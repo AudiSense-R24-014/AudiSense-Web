@@ -8,11 +8,11 @@ export default function Home() {
         <title>AudiSense</title>
         <link rel="icon" href="/audisense.ico" />
       </Head>
-      <body>
+      <div>
         <h1>Coming Soon</h1>
         <h2>Our website is under construction</h2>
         <h3>Stay tuned for updates</h3>
-      </body>
+      </div>
       </div>
   );
 }
