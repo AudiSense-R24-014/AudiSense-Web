@@ -5,7 +5,12 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        audiSensePurple: '#6c26a6',
+        audiSenseBlue: '#2379a4',
+      },
+    },
   },
   plugins: [],
 }

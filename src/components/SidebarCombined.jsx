@@ -10,7 +10,7 @@ import {
 import Sidebar, { SidebarItem } from "./Sidebar";
 import React, { useState } from "react";
 
-function SidebarCombined({ status }) {
+function SidebarCombined({ props }) {
     const [alertStatus, setAlertStatus] = useState({
         dashboard: false,
         patients: true,
@@ -18,7 +18,7 @@ function SidebarCombined({ status }) {
         tasks: false,
         assignTasks: false,
         settings: false,
-        help: true,
+        help: false,
       });
   return (
     <div className="flex">
@@ -27,44 +27,44 @@ function SidebarCombined({ status }) {
           icon={<LayoutDashboard size={20} />}
           text="Dashboard"
           alert={alertStatus.dashboard}
-          active={status === "dashboard"}
+          active={props.status === "dashboard"}
         />
         <SidebarItem
           icon={<Users2 size={20} />}
           text="Patients"
           alert={alertStatus.patients}
-          active={status === "patients"}
+          active={props.status === "patients"}
         />
         <SidebarItem
           icon={<UserPlus2 size={20} />}
           text="Assign Patients"
           alert={alertStatus.assignPatients}
-          active={status === "assignPatients"}
+          active={props.status === "assignPatients"}
         />
         <SidebarItem
           icon={<Layers size={20} />}
           text="Tasks"
           alert={alertStatus.tasks}
-          active={status === "tasks"}
+          active={props.status === "tasks"}
         />
         <SidebarItem
           icon={<Flag size={20} />}
           text="Assign Tasks"
           alert={alertStatus.assignPatients}
-          active={status === "assignPatients"}
+          active={props.status === "assignPatients"}
         />
         <hr className="my-3" />
         <SidebarItem
           icon={<Settings size={20} />}
           text="Settings"
           alert={alertStatus.settings}
-          active={status === "settings"}
+          active={props.status === "settings"}
         />
         <SidebarItem
           icon={<LifeBuoy size={20} />}
           text="Help"
           alert={alertStatus.help}
-          active={status === "help"}
+          active={props.status === "help"}
         />
       </Sidebar>
     </div>
