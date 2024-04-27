@@ -1,7 +1,9 @@
 import Dashboard from './Dashboard/Dashboard';
 import Patients from './Patients/Patients';
+import Landing from './Landing/Landing';
 
-export{
+export {
     Dashboard,
-    Patients
+    Patients,
+    Landing
 };
