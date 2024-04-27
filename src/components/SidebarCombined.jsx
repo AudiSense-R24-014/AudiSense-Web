@@ -40,7 +40,7 @@ function SidebarCombined({ props }) {
             active={props.status === "patients"}
           />
         </Link>
-        <Link to="/">
+        <Link to="#">
           <SidebarItem
             icon={<UserPlus2 size={20} />}
             text="Assign Patients"
@@ -48,7 +48,7 @@ function SidebarCombined({ props }) {
             active={props.status === "assignPatients"}
           />
         </Link>
-        <Link to="/">
+        <Link to="#">
           <SidebarItem
             icon={<Layers size={20} />}
             text="Tasks"
@@ -56,7 +56,7 @@ function SidebarCombined({ props }) {
             active={props.status === "tasks"}
           />
         </Link>
-        <Link to="/">
+        <Link to="#">
           <SidebarItem
             icon={<Flag size={20} />}
             text="Assign Tasks"
@@ -65,7 +65,7 @@ function SidebarCombined({ props }) {
           />
         </Link>
         <hr className="my-3" />
-        <Link to="/">
+        <Link to="#">
           <SidebarItem
             icon={<Settings size={20} />}
             text="Settings"
@@ -73,7 +73,7 @@ function SidebarCombined({ props }) {
             active={props.status === "settings"}
           />
         </Link>
-        <Link to="/">
+        <Link to="#">
           <SidebarItem
             icon={<LifeBuoy size={20} />}
             text="Help"
