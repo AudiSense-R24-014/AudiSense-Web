@@ -2,18 +2,21 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import {
   Dashboard,
   Patients,
-  Landing
+  Landing,
+  AssignPatient,
+  AllTasks,
+  ComprehensiveTasks
 } from "../pages";
-import AssignPatient from "../pages/AssignPatient/AssignPatient";
-
 export default function AppRoutes() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Landing />} />s
+        <Route path="/" element={<Landing />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/patients" element={<Patients />} />
-        <Route path="/assign-Patient" element={<AssignPatient />} />
+        <Route path="/assignPatient" element={<AssignPatient />} />
+        <Route path="/tasks" element={<AllTasks />} />
+        <Route path="/tasks/comprehensive" element={<ComprehensiveTasks />} />
       </Routes>
     </Router>
   );

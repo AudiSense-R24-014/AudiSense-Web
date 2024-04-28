@@ -77,7 +77,7 @@ function Patients() {
         props={{ status: "patients" }}
         className="fixed h-full"
       />
-      <div className="flex-1 p-10 overflow-x-auto">
+      <div className="flex-1 p-4 px-10 overflow-x-auto">
         <h1 className="text-4xl font-nunito font-bold mb-8">Patients</h1>
         <div className="min-w-full overflow-hidden overflow-x-scroll">
           <table className="w-full table-auto">

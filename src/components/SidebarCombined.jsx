@@ -10,8 +10,16 @@ import {
 import Sidebar, { SidebarItem } from "./Sidebar";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import PropTypes from 'prop-types';
+
+SidebarCombined.propTypes = {
+  props: PropTypes.object,
+  status: PropTypes.string
+}
 
 function SidebarCombined({ props }) {
+
+  
   const [alertStatus, setAlertStatus] = useState({
     dashboard: false,
     patients: true,
@@ -24,7 +32,7 @@ function SidebarCombined({ props }) {
   return (
     <div className="flex">
       <Sidebar>
-        <Link to="/">
+        <Link to="/dashboard">
           <SidebarItem
             icon={<LayoutDashboard size={20} />}
             text="Dashboard"
@@ -40,7 +48,7 @@ function SidebarCombined({ props }) {
             active={props.status === "patients"}
           />
         </Link>
-        <Link to="#">
+        <Link to="/assignPatient">
           <SidebarItem
             icon={<UserPlus2 size={20} />}
             text="Assign Patients"
@@ -48,7 +56,7 @@ function SidebarCombined({ props }) {
             active={props.status === "assignPatients"}
           />
         </Link>
-        <Link to="#">
+        <Link to="/tasks">
           <SidebarItem
             icon={<Layers size={20} />}
             text="Tasks"
@@ -61,7 +69,7 @@ function SidebarCombined({ props }) {
             icon={<Flag size={20} />}
             text="Assign Tasks"
             alert={alertStatus.assignPatients}
-            active={props.status === "assignPatients"}
+            active={props.status === "assignTasks"}
           />
         </Link>
         <hr className="my-3" />

@@ -1,9 +1,13 @@
 import { MoreVertical, ChevronLast, ChevronFirst } from "lucide-react";
 import { useContext, createContext, useState } from "react";
+import PropTypes from 'prop-types';
 import AudiSenseLogoWordOnly from "../assets/images/AudiSenseLogoWordOnly.png";
 
 const SidebarContext = createContext()
 
+Sidebar.propTypes = {
+  children: PropTypes.node
+}
 export default function Sidebar({ children }) {
   const [expanded, setExpanded] = useState(true)
   
@@ -54,6 +58,12 @@ export default function Sidebar({ children }) {
   )
 }
 
+SidebarItem.propTypes = {
+  icon: PropTypes.node,
+  text: PropTypes.string,
+  active: PropTypes.bool,
+  alert: PropTypes.bool
+}
 export function SidebarItem({ icon, text, active, alert }) {
     const { expanded } = useContext(SidebarContext)
     
