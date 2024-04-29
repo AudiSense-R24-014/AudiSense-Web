@@ -5,7 +5,6 @@ import {
   Landing,
   AssignPatient,
   AllTasks,
-  ComprehensiveTasks
 } from "../pages";
 export default function AppRoutes() {
   return (
@@ -16,7 +15,6 @@ export default function AppRoutes() {
         <Route path="/patients" element={<Patients />} />
         <Route path="/assignPatient" element={<AssignPatient />} />
         <Route path="/tasks" element={<AllTasks />} />
-        <Route path="/tasks/comprehensive" element={<ComprehensiveTasks />} />
       </Routes>
     </Router>
   );
