@@ -4,8 +4,9 @@ import {
   Patients,
   Landing,
   AssignPatient,
-  AllTasks,
+  Tasks,
 } from "../pages";
+
 export default function AppRoutes() {
   return (
     <Router>
@@ -14,7 +15,7 @@ export default function AppRoutes() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/patients" element={<Patients />} />
         <Route path="/assignPatient" element={<AssignPatient />} />
-        <Route path="/tasks" element={<AllTasks />} />
+        <Route path="/tasks" element={<Tasks />} />
       </Routes>
     </Router>
   );
