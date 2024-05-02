@@ -4,7 +4,7 @@ function AwarenessTasks() {
   return (
     <div>
       <div className="flex">
-        <h1 className="text-4xl font-nunito font-bold ">AwarenessTasks</h1>
+        <h1 className="text-4xl font-nunito font-bold ">Awareness Tasks</h1>
       </div>
     </div>
   )

@@ -3,6 +3,7 @@ import SidebarCombined from "../../components/SidebarCombined";
 import TasksTopbar from "../../components/TasksTopbar";
 
 import {
+  AllTasks,
   AwarenessTasks,
   IdentificationTasks,
   DiscriminationTasks,
@@ -10,7 +11,7 @@ import {
 } from "./TaskComponents";
 
 
-function AllTasks() {
+function Tasks() {
   const [taskTab, setTaskTab] = useState("allTasks");
 
 
@@ -20,15 +21,7 @@ function AllTasks() {
       <div className="flex-1 p-4 px-10">
         <h1 className="text-4xl font-nunito font-bold ">Tasks</h1>
         <TasksTopbar taskList={taskTab} toggleTaskStatus={setTaskTab} />
-        {taskTab === "allTasks" && (
-          <div>
-            <AwarenessTasks />
-            <IdentificationTasks />
-            <DiscriminationTasks />
-            <ComprehensiveTasks />
-          </div>
-        )}
-
+        {taskTab === "allTasks" && <AllTasks />}
         {taskTab === "awareness" && <AwarenessTasks />}
         {taskTab === "identification" && <IdentificationTasks />}
         {taskTab === "discrimination" && <DiscriminationTasks />}
@@ -39,4 +32,4 @@ function AllTasks() {
   );
 }
 
-export default AllTasks;
+export default Tasks;
