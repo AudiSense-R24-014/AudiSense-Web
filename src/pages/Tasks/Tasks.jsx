@@ -10,23 +10,22 @@ import {
   ComprehensiveTasks,
 } from "./TaskComponents";
 
-
 function Tasks() {
-  const [taskTab, setTaskTab] = useState("allTasks");
-
+  const [taskTab, setTaskTab] = useState("comprehension");
 
   return (
-    <div className="flex">
-      <SidebarCombined props={{ status: "tasks" }} className="fixed h-full" />
-      <div className="flex-1 p-4 px-10">
-        <h1 className="text-4xl font-nunito font-bold ">Tasks</h1>
-        <TasksTopbar taskList={taskTab} toggleTaskStatus={setTaskTab} />
-        {taskTab === "allTasks" && <AllTasks />}
-        {taskTab === "awareness" && <AwarenessTasks />}
-        {taskTab === "identification" && <IdentificationTasks />}
-        {taskTab === "discrimination" && <DiscriminationTasks />}
-        {taskTab === "comprehension" && <ComprehensiveTasks />}
-
+    <div className="flex h-screen">
+        <SidebarCombined props={{ status: "tasks" }} />
+      <div className="flex-1 overflow-y-auto">
+        <div className="p-4 px-10">
+          <h1 className="text-4xl font-nunito font-bold mb-6">Tasks</h1>
+          <TasksTopbar taskList={taskTab} toggleTaskStatus={setTaskTab} />
+          {taskTab === "allTasks" && <AllTasks />}
+          {taskTab === "awareness" && <AwarenessTasks />}
+          {taskTab === "identification" && <IdentificationTasks />}
+          {taskTab === "discrimination" && <DiscriminationTasks />}
+          {taskTab === "comprehension" && <ComprehensiveTasks />}
+        </div>
       </div>
     </div>
   );

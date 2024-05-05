@@ -30,7 +30,6 @@ function SidebarCombined({ props }) {
     help: false,
   });
   return (
-    <div className="flex">
       <Sidebar>
         <Link to="/dashboard">
           <SidebarItem
@@ -90,7 +89,6 @@ function SidebarCombined({ props }) {
           />
         </Link>
       </Sidebar>
-    </div>
   );
 }
 
