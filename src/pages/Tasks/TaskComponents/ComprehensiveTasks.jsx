@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import ComprehensionTaskGeneratorService from "../../../services/ComprehensionTaskGenerator.service";
-import dataset from "./test";
 
 function ComprehensiveTasks() {
   const [feedback, setFeedback] = useState("");
