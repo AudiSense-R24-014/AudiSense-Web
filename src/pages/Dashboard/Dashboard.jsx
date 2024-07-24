@@ -1,6 +1,6 @@
 import React from "react";
 import SidebarCombined from "../../components/SidebarCombined";
-import "../../App.css";
+
 function Dashboard() {
   return (
     <div className="flex">
