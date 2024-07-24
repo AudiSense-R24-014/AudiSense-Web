@@ -20,9 +20,9 @@ SidebarCombined.propTypes = {
 function SidebarCombined({ props }) {
 
 
-  const [alertStatus, setAlertStatus] = useState({
+  const [alertStatus] = useState({
     dashboard: false,
-    patients: true,
+    patients: false,
     assignPatients: false,
     tasks: false,
     assignTasks: false,

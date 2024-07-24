@@ -1,17 +1,30 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
 import {
   Dashboard,
   Patients,
   Landing,
   AssignPatient,
   Tasks,
+  Login,
 } from "../pages";
+import OnboardingLayout from "../layouts/OnboardingLayout";
 
 export default function AppRoutes() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Landing />} />
+        {/* Onboarding Paths */}
+        <Route path="/" element={<OnboardingLayout />}>
+          <Route path="/" element={<Landing />} />
+          <Route path="login" element={<Login />} />
+        </Route>
+
+        {/* LoggedIn Paths */}
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/patients" element={<Patients />} />
         <Route path="/assignPatient" element={<AssignPatient />} />
