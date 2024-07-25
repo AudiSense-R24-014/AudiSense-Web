@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.input-field {
+  @apply bg-gray-100 border text-sm border-gray-300 text-gray-900 rounded-lg focus:outline-transparent focus:ring-4 focus:ring-purple-400 w-full p-2.5 pr-10;
+}

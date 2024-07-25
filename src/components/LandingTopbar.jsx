@@ -1,12 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AudiSenseLogoWithoutName from "../assets/images/audisense-logo-without-name.png";
 import AudiSenseLogoWordOnly from "../assets/images/audisense-words-only.png";
 import { ArrowRightIcon } from "lucide-react";
+import { Link } from "react-router-dom";
+
+function DeterminePath() {
+  const currentPath = window.location.pathname;
+  if (currentPath == "/login") {
+    return "login";
+  } else if (currentPath == "/register") {
+    return "register";
+  } else {
+    return "landing";
+  }
+}
 
 export default function LandingTopbar() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [path, setPath] = useState("");
+
+  useEffect(() => {
+    setPath(DeterminePath());
+  }, [path]);
+
   return (
-    <header className="bg-gray-50">
+    <header className="bg-gray-100">
       <div className="container mx-auto py-4 flex justify-between items-center">
         <div className="flex items-center">
           <img
@@ -20,21 +37,60 @@ export default function LandingTopbar() {
             className="hidden lg:block h-5 ml-2 w-auto"
           />
         </div>
+
         <nav className="flex space-x-6 items-center font-montserrat font-semibold text-base mr-2">
-          <a href="#" className="hover:text-audi-purple">
-            Home
-          </a>
-          <a href="#" className="hover:text-audi-purple">
-            Login
-          </a>
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="bg-audi-purple text-white py-2 px-4 rounded-md hover:bg-purple-700 flex-grow flex items-center justify-center"
-          >
-            Join Us
-            <span className="ml-1" />
-            <ArrowRightIcon size={18}/>
-          </button>
+          {path == "register" ? (
+            <>
+              <a href="/" className={`hover:text-purple-900`}>
+                Home
+              </a>
+              <a
+                href="/register"
+                className={`hover:text-purple-900 text-audi-purple`}
+              >
+                Register
+              </a>
+              <button
+                className="bg-audi-purple text-white py-2 px-4 rounded-md hover:bg-purple-900 flex-grow flex items-center justify-center"
+                onClick={() => {
+                  window.location = "./login";
+                }}
+              >
+                Login
+                <span className="ml-1" />
+                <ArrowRightIcon size={18} />
+              </button>
+            </>
+          ) : (
+            <>
+              <a
+                href="/"
+                className={`hover:text-purple-900 ${
+                  path == "landing" ? "text-audi-purple" : ""
+                }`}
+              >
+                Home
+              </a>
+              <a
+                href="/login"
+                className={`hover:text-purple-900 ${
+                  path == "login" ? "text-audi-purple" : ""
+                }`}
+              >
+                Login
+              </a>
+              <button
+                className="bg-audi-purple text-white py-2 px-4 rounded-md hover:bg-purple-900 flex-grow flex items-center justify-center"
+                onClick={() => {
+                  window.location = "./register";
+                }}
+              >
+                Join Us
+                <span className="ml-1" />
+                <ArrowRightIcon size={18} />
+              </button>
+            </>
+          )}
         </nav>
       </div>
     </header>

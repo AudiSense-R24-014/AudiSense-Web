@@ -1,8 +1,6 @@
-import LandingTopbar from "../../components/LandingTopbar";
 import { faListCheck, faChartLine } from "@fortawesome/free-solid-svg-icons";
 import LandingRight from "../../assets/images/landing-right.png";
 import LandingCards from "../../components/LandingCards";
-import Footer from "../../components/Footer";
 
 const Landing = () => {
   return (
@@ -15,14 +13,14 @@ const Landing = () => {
           Audisense is a platform that provides a patient management tool and
           personalized gamification of auditory verbal therapy.
         </p>
-        <button className="bg-audi-purple text-white text-sm font-semibold py-2 px-4 md:py-2.5 md:px-8 rounded-md hover:bg-purple-700 my-4">
-          LOGIN
-        </button>
+          <button onClick={()=>{window.location="./login"}} className="bg-audi-purple text-white text-sm font-semibold py-2 px-4 md:py-2.5 md:px-8 rounded-md hover:bg-purple-900 my-10">
+            LOGIN
+          </button>
         <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 my-4">
           <LandingCards
             props={{
               icon: faChartLine,
-              title: "Online Progress Tracking",
+              title: "Progress Tracking",
               description:
                 "FormBold is free to use, we are offering a decent free plan for experiments, personal projects, and projects.",
             }}
