@@ -1,8 +1,7 @@
 import {
   BrowserRouter as Router,
   Route,
-  Routes,
-  Navigate,
+  Routes
 } from "react-router-dom";
 import {
   Dashboard,
@@ -11,6 +10,7 @@ import {
   AssignPatient,
   Tasks,
   Login,
+  Register,
 } from "../pages";
 import OnboardingLayout from "../layouts/OnboardingLayout";
 
@@ -20,8 +20,9 @@ export default function AppRoutes() {
       <Routes>
         {/* Onboarding Paths */}
         <Route path="/" element={<OnboardingLayout />}>
-          <Route path="/" element={<Landing />} />
+          <Route index={true} element={<Landing />} />
           <Route path="login" element={<Login />} />
+          <Route path="register" element={<Register />} />
         </Route>
 
         {/* LoggedIn Paths */}

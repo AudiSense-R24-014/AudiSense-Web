@@ -1,9 +1,11 @@
+import Landing from './Onboarding/Landing';
+import Login from './Onboarding/Login';
+import Register from './Onboarding/Register';
+
 import Dashboard from './Dashboard/Dashboard';
 import Patients from './Patients/Patients';
-import Landing from './Landing/Landing';
 import AssignPatient from './AssignPatient/AssignPatient';
 import Tasks from './Tasks/Tasks';
-import Login from './Login/Login';
 
 export {
     Dashboard,
@@ -12,4 +14,5 @@ export {
     AssignPatient,
     Tasks,
     Login,
+    Register
 };
