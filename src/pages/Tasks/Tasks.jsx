@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import SidebarCombined from "../../components/SidebarCombined";
 import TasksTopbar from "../../components/TasksTopbar";
 
 import {
@@ -14,9 +13,6 @@ function Tasks() {
   const [taskTab, setTaskTab] = useState("comprehension");
 
   return (
-    <div className="flex h-screen">
-        <SidebarCombined props={{ status: "tasks" }} />
-      <div className="flex-1 overflow-y-auto">
         <div className="p-4 px-10">
           <h1 className="text-4xl font-nunito font-bold mb-6">Tasks</h1>
           <TasksTopbar taskList={taskTab} toggleTaskStatus={setTaskTab} />
@@ -26,8 +22,6 @@ function Tasks() {
           {taskTab === "discrimination" && <DiscriminationTasks />}
           {taskTab === "comprehension" && <ComprehensiveTasks />}
         </div>
-      </div>
-    </div>
   );
 }
 
