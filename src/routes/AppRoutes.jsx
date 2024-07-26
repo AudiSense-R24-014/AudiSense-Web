@@ -1,8 +1,4 @@
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import {
   Dashboard,
   Patients,
@@ -13,6 +9,7 @@ import {
   Register,
 } from "../pages";
 import OnboardingLayout from "../layouts/OnboardingLayout";
+import SessionLayout from "../layouts/SessionLayout";
 
 export default function AppRoutes() {
   return (
@@ -26,10 +23,12 @@ export default function AppRoutes() {
         </Route>
 
         {/* LoggedIn Paths */}
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/patients" element={<Patients />} />
-        <Route path="/assignPatient" element={<AssignPatient />} />
-        <Route path="/tasks" element={<Tasks />} />
+        <Route path="/" element={<SessionLayout />}>
+          <Route index={true} path="dashboard" element={<Dashboard />} />
+          <Route path="patients" element={<Patients />} />
+          <Route path="assignPatient" element={<AssignPatient />} />
+          <Route path="tasks" element={<Tasks />} />
+        </Route>
       </Routes>
     </Router>
   );

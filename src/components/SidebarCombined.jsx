@@ -10,16 +10,9 @@ import {
 import Sidebar, { SidebarItem } from "./Sidebar";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import PropTypes from 'prop-types';
 
-SidebarCombined.propTypes = {
-  props: PropTypes.object,
-  status: PropTypes.string
-}
-
-function SidebarCombined({ props }) {
-
-
+export default function SidebarCombined() {
+  const [status, setStatus] = useState("dashboard");
   const [alertStatus] = useState({
     dashboard: false,
     patients: false,
@@ -30,66 +23,64 @@ function SidebarCombined({ props }) {
     help: false,
   });
   return (
-      <Sidebar>
-        <Link to="/dashboard">
-          <SidebarItem
-            icon={<LayoutDashboard size={20} />}
-            text="Dashboard"
-            alert={alertStatus.dashboard}
-            active={props.status === "dashboard"}
-          />
-        </Link>
-        <Link to="/patients">
-          <SidebarItem
-            icon={<Users2 size={20} />}
-            text="Patients"
-            alert={alertStatus.patients}
-            active={props.status === "patients"}
-          />
-        </Link>
-        <Link to="/assignPatient">
-          <SidebarItem
-            icon={<UserPlus2 size={20} />}
-            text="Assign Patients"
-            alert={alertStatus.assignPatients}
-            active={props.status === "assignPatients"}
-          />
-        </Link>
-        <Link to="/tasks">
-          <SidebarItem
-            icon={<Layers size={20} />}
-            text="Tasks"
-            alert={alertStatus.tasks}
-            active={props.status === "tasks"}
-          />
-        </Link>
-        <Link to="#">
-          <SidebarItem
-            icon={<Flag size={20} />}
-            text="Assign Tasks"
-            alert={alertStatus.assignPatients}
-            active={props.status === "assignTasks"}
-          />
-        </Link>
-        <hr className="my-3" />
-        <Link to="#">
-          <SidebarItem
-            icon={<Settings size={20} />}
-            text="Settings"
-            alert={alertStatus.settings}
-            active={props.status === "settings"}
-          />
-        </Link>
-        <Link to="#">
-          <SidebarItem
-            icon={<LifeBuoy size={20} />}
-            text="Help"
-            alert={alertStatus.help}
-            active={props.status === "help"}
-          />
-        </Link>
-      </Sidebar>
+    <Sidebar>
+      <Link to="/dashboard" onClick={() => {setStatus("dashboard")}}>
+        <SidebarItem
+          icon={<LayoutDashboard size={20} />}
+          text="Dashboard"
+          alert={alertStatus.dashboard}
+          active={status === "dashboard"}
+        />
+      </Link>
+      <Link to="/patients" onClick={() => {setStatus("patients")}}>
+        <SidebarItem
+          icon={<Users2 size={20} />}
+          text="Patients"
+          alert={alertStatus.patients}
+          active={status === "patients"}
+        />
+      </Link>
+      <Link to="/assignPatient" onClick={() => {setStatus("assignPatients")}}>
+        <SidebarItem
+          icon={<UserPlus2 size={20} />}
+          text="Assign Patients"
+          alert={alertStatus.assignPatients}
+          active={status === "assignPatients"}
+        />
+      </Link>
+      <Link to="/tasks" onClick={() => {setStatus("tasks")}}>
+        <SidebarItem
+          icon={<Layers size={20} />}
+          text="Tasks"
+          alert={alertStatus.tasks}
+          active={status === "tasks"}
+        />
+      </Link>
+      <Link to="#">
+        <SidebarItem
+          icon={<Flag size={20} />}
+          text="Assign Tasks"
+          alert={alertStatus.assignPatients}
+          active={status === "assignTasks"}
+        />
+      </Link>
+      <hr className="my-3" />
+      <Link to="#">
+        <SidebarItem
+          icon={<Settings size={20} />}
+          text="Settings"
+          alert={alertStatus.settings}
+          active={status === "settings"}
+        />
+      </Link>
+      <Link to="#">
+        <SidebarItem
+          icon={<LifeBuoy size={20} />}
+          text="Help"
+          alert={alertStatus.help}
+          active={status === "help"}
+        />
+      </Link>
+    </Sidebar>
   );
 }
-
-export default SidebarCombined;
