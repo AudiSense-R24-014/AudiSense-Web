@@ -6,6 +6,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
 
+  function signIn(e) {
+    e.preventDefault();
+    window.location = "./dashboard";
+  }
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -17,7 +21,7 @@ const Login = () => {
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-3xl">
               Login
             </h1>
-            <form className="space-y-4 md:space-y-6" action="#">
+            <form className="space-y-4 md:space-y-6" onSubmit={signIn}>
               <div>
                 <label
                   htmlFor="email"
@@ -84,7 +88,7 @@ const Login = () => {
                   </div>
                 </div>
                 <a
-                  href="#"
+                  href="./register"
                   className="text-sm font-medium text-audi-purple hover:underline"
                 >
                   Forgot password?

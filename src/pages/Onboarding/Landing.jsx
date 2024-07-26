@@ -13,25 +13,24 @@ const Landing = () => {
           Audisense is a platform that provides a patient management tool and
           personalized gamification of auditory verbal therapy.
         </p>
-          <button onClick={()=>{window.location="./login"}} className="bg-audi-purple text-white text-sm font-semibold py-2 px-4 md:py-2.5 md:px-8 rounded-md hover:bg-purple-900 my-10">
-            LOGIN
-          </button>
+        <button
+          onClick={() => {
+            window.location = "./login";
+          }}
+          className="bg-audi-purple text-white text-sm font-semibold py-2 px-4 md:py-2.5 md:px-8 rounded-md hover:bg-purple-900 my-10"
+        >
+          LOGIN
+        </button>
         <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 my-4">
           <LandingCards
-            props={{
-              icon: faChartLine,
-              title: "Progress Tracking",
-              description:
-                "FormBold is free to use, we are offering a decent free plan for experiments, personal projects, and projects.",
-            }}
+            icon={faChartLine}
+            title="Progress Tracking"
+            description="FormBold is free to use, we are offering a decent free plan for experiments, personal projects, and projects."
           />
           <LandingCards
-            props={{
-              icon: faListCheck,
-              title: "Task Suggestion",
-              description:
-                "FormBold is free to use, we are offering a decent free plan for experiments, personal projects, and projects.",
-            }}
+            icon={faListCheck}
+            title="Task Suggestion"
+            description="FormBold is free to use, we are offering a decent free plan for experiments, personal projects, and projects."
           />
         </div>
       </div>

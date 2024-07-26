@@ -1,5 +1,5 @@
 import { MoreVertical, ChevronLast, ChevronFirst } from "lucide-react";
-import { useContext, createContext, useState } from "react";
+import { useContext, createContext, useState, useMemo } from "react";
 import PropTypes from "prop-types";
 import AudiSenseLogoWordOnly from "../assets/images/audisense-words-only.png";
 
@@ -8,9 +8,10 @@ const SidebarContext = createContext();
 Sidebar.propTypes = {
   children: PropTypes.node,
 };
+
 export default function Sidebar({ children }) {
   const [expanded, setExpanded] = useState(true);
-
+  const contextValue = useMemo(() => ({ expanded }), [expanded]);
   return (
     <aside className="h-screen shadow-lg shadow-purple-900/20 shadow-b-2 shadow-r-[3px] -shadow-spread-2">
       <nav className="h-full flex flex-col bg-white border-r shadow-sm">
@@ -20,7 +21,7 @@ export default function Sidebar({ children }) {
             className={`overflow-hidden transition-all ${
               expanded ? "w-32" : "w-0"
             }`}
-            alt=""
+            alt="logo"
           />
           <button
             onClick={() => setExpanded((curr) => !curr)}
@@ -30,7 +31,7 @@ export default function Sidebar({ children }) {
           </button>
         </div>
 
-        <SidebarContext.Provider value={{ expanded }}>
+        <SidebarContext.Provider value={contextValue}>
           <ul className="flex-1 px-3">{children}</ul>
         </SidebarContext.Provider>
 
@@ -64,9 +65,9 @@ SidebarItem.propTypes = {
   active: PropTypes.bool,
   alert: PropTypes.bool,
 };
+
 export function SidebarItem({ icon, text, active, alert }) {
   const { expanded } = useContext(SidebarContext);
-
   return (
     <li
       className={`

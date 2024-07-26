@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import AudiSenseLogoWithoutName from "../assets/images/audisense-logo-without-name.png";
 import AudiSenseLogoWordOnly from "../assets/images/audisense-words-only.png";
 import { ArrowRightIcon } from "lucide-react";
-import { Link } from "react-router-dom";
 
 function DeterminePath() {
   const currentPath = window.location.pathname;
@@ -57,7 +56,7 @@ export default function LandingTopbar() {
                 }}
               >
                 Login
-                <span className="ml-1" />
+                <div>&nbsp;</div>
                 <ArrowRightIcon size={18} />
               </button>
             </>
@@ -86,7 +85,7 @@ export default function LandingTopbar() {
                 }}
               >
                 Join Us
-                <span className="ml-1" />
+                <div>&nbsp;</div>
                 <ArrowRightIcon size={18} />
               </button>
             </>
