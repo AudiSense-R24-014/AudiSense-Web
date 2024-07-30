@@ -8,4 +8,4 @@ Currently, two official plugins are available:
 - [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
 
-[Figma UI Prototype](https://www.figma.com/design/za4xMPO2cHbuSwZS8OKPKA/AudiSense?node-id=1-2&t=RNOTIQcSruJg3mFK-0)
+[`Figma UI Prototype`](https://www.figma.com/design/za4xMPO2cHbuSwZS8OKPKA/AudiSense?node-id=1-2&t=RNOTIQcSruJg3mFK-0)
