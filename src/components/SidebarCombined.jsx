@@ -5,82 +5,125 @@ import {
   LifeBuoy,
   Settings,
   Users2,
-  UserPlus2,
+  LogOut,
+  LucideBuilding2,
 } from "lucide-react";
 import Sidebar, { SidebarItem } from "./Sidebar";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function SidebarCombined() {
-  const [status, setStatus] = useState("dashboard");
+  const [status, setStatus] = useState();
   const [alertStatus] = useState({
     dashboard: false,
     patients: false,
-    assignPatients: false,
     tasks: false,
     assignTasks: false,
+    organization: false,
     settings: false,
-    help: false,
+    support: false,
   });
+
+  useEffect(() => {
+    setStatus(localStorage.getItem("audi-sidebar-status")  || "dashboard");
+  }, [status]);
+
   return (
     <Sidebar>
-      <Link to="/dashboard" onClick={() => {setStatus("dashboard")}}>
-        <SidebarItem
-          icon={<LayoutDashboard size={20} />}
-          text="Dashboard"
-          alert={alertStatus.dashboard}
-          active={status === "dashboard"}
-        />
-      </Link>
-      <Link to="/patients" onClick={() => {setStatus("patients")}}>
-        <SidebarItem
-          icon={<Users2 size={20} />}
-          text="Patients"
-          alert={alertStatus.patients}
-          active={status === "patients"}
-        />
-      </Link>
-      <Link to="/assignPatient" onClick={() => {setStatus("assignPatients")}}>
-        <SidebarItem
-          icon={<UserPlus2 size={20} />}
-          text="Assign Patients"
-          alert={alertStatus.assignPatients}
-          active={status === "assignPatients"}
-        />
-      </Link>
-      <Link to="/tasks" onClick={() => {setStatus("tasks")}}>
-        <SidebarItem
-          icon={<Layers size={20} />}
-          text="Tasks"
-          alert={alertStatus.tasks}
-          active={status === "tasks"}
-        />
-      </Link>
-      <Link to="#">
-        <SidebarItem
-          icon={<Flag size={20} />}
-          text="Assign Tasks"
-          alert={alertStatus.assignPatients}
-          active={status === "assignTasks"}
-        />
-      </Link>
-      <hr className="my-3" />
-      <Link to="#">
-        <SidebarItem
-          icon={<Settings size={20} />}
-          text="Settings"
-          alert={alertStatus.settings}
-          active={status === "settings"}
-        />
-      </Link>
-      <Link to="#">
-        <SidebarItem
-          icon={<LifeBuoy size={20} />}
-          text="Help"
-          alert={alertStatus.help}
-          active={status === "help"}
-        />
-      </Link>
+      <div className="flex flex-col h-full justify-between">
+        <div>
+          <Link
+            to="/dashboard"
+            onClick={() => {
+              localStorage.setItem("audi-sidebar-status", "dashboard");
+              setStatus("dashboard");
+            }}
+          >
+            <SidebarItem
+              icon={<LayoutDashboard size={20} />}
+              text="Dashboard"
+              alert={alertStatus.dashboard}
+              active={status == "dashboard"}
+            />
+          </Link>
+          <Link
+            to="/patients"
+            onClick={() => {
+              localStorage.setItem("audi-sidebar-status", "patients");
+              setStatus("patients");
+            }}
+          >
+            <SidebarItem
+              icon={<Users2 size={20} />}
+              text="Patients"
+              alert={alertStatus.patients}
+              active={status == "patients"}
+            />
+          </Link>
+          <Link
+            to="/tasks"
+            onClick={() => {
+              localStorage.setItem("audi-sidebar-status", "tasks");
+              setStatus("tasks");
+            }}
+          >
+            <SidebarItem
+              icon={<Layers size={20} />}
+              text="Tasks"
+              alert={alertStatus.tasks}
+              active={status == "tasks"}
+            />
+          </Link>
+          <Link to="#">
+            <SidebarItem
+              icon={<Flag size={20} />}
+              text="Assign Tasks"
+              alert={alertStatus.assignPatients}
+              active={status == "assignTasks"}
+            />
+          </Link>
+          <Link
+            to="/organization"
+            onClick={() => {
+              localStorage.setItem("audi-sidebar-status", "organization");
+              setStatus("organization");
+            }}
+          >
+            <SidebarItem
+              icon={<LucideBuilding2 size={20} />}
+              text="Organization"
+              alert={alertStatus.organization}
+              active={status == "organization"}
+            />
+          </Link>
+        </div>
+        <div className="mb-4">
+          <hr className="my-2 border" />
+          <Link to="#">
+            <SidebarItem
+              icon={<LifeBuoy size={20} />}
+              text="Support"
+              alert={alertStatus.support}
+              active={status == "help"}
+            />
+          </Link>
+          <Link to="#">
+            <SidebarItem
+              icon={<Settings size={20} />}
+              text="Settings"
+              alert={alertStatus.settings}
+              active={status == "settings"}
+            />
+          </Link>
+          <Link to="#">
+            <SidebarItem
+              icon={<LogOut size={20} />}
+              text="Logout"
+              logout={true}
+            />
+          </Link>
+        </div>
+      </div>
     </Sidebar>
   );
 }
