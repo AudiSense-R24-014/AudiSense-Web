@@ -1,5 +1,4 @@
 import React from "react";
-import SidebarCombined from "../../components/SidebarCombined";
 import { Edit, Trash } from "lucide-react";
 
 function Patients() {
@@ -72,12 +71,7 @@ function Patients() {
   };
 
   return (
-    <div className="flex">
-      <SidebarCombined
-        props={{ status: "patients" }}
-        className="fixed h-full"
-      />
-      <div className="flex-1 p-10 overflow-x-auto">
+      <div className="p-4 px-10">
         <h1 className="text-4xl font-nunito font-bold mb-8">Patients</h1>
         <div className="min-w-full overflow-hidden overflow-x-scroll">
           <table className="w-full table-auto">
@@ -93,14 +87,14 @@ function Patients() {
                 <th className="px-4 py-2">Height</th>
                 <th className="px-4 py-2">Diagnosis</th>
                 <th className="px-4 py-2">Edit</th>
-                <th className="px-4 py-2">Delete</th>{" "}
+                <th className="px-4 py-2">Delete</th>
                 {/* New column for actions */}
               </tr>
             </thead>
             <tbody>
               {patientsJson.map((patient, index) => (
                 <tr
-                  key={index}
+                  key={index + 1}
                   className={
                     index % 2 === 0
                       ? "bg-purple-200 font-nunito"
@@ -142,7 +136,6 @@ function Patients() {
           </table>
         </div>
       </div>
-    </div>
   );
 }
 
