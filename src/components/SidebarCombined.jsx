@@ -6,8 +6,7 @@ import {
   Settings,
   Users2,
   LogOut,
-  UserPlus2,
-  LogOut
+  LucideBuilding2
 } from "lucide-react";
 import Sidebar, { SidebarItem } from "./Sidebar";
 import React, { useEffect, useState } from "react";
@@ -26,8 +25,13 @@ export default function SidebarCombined() {
   });
 
   useEffect(() => {
-    setStatus(localStorage.getItem("audi-sidebar-status")  || "dashboard");
+    setStatus(localStorage.getItem("audi-sidebar-status") || "dashboard");
   }, [status]);
+
+  function logout() {
+    localStorage.removeItem("token");
+    window.location.href = "/";
+  }
 
   return (
     <Sidebar>
@@ -116,7 +120,7 @@ export default function SidebarCombined() {
               active={status == "settings"}
             />
           </Link>
-          <Link to="#">
+          <Link onClick={logout}>
             <SidebarItem
               icon={<LogOut size={20} />}
               text="Logout"
