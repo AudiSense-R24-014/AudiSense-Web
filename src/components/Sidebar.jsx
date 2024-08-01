@@ -1,4 +1,13 @@
-import { ChevronLast, ChevronFirst } from "lucide-react";
+import {
+  MoreVertical, ChevronLast, ChevronFirst,
+  LayoutDashboard,
+  Layers,
+  Flag,
+  LifeBuoy,
+  Settings,
+  Users2,
+  UserPlus2,
+} from "lucide-react";
 import { useContext, createContext, useState, useMemo } from "react";
 import PropTypes from "prop-types";
 import AudiSenseLogoWordOnly from "../assets/images/audisense-words-only.png";
@@ -18,9 +27,8 @@ export default function Sidebar({ children }) {
         <div className="p-4 pb-2 flex justify-between items-center">
           <img
             src={AudiSenseLogoWordOnly}
-            className={`overflow-hidden transition-all ${
-              expanded ? "w-32" : "w-0"
-            }`}
+            className={`overflow-hidden transition-all ${expanded ? "w-32" : "w-0"
+              }`}
             alt="logo"
           />
           <button
@@ -33,6 +41,32 @@ export default function Sidebar({ children }) {
         <SidebarContext.Provider value={contextValue}>
           <ul className="flex-1 px-3">{children}</ul>
         </SidebarContext.Provider>
+
+        <div className="border-t flex p-3">
+          {/* <img
+            src="https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true"
+            alt=""
+            className="w-10 h-10 rounded-md"
+          />
+          <div
+            className={`
+              flex justify-between items-center
+              overflow-hidden transition-all ${expanded ? "w-52 ml-3" : "w-0"}
+          `}
+          >
+            <div className="leading-4">
+              <h4 className="font-semibold">John Doe</h4>
+              <span className="text-xs text-gray-600">johndoe@gmail.com</span>
+            </div>
+            <MoreVertical size={20} />
+          </div> */}
+          {/* <SidebarItem
+            icon={<Layers size={20} />}
+            text="Tasks"
+            alert={false}
+            active={false}
+          /> */}
+        </div>
       </nav>
     </aside>
   );
@@ -41,9 +75,9 @@ export default function Sidebar({ children }) {
 SidebarItem.propTypes = {
   icon: PropTypes.node,
   text: PropTypes.string,
-  active: PropTypes.bool,
-  alert: PropTypes.bool,
   logout: PropTypes.bool,
+  active: PropTypes.bool || null,
+  alert: PropTypes.bool || null,
 };
 
 export function SidebarItem({ icon, text, active, alert, logout = false }) {
@@ -72,9 +106,8 @@ export function SidebarItem({ icon, text, active, alert, logout = false }) {
       </span>
       {alert && (
         <div
-          className={`absolute right-2 w-2 h-2 rounded bg-indigo-400 ${
-            expanded ? "" : "top-2"
-          }`}
+          className={`absolute right-2 w-2 h-2 rounded bg-indigo-400 ${expanded ? "" : "top-2"
+            }`}
         />
       )}
 

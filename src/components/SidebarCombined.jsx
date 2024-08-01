@@ -6,7 +6,8 @@ import {
   Settings,
   Users2,
   LogOut,
-  LucideBuilding2,
+  UserPlus2,
+  LogOut
 } from "lucide-react";
 import Sidebar, { SidebarItem } from "./Sidebar";
 import React, { useEffect, useState } from "react";
