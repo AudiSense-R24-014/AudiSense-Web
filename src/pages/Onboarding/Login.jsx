@@ -9,7 +9,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState({ email: "", password: "" });
-  const [isEmtpy, setIsEmpty] = useState(true);
+  const [isEmpty, setIsEmpty] = useState(true);
 
   const validateEmail = (value) => {
     if (!value) {
@@ -52,7 +52,7 @@ const Login = () => {
   const signIn = (e) => {
     e.preventDefault();
 
-    if (isEmtpy) {
+    if (isEmpty) {
       alert("Please fill in the required fields.");
       return;
     }
