@@ -38,7 +38,6 @@ export default function Sidebar({ children }) {
             {expanded ? <ChevronFirst /> : <ChevronLast />}
           </button>
         </div>
-
         <SidebarContext.Provider value={contextValue}>
           <ul className="flex-1 px-3">{children}</ul>
         </SidebarContext.Provider>
@@ -76,28 +75,32 @@ export default function Sidebar({ children }) {
 SidebarItem.propTypes = {
   icon: PropTypes.node,
   text: PropTypes.string,
+  logout: PropTypes.bool,
   active: PropTypes.bool || null,
   alert: PropTypes.bool || null,
 };
 
-export function SidebarItem({ icon, text, active, alert }) {
+export function SidebarItem({ icon, text, active, alert, logout = false }) {
   const { expanded } = useContext(SidebarContext);
   return (
     <li
       className={`
-          relative flex items-center py-2 px-3 my-1
-          font-medium rounded-md cursor-pointer
-          transition-colors group
-          ${active
-          ? "bg-gradient-to-tr from-indigo-200 to-indigo-100 text-indigo-800"
-          : "hover:bg-indigo-50 text-gray-600"
-        }
-      `}
+      relative flex items-center py-2 px-3 my-1
+      font-medium rounded-md cursor-pointer
+      transition-colors group
+      ${
+        active
+          ? "bg-gradient-to-tr from-indigo-300/85 to-indigo-200 text-indigo-800"
+          : "hover:bg-indigo-100/75 text-gray-600"
+      }
+      ${logout && "text-gray-600 hover:bg-red-200/75"}
+    `}
     >
       {icon}
       <span
-        className={`overflow-hidden transition-all ${expanded ? "w-52 ml-3" : "w-0"
-          }`}
+        className={`overflow-hidden transition-all font-nunito font-bold ${
+          expanded ? "w-52 ml-3" : "w-0"
+        }`}
       >
         {text}
       </span>
@@ -115,6 +118,7 @@ export function SidebarItem({ icon, text, active, alert }) {
             bg-indigo-100 text-indigo-800 text-sm
             invisible opacity-20 -translate-x-3 transition-all
             group-hover:visible group-hover:opacity-100 group-hover:translate-x-0
+            ${logout && "bg-red-200 text-red-800"}
         `}
         >
           {text}
