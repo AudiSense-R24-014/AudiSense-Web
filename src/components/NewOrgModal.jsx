@@ -48,19 +48,22 @@ export default function NewOrgModal({ visible, onClose }) {
   const [country, setCountry] = useState("");
   const countries = useMemo(() => countryList().getData(), []);
 
+  console.log(countries);
+
   if (!visible) {
     return null;
   }
+
   return (
     <div
       className="fixed inset-0 bg-opacity-20 backdrop-blur-sm bg-black flex justify-center items-center"
       aria-modal="true"
     >
-      <div className="bg-white rounded-xl relative w-5/6 lg:w-1/2">
-        <div className="border-b-2 p-2 lg:p-4 lg:px-8">
+      <div className="bg-white rounded-xl relative w-full max-w-3xl mx-4 sm:mx-8 lg:w-2/3 xl:w-1/2 overflow-auto max-h-full p-4 sm:p-6 lg:p-8">
+        <div className="pb-2">
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 p-1 rounded-lg text-gray-400 bg-white hover:bg-gray-50 hover:text-gray-600"
+            className="absolute top-3 right-4 p-1 rounded-lg text-gray-400 bg-white hover:bg-gray-50 hover:text-gray-600"
             aria-label="Close"
           >
             <X />
@@ -69,9 +72,9 @@ export default function NewOrgModal({ visible, onClose }) {
             Add New Organization
           </h1>
         </div>
-        {/* Modal Content*/}
-        <div className="font-montserrat p-2 lg:p-4 lg:px-8">
-          <form className="space-y-6 px-4">
+        {/* Modal Content */}
+        <div className="font-montserrat pt-4">
+          <form className="space-y-6">
             <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-8">
               <div className="flex-1">
                 <label
@@ -181,7 +184,7 @@ export default function NewOrgModal({ visible, onClose }) {
                 type="submit"
                 className="text-white bg-audi-purple hover:bg-purple-900 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-12 py-2.5"
               >
-                Sign Up
+                Create Organization
               </button>
             </div>
           </form>

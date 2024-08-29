@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import ComprehensionTaskGeneratorService from "../../../services/ComprehensionTaskGenerator.service";
+import ComprehensionTaskService from "../../../services/ComprehensionTask.service";
 
 function ComprehensiveTasks() {
   const [feedback, setFeedback] = useState("");
@@ -8,6 +8,7 @@ function ComprehensiveTasks() {
 
   const [generatedComprehension, setGeneratedComprehension] = useState({});
   const [loading, setLoading] = useState(false);
+  const [isGenerated, setIsGenerated] = useState(false);
 
   const handlePassageChange = (event) => {
     setGeneratedComprehension((prevState) => ({
@@ -44,10 +45,10 @@ function ComprehensiveTasks() {
     setQuestionCount(event.target.value);
   };
 
-  const handleSubmit = async (event) => {
+  const handleGeneration = async (event) => {
     event.preventDefault();
     setLoading(true); // Set loading state to true
-    ComprehensionTaskGeneratorService.generate(feedback, length, questionCount)
+    ComprehensionTaskService.generate(feedback, length, questionCount)
       .then((data) => {
         setGeneratedComprehension(data);
       })
@@ -56,6 +57,19 @@ function ComprehensiveTasks() {
       })
       .finally(() => {
         setLoading(false); // Set loading state back to false
+        setIsGenerated(true); // Set isGenerated state to true
+      });
+  };
+
+  const saveComprehensiveTask = async (event) => {
+    event.preventDefault();
+    console.log(generatedComprehension);
+    ComprehensionTaskService.persist(generatedComprehension)
+      .then((data) => {
+        console.log("Comprehensive Task saved successfully:", data);  
+      })
+      .catch((err) => {
+        console.error("Error saving comprehensive task:", err);
       });
   };
 
@@ -125,7 +139,7 @@ function ComprehensiveTasks() {
         </div>
         <div>
           <button
-            onClick={handleSubmit}
+            onClick={handleGeneration}
             disabled={loading} // Disable the button when loading is true
             className={`bg-purple-400 font-nunito text-white py-2 px-4 rounded-md hover:bg-purple-600 transition-colors duration-300 ${
               loading ? "opacity-50 cursor-not-allowed" : ""
@@ -139,6 +153,15 @@ function ComprehensiveTasks() {
         <div className="border border-gray-300 rounded-md font-nunito p-4">
           <div className="flex justify-between items-center mb-4">
             <h1 className="text-2xl font-nunito font-bold">Generated Task</h1>
+            <button
+            onClick={saveComprehensiveTask}
+            disabled={!isGenerated} // Disable the button when isGenerated is false
+            className={`bg-purple-400 font-nunito text-white py-2 px-4 rounded-md hover:bg-purple-600 transition-colors duration-300 ${
+              !isGenerated ? "opacity-50 cursor-not-allowed" : ""
+            }`}
+          >
+            Save & Assign
+          </button>
           </div>
           <div className="mb-4 flex items-center">
             <div className="flex-grow w-72 mr-4">

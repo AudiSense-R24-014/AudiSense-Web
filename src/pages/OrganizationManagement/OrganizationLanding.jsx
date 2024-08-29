@@ -15,7 +15,7 @@ const OrganizationLanding = () => {
       <div className="flex justify-center mx-2 my-12">
         <img src={orgLanding} alt="org landing" className="opacity-80" />
       </div>
-      <div className="flex justify-center font-montserrat">
+      <div className="flex justify-center font-montserrat mb-4">
         <div className="flex flex-col gap-y-2">
           <button
             onClick={() => {
