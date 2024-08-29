@@ -31,9 +31,16 @@ function Patients() {
     console.log("Edit", patient);
   };
 
-  const handleDelete = (patient) => {
+  const handleDelete = async (patient) => {
     // Implement your delete logic here
-    console.log("Delete", patient);
+    await PatientService.deletePatient(patient._id)
+      .then(() => {
+        alert(patient.fName + " " + patient.lName + " has been deleted.");
+        getAllPatients();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return (
@@ -129,7 +136,9 @@ function Patients() {
                         <div className="flex justify-center">
                           <button
                             className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                            onClick={() => handleDelete(patient)}
+                            onClick={() => {
+                              handleDelete(patient);
+                            }}
                           >
                             <Trash size={20} />
                           </button>
@@ -147,6 +156,7 @@ function Patients() {
       <AddNewPatientModal
         visible={openAddNewPatientModal}
         onClose={() => setOpenAddNewPatientModal(false)}
+        getPatients={getAllPatients}
       />
     </div>
   );

@@ -42,7 +42,7 @@ const customCountrySelectStyles = {
     }),
 };
 
-export default function AddNewPatientModal({ visible, onClose }) {
+export default function AddNewPatientModal({ visible, onClose, getPatients }) {
     const [formData, setFormData] = useState({
         fName: "",
         lName: "",
@@ -158,6 +158,7 @@ export default function AddNewPatientModal({ visible, onClose }) {
                 handleAvtLevelChange(null);
                 handleGenderChange(null);
                 handleIsImplantedChange(null);
+                getPatients();
                 onClose();
             }).catch((error) => {
                 alert("Error adding patient");
