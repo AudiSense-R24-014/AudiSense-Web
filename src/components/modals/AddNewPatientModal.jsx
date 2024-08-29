@@ -3,6 +3,8 @@ import { X } from "lucide-react";
 import Select from "react-select";
 import PropTypes from "prop-types";
 
+import PatientService from "../../services/Patient.service";
+
 const customCountrySelectStyles = {
     control: (provided, state) => ({
         ...provided,
@@ -63,8 +65,8 @@ export default function AddNewPatientModal({ visible, onClose }) {
     ];
 
     const yesno = [
-        { value: "Yes", label: "Yes" },
-        { value: "No", label: "No" },
+        { value: true, label: "Yes" },
+        { value: false, label: "No" },
     ];
 
     const avtLevels = [
@@ -109,8 +111,60 @@ export default function AddNewPatientModal({ visible, onClose }) {
 
     const addPatient = (e) => {
         e.preventDefault();
-        console.log(formData);
-        onClose();
+        // console.log(formData);
+
+        //create custom object
+        const patient = {
+            fName: formData.fName,
+            lName: formData.lName,
+            dob: formData.dob,
+            gender: formData.gender.value,
+            email: formData.email,
+            contactNo: formData.contactNo,
+            password: formData.password,
+            hearingAge: formData.hearingAge,
+            implant: {
+                isImplanted: formData.isImplanted.value,
+                surgeryDate: formData.surgeryDate,
+                switchOnDate: formData.switchOnDate,
+            },
+            AVTLevel: formData.avtLevel.value,
+        }
+
+        // console.log(patient);
+
+        PatientService.createPatient(patient)
+            .then((response) => {
+                alert("Patient added successfully");
+                console.log(response);
+
+                // Reset the form
+                setFormData({
+                    fName: "",
+                    lName: "",
+                    dob: "",
+                    gender: null,
+                    contactNo: "",
+                    email: "",
+                    password: "",
+                    repeatPassword: "",
+                    hearingAge: "",
+                    avtLevel: null,
+                    isImplanted: null,
+                    surgeryDate: "",
+                    switchOnDate: "",
+                });
+
+                handleAvtLevelChange(null);
+                handleGenderChange(null);
+                handleIsImplantedChange(null);
+                onClose();
+            }).catch((error) => {
+                alert("Error adding patient");
+                console.log(error);
+            });
+
+
     };
 
     return (
