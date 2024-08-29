@@ -1,68 +1,30 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Edit, Trash } from "lucide-react";
 import AddNewPatientModal from "../../components/modals/AddNewPatientModal";
+import PatientService from "../../services/Patient.service";
 
 function Patients() {
-
+  const [patients, setPatients] = useState([]);
+  const [selectedPatient, setSelectedPatient] = useState(null);
   const [openAddNewPatientModal, setOpenAddNewPatientModal] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  const patientsJson = [
-    {
-      Name: "Emily Johnson",
-      Age: 32,
-      Gender: "Female",
-      BloodPressure: "120/80 mmHg",
-      HeartRate: "72 bpm",
-      Temperature: "98.6°F",
-      Weight: "65 kg",
-      Height: "170 cm",
-      Diagnosis: "Hypertension",
-    },
-    {
-      Name: "John Smith",
-      Age: 45,
-      Gender: "Male",
-      BloodPressure: "130/85 mmHg",
-      HeartRate: "65 bpm",
-      Temperature: "98.2°F",
-      Weight: "80 kg",
-      Height: "180 cm",
-      Diagnosis: "Type 2 Diabetes",
-    },
-    {
-      Name: "Sarah Lee",
-      Age: 28,
-      Gender: "Female",
-      BloodPressure: "110/70 mmHg",
-      HeartRate: "80 bpm",
-      Temperature: "98.9°F",
-      Weight: "55 kg",
-      Height: "160 cm",
-      Diagnosis: "Seasonal Allergies",
-    },
-    {
-      Name: "Michael Chen",
-      Age: 60,
-      Gender: "Male",
-      BloodPressure: "140/90 mmHg",
-      HeartRate: "78 bpm",
-      Temperature: "98.4°F",
-      Weight: "75 kg",
-      Height: "175 cm",
-      Diagnosis: "Osteoarthritis",
-    },
-    {
-      Name: "Emma Davis",
-      Age: 20,
-      Gender: "Female",
-      BloodPressure: "115/75 mmHg",
-      HeartRate: "60 bpm",
-      Temperature: "98.0°F",
-      Weight: "58 kg",
-      Height: "165 cm",
-      Diagnosis: "Healthy",
-    },
-  ];
+  const getAllPatients = async () => {
+    setLoading(true);
+    try {
+      const response = await PatientService.getPatients();
+      console.log(response);
+      setPatients(response);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getAllPatients();
+  }, []);
 
   const handleEdit = (patient) => {
     // Implement your edit logic here
@@ -81,81 +43,111 @@ function Patients() {
         <button
           type="button"
           className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-
-          onClick={() => {
-            setOpenAddNewPatientModal(true);
-          }}
+          onClick={() => setOpenAddNewPatientModal(true)}
         >
           Add New Patient
         </button>
       </div>
-      <div className="min-w-full overflow-hidden overflow-x-scroll">
-        <table className="w-full table-auto">
-          <thead>
-            <tr className=" text-purple-600 font-nunito">
-              <th className="px-4 py-2">Name</th>
-              <th className="px-4 py-2">Age</th>
-              <th className="px-4 py-2">Gender</th>
-              <th className="px-4 py-2">Blood Pressure</th>
-              <th className="px-4 py-2">Heart Rate</th>
-              <th className="px-4 py-2">Temperature</th>
-              <th className="px-4 py-2">Weight</th>
-              <th className="px-4 py-2">Height</th>
-              <th className="px-4 py-2">Diagnosis</th>
-              <th className="px-4 py-2">Edit</th>
-              <th className="px-4 py-2">Delete</th>
-              {/* New column for actions */}
-            </tr>
-          </thead>
-          <tbody>
-            {patientsJson.map((patient, index) => (
-              <tr
-                key={index + 1}
-                className={
-                  index % 2 === 0
-                    ? "bg-purple-200 font-nunito"
-                    : "bg-purple-300 font-nunito"
-                }
-              >
-                <td className="border px-4 py-2">{patient.Name}</td>
-                <td className="border px-4 py-2">{patient.Age}</td>
-                <td className="border px-4 py-2">{patient.Gender}</td>
-                <td className="border px-4 py-2">{patient.BloodPressure}</td>
-                <td className="border px-4 py-2">{patient.HeartRate}</td>
-                <td className="border px-4 py-2">{patient.Temperature}</td>
-                <td className="border px-4 py-2">{patient.Weight}</td>
-                <td className="border px-4 py-2">{patient.Height}</td>
-                <td className="border px-4 py-2">{patient.Diagnosis}</td>
-                <td className="border px-4 py-2">
-                  <div className="flex justify-center">
-                    <button
-                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
-                      onClick={() => handleEdit(patient)}
+
+      {loading ? (
+        <div className="flex justify-center items-center h-96">
+          <div className="loader"></div>
+          <p>Loading patients...</p>
+        </div>
+      ) : (
+        <div className="min-w-full overflow-hidden overflow-x-scroll">
+          <div className="w-full">
+            <div className="overflow-y-auto h-96">
+              <table className="w-full table-auto">
+                <thead className="bg-purple-600 text-white font-nunito sticky top-0">
+                  <tr>
+                    <th className="px-4 py-2">First Name</th>
+                    <th className="px-4 py-2">Last Name</th>
+                    <th className="px-4 py-2">Gender</th>
+                    <th className="px-4 py-2">DOB</th>
+                    <th className="px-4 py-2">Contact No</th>
+                    <th className="px-4 py-2">Email</th>
+                    <th className="px-4 py-2">AVT Level</th>
+                    <th className="px-4 py-2">Is Implanted</th>
+                    <th className="px-4 py-2">Surgery Date</th>
+                    <th className="px-4 py-2">Switched on Date</th>
+                    <th className="px-4 py-2">Edit</th>
+                    <th className="px-4 py-2">Delete</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {patients.map((patient, index) => (
+                    <tr
+                      key={index}
+                      className={
+                        index % 2 === 0
+                          ? "bg-purple-200 font-nunito"
+                          : "bg-purple-300 font-nunito"
+                      }
                     >
-                      <Edit size={20} />
-                    </button>
-                  </div>
-                </td>
-                <td className="border px-4 py-2">
-                  <div className="flex justify-center">
-                    <button
-                      className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                      onClick={() => handleDelete(patient)}
-                    >
-                      <Trash size={20} />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+                      <td className="border px-4 py-2">{patient.fName}</td>
+                      <td className="border px-4 py-2">{patient.lName}</td>
+                      <td className="border px-4 py-2">{patient.gender}</td>
+                      <td className="border px-4 py-2">
+                        {patient.dob ? patient.dob.slice(0, 10) : "N/A"}
+                      </td>
+                      <td className="border px-4 py-2">{patient.contactNo}</td>
+                      <td className="border px-4 py-2">{patient.email}</td>
+                      <td className="border px-4 py-2">{patient.AVTLevel}</td>
+                      <td className="border px-4 py-2">
+                        {patient.implant.isImplanted ? (
+                          <span className="bg-green-500 text-white font-bold py-1 px-2 rounded-full">
+                            Yes
+                          </span>
+                        ) : (
+                          <span className="bg-red-500 text-white font-bold py-1 px-2 rounded-full">
+                            No
+                          </span>
+                        )}
+                      </td>
+                      <td className="border px-4 py-2">
+                        {patient.implant.surgeryDate
+                          ? patient.implant.surgeryDate.slice(0, 10)
+                          : "N/A"}
+                      </td>
+                      <td className="border px-4 py-2">
+                        {patient.implant.switchOnDate
+                          ? patient.implant.switchOnDate.slice(0, 10)
+                          : "N/A"}
+                      </td>
+                      <td className="border px-4 py-2">
+                        <div className="flex justify-center">
+                          <button
+                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
+                            onClick={() => handleEdit(patient)}
+                          >
+                            <Edit size={20} />
+                          </button>
+                        </div>
+                      </td>
+                      <td className="border px-4 py-2">
+                        <div className="flex justify-center">
+                          <button
+                            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                            onClick={() => handleDelete(patient)}
+                          >
+                            <Trash size={20} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
+
       <AddNewPatientModal
         visible={openAddNewPatientModal}
-        onClose={() => {
-          setOpenAddNewPatientModal(false);
-        }} />
+        onClose={() => setOpenAddNewPatientModal(false)}
+      />
     </div>
   );
 }
