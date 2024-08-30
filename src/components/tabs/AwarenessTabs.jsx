@@ -2,8 +2,6 @@ import React from "react";
 import {
     AudioLines,
     Combine,
-    SearchCheck,
-    BookOpenText,
     Shapes,
 } from "lucide-react";
 import PropTypes from "prop-types";
@@ -17,8 +15,8 @@ export default function AwarenessTabs({ taskList, toggleTaskStatus }) {
 
     const taskOptions = [
         { id: "awarenessSounds", label: "Awareness Sounds", icon: <AudioLines size={20} /> },
-        { id: "ling6All", label: "Ling 6 All", icon: <Combine size={20} /> },
-        { id: "ling6Separate", label: "ling 6 Separate", icon: <Shapes size={20} /> },
+        { id: "ling6All", label: "Ling 6 Combined", icon: <Combine size={20} /> },
+        { id: "ling6Separate", label: "Ling 6 Separate", icon: <Shapes size={20} /> },
     ]
 
     return (

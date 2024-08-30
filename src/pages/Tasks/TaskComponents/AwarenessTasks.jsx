@@ -11,15 +11,13 @@ function AwarenessTasks() {
   const [taskTab, setTaskTab] = useState("awarenessSounds");
   return (
     <>
-      <div className="p-4 px-10">
-        <div className="flex justify-between items-center">
-          <h1 className="text-4xl font-nunito font-bold">Awareness Tasks</h1>
-          <AwarenessTabs taskList={taskTab} toggleTaskStatus={setTaskTab} />
-        </div>
-        {taskTab === "ling6All" && <Ling6All />}
-        {taskTab === "ling6Separate" && <Ling6Separate />}
-        {taskTab === "awarenessSounds" && <AwarenessBasicGenerate />}
+      <div className="flex justify-between items-center">
+        <h1 className="text-2xl font-nunito font-bold">Awareness Tasks</h1>
+        <AwarenessTabs taskList={taskTab} toggleTaskStatus={setTaskTab} />
       </div>
+      {taskTab === "ling6All" && <Ling6All />}
+      {taskTab === "ling6Separate" && <Ling6Separate />}
+      {taskTab === "awarenessSounds" && <AwarenessBasicGenerate />}
     </>
   )
 }

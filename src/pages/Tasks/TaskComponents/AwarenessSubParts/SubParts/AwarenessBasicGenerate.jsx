@@ -2,10 +2,16 @@ import React, { useEffect, useState } from 'react'
 import {
     LayoutList,
     Columns4,
+    FileMusic
 } from "lucide-react";
 
 export default function AwarenessBasicGenerate() {
     const [selected, setSelected] = useState('all');
+    const [loading, setLoading] = useState(false);
+
+    async function generateTask() {
+        alert('Generate Task');
+    }
 
     return (
         <>
@@ -14,6 +20,19 @@ export default function AwarenessBasicGenerate() {
                     <div className="flex justify-between items-center mb-4">
                         <div>
                             <h1 className="text-xl font-nunito font-bold">Awareness Sounds</h1>
+                        </div>
+                        <div>
+                            <button
+                                className={`
+              relative flex items-center py-2 px-3 my-1
+              font-bold rounded-md cursor-pointer
+              transition-colors group hover:bg-indigo-50 text-gray-600 border border-gray-200
+          `}
+                                onClick={() => generateTask()}
+                            >
+                                <FileMusic size={20} />
+                                <span>&nbsp;Generate Task</span>
+                            </button>
                         </div>
                         <div>
                             <div className="flex items-center space-x-1">
@@ -51,7 +70,35 @@ export default function AwarenessBasicGenerate() {
                         </div>
                     </div>
                     <div>
-                        {selected}
+                        {loading ? (
+                            <div className="flex justify-center items-center h-96">
+                                <div className="loader"></div>
+                                <p>Loading patients...</p>
+                            </div>
+                        ) : (
+                            <div className="min-w-full overflow-hidden overflow-x-scroll">
+                                <div className="w-full">
+                                    <div className="overflow-y-auto h-96">
+                                        <table className="w-full table-auto">
+                                            <thead className="bg-purple-600 text-white font-nunito sticky top-0">
+                                                <tr>
+                                                    <th className="px-4 py-2">1st Sound</th>
+                                                    <th className="px-4 py-2">2nd Sound</th>
+                                                    <th className="px-4 py-2">3rd Sound</th>
+                                                    <th className="px-4 py-2">Created Date</th>
+                                                    <th className="px-4 py-2">is Assigned</th>
+                                                    <th className="px-4 py-2">View</th>
+                                                    <th className="px-4 py-2">Delete</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
