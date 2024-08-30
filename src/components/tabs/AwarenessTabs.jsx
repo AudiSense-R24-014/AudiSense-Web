@@ -18,7 +18,7 @@ export default function AwarenessTabs({ taskList, toggleTaskStatus }) {
     const taskOptions = [
         { id: "awarenessSounds", label: "Awareness Sounds", icon: <AudioLines size={20} /> },
         { id: "ling6All", label: "Ling 6 All", icon: <Combine size={20} /> },
-        { id: "ling6Separate", label: "ling6Separate", icon: <Shapes size={20} /> },
+        { id: "ling6Separate", label: "ling 6 Separate", icon: <Shapes size={20} /> },
     ]
 
     return (

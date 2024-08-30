@@ -8,7 +8,7 @@ import {
 } from "./AwarenessSubParts";
 
 function AwarenessTasks() {
-  const [taskTab, setTaskTab] = useState("ling6All");
+  const [taskTab, setTaskTab] = useState("awarenessSounds");
   return (
     <>
       <div className="p-4 px-10">
