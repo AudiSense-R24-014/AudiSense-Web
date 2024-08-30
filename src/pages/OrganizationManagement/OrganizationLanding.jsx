@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import orgLanding from "../../assets/images/org-landing.png";
-import NewOrgModal from "../../components/NewOrgModal";
+import NewOrgModal from "../../components/modals/NewOrgModal";
 
 const OrganizationLanding = () => {
   const [openNewOrgModal, setOpenNewOrgModal] = useState(false);
