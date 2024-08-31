@@ -14,7 +14,7 @@ const generateAwarenessSounds = async (data) => {
 
 const getAwarenessSounds = async (data) => {
     const response = await fetch(URL.AWARENESS_BASIC, {
-        method: 'POST',
+        method: 'GET',
         headers: {
             'Content-Type': 'application/json',
         },
@@ -45,6 +45,7 @@ const updateAwarenessSound = async (id, data) => {
     });
     const responseData = await response.json();
     return responseData;
+
 }
 
 const deleteAwarenessSound = async (id) => {
@@ -54,8 +55,7 @@ const deleteAwarenessSound = async (id) => {
             'Content-Type': 'application/json',
         },
     });
-    const responseData = await response.json();
-    return responseData;
+    return response;
 }
 
 const getNotAssignedAwarenessSounds = async () => {
@@ -80,7 +80,7 @@ const getAwarenessSoundsByPatientID = async (id) => {
     return responseData;
 }
 
-export {
+export default {
     generateAwarenessSounds,
     getAwarenessSounds,
     getOneAwarenessSound,

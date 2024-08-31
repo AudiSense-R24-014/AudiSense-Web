@@ -14,7 +14,7 @@ const generateLing6All = async (data) => {
 
 const getLing6All = async (data) => {
     const response = await fetch(URL.LING_6_ALL, {
-        method: 'POST',
+        method: 'GET',
         headers: {
             'Content-Type': 'application/json',
         },
@@ -54,8 +54,7 @@ const deleteLing6All = async (id) => {
             'Content-Type': 'application/json',
         },
     });
-    const responseData = await response.json();
-    return responseData;
+    return response;
 }
 
 const getLing6AllNotAssigned = async () => {
@@ -80,7 +79,7 @@ const getLing6AllByPatientID = async (id) => {
     return responseData;
 }
 
-export {
+export default {
     generateLing6All,
     getLing6All,
     getOneLing6All,

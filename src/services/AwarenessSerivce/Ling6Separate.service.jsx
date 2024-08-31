@@ -12,9 +12,9 @@ const generateLing6Separate = async (data) => {
     return responseData;
 }
 
-const getLing6Separate = async (data) => {
+const getLing6Separates = async (data) => {
     const response = await fetch(URL.LING_6_SEPARATE, {
-        method: 'POST',
+        method: 'GET',
         headers: {
             'Content-Type': 'application/json',
         },
@@ -54,8 +54,7 @@ const deleteLing6Separate = async (id) => {
             'Content-Type': 'application/json',
         },
     });
-    const responseData = await response.json();
-    return responseData;
+    return response;
 }
 
 const getLing6SeparateNotAssigned = async () => {
@@ -80,9 +79,9 @@ const getLing6SeparateByPatientID = async (id) => {
     return responseData;
 }
 
-export {
+export default {
     generateLing6Separate,
-    getLing6Separate,
+    getLing6Separates,
     getOneLing6Separate,
     updateLing6Separate,
     deleteLing6Separate,
