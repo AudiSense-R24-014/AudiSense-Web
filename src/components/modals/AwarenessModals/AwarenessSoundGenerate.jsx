@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { X } from "lucide-react";
+import Select from "react-select";
 import PropTypes from "prop-types";
 
-export default function AwarenessSoundView({ visible, onClose, data }) {
+export default function AwarenessSoundGenerate({ visible, onClose, getData }) {
 
     if (!visible) {
         return null;
@@ -24,7 +25,7 @@ export default function AwarenessSoundView({ visible, onClose, data }) {
                     </button>
 
                     <h1 className="font-bold font-montserrat text-lg">
-                        AwarenessSoundView
+                        AwarenessSoundGenerate
                     </h1>
                 </div>
             </div>
@@ -33,8 +34,8 @@ export default function AwarenessSoundView({ visible, onClose, data }) {
     )
 }
 
-AwarenessSoundView.propTypes = {
+AwarenessSoundGenerate.propTypes = {
     visible: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
-    data: PropTypes.object,
+    getData: PropTypes.func.isRequired,
 };

@@ -1,9 +1,40 @@
-import React from 'react'
+import React, { useState } from "react";
+import { X } from "lucide-react";
+import Select from "react-select";
+import PropTypes from "prop-types";
 
-export default function Ling6AllGenerate() {
+export default function Ling6AllGenerate({ visible, onClose, getData }) {
+    if (!visible) {
+        return null;
+    }
+
     return (
-        <div>
+        <div
+            className="fixed inset-0 bg-opacity-20 backdrop-blur-sm bg-black flex justify-center items-center"
+            aria-modal="true"
+        >
+            <div className="bg-white rounded-xl relative w-5/6 lg:w-1/2">
+                <div className="border-b-2 p-2 lg:p-4 lg:px-8">
+                    <button
+                        onClick={onClose}
+                        className="absolute top-4 right-4 p-1 rounded-lg text-gray-400 bg-white hover:bg-gray-50 hover:text-gray-600"
+                        aria-label="Close"
+                    >
+                        <X />
+                    </button>
 
+                    <h1 className="font-bold font-montserrat text-lg">
+                        Ling6AllGenerate
+                    </h1>
+                </div>
+            </div>
+            {/* Modal Content */}
         </div>
     )
 }
+
+Ling6AllGenerate.propTypes = {
+    visible: PropTypes.bool.isRequired,
+    onClose: PropTypes.func.isRequired,
+    getData: PropTypes.func.isRequired,
+};

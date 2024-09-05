@@ -6,11 +6,18 @@ import {
 } from "lucide-react";
 import moment from 'moment';
 import Ling6SeparateService from '../../../../../services/AwarenessSerivce/Ling6Separate.service';
+import {
+    Ling6SeparateGenerate,
+    Ling6SeparateView
+} from '../../../../../components/modals/AwarenessModals';
 
 export default function Ling6Separate() {
     const [selected, setSelected] = useState('all');
     const [loading, setLoading] = useState(false);
     const [sounds, setSounds] = useState([]);
+
+    const [openGenerateModal, setOpenGenerateModal] = useState(false);
+    const [openViewModal, setOpenViewModal] = useState(false);
 
     async function generateTask() {
         alert('Generate Task');
@@ -78,7 +85,7 @@ export default function Ling6Separate() {
                                 font-bold rounded-md cursor-pointer
                                 transition-colors group hover:bg-indigo-50 text-gray-600 border border-gray-200
                             `}
-                            onClick={() => generateTask()}
+                            onClick={() => setOpenGenerateModal(true)}
                         >
                             <AudioWaveform size={20} />
                             <span>&nbsp;Generate Task</span>
@@ -198,6 +205,19 @@ export default function Ling6Separate() {
                     )}
                 </div>
             </div>
+
+            <Ling6SeparateGenerate
+                visible={openGenerateModal}
+                onClose={() => setOpenGenerateModal(false)}
+                getData={getLing6Separate}
+            />
+            <Ling6SeparateView
+                visible={openViewModal}
+                onClose={() => setOpenViewModal(false)}
+                data={null}
+            />
+
+
         </div>
     );
 }

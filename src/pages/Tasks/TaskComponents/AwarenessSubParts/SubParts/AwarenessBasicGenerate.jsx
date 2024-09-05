@@ -6,12 +6,19 @@ import {
 } from "lucide-react";
 import moment from 'moment';
 import AwarenessBasicService from '../../../../../services/AwarenessSerivce/AwarenessBasic.service';
+import {
+    AwarenessSoundGenerate,
+    AwarenessSoundView,
+} from '../../../../../components/modals/AwarenessModals';
 
 export default function AwarenessBasicGenerate() {
     const [selected, setSelected] = useState('all');
     const [loading, setLoading] = useState(true);
     const [awarenessSounds, setAwarenessSounds] = useState([]);
     const [filteredSounds, setFilteredSounds] = useState([]);
+
+    const [openGenerateModal, setOpenGenerateModal] = useState(false);
+    const [openViewModal, setOpenViewModal] = useState(false);
 
     async function generateTask() {
         alert('Generate Task');
@@ -74,7 +81,7 @@ export default function AwarenessBasicGenerate() {
                                 font-bold rounded-md cursor-pointer
                                 transition-colors group hover:bg-indigo-50 text-gray-600 border border-gray-200
                             `}
-                            onClick={() => generateTask()}
+                            onClick={() => setOpenGenerateModal(true)}
                         >
                             <FileMusic size={20} />
                             <span>&nbsp;Generate Task</span>
@@ -200,6 +207,18 @@ export default function AwarenessBasicGenerate() {
                     )}
                 </div>
             </div>
+
+            <AwarenessSoundGenerate
+                visible={openGenerateModal}
+                onClose={() => setOpenGenerateModal(false)}
+                getData={getAwarenessSounds}
+            />
+            <AwarenessSoundView
+                visible={openViewModal}
+                onClose={() => setOpenViewModal(false)}
+                data={null}
+            />
+
         </div>
     )
 }
