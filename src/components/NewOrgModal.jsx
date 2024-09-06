@@ -48,7 +48,7 @@ export default function NewOrgModal({ visible, onClose }) {
   const [country, setCountry] = useState("");
   const countries = useMemo(() => countryList().getData(), []);
 
-  console.log(countries);
+  // console.log(countries);
 
   if (!visible) {
     return null;

@@ -80,7 +80,7 @@ export default function AwarenessSoundView({ visible, onClose, getData, data, pa
                     )}
 
                     {/* Assign or View Patient */}
-                    {data.patient ? (
+                    {data.patientID ? (
                         <div className="p-4 bg-green-50 rounded-lg shadow-inner">
                             <h3 className="text-lg font-semibold text-gray-800">Assigned Patient:</h3>
                             {/* <p className="text-md text-gray-700">Name: {data.patient.fName}</p>

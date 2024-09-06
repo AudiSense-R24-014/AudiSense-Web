@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { X } from "lucide-react";
 import PropTypes from "prop-types";
 
-export default function Ling6SeparateView({ visible, onClose, data }) {
+export default function Ling6SeparateView({ visible, onClose, getData, data, patients }) {
     if (!visible) {
         return null;
     }
@@ -35,4 +35,6 @@ Ling6SeparateView.propTypes = {
     visible: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
     data: PropTypes.object,
+    getDate: PropTypes.func,
+    patients: PropTypes.array.isRequired,
 };
