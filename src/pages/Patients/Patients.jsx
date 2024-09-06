@@ -13,7 +13,7 @@ function Patients() {
     setLoading(true);
     try {
       const response = await PatientService.getPatients();
-      console.log(response);
+      // console.log(response);
       setPatients(response);
     } catch (error) {
       console.error(error);

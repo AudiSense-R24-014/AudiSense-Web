@@ -452,4 +452,5 @@ export default function AddNewPatientModal({ visible, onClose, getPatients }) {
 AddNewPatientModal.propTypes = {
     visible: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
+    getPatients: PropTypes.func.isRequired,
 };

@@ -5,17 +5,23 @@ import {
     FileMusic
 } from "lucide-react";
 import moment from 'moment';
+import PropTypes from "prop-types";
 import AwarenessBasicService from '../../../../../services/AwarenessSerivce/AwarenessBasic.service';
+import {
+    AwarenessSoundGenerate,
+    AwarenessSoundView,
+} from '../../../../../components/modals/AwarenessModals';
 
-export default function AwarenessBasicGenerate() {
+export default function AwarenessBasicGenerate({ patients }) {
     const [selected, setSelected] = useState('all');
     const [loading, setLoading] = useState(true);
     const [awarenessSounds, setAwarenessSounds] = useState([]);
     const [filteredSounds, setFilteredSounds] = useState([]);
+    const [selectedSound, setSelectedSound] = useState(null);
 
-    async function generateTask() {
-        alert('Generate Task');
-    }
+
+    const [openGenerateModal, setOpenGenerateModal] = useState(false);
+    const [openViewModal, setOpenViewModal] = useState(false);
 
     async function getAwarenessSounds() {
         AwarenessBasicService.getAwarenessSounds().then((response) => {
@@ -57,7 +63,8 @@ export default function AwarenessBasicGenerate() {
     }
 
     function handleView(sound) {
-        alert('View function needs implementation');
+        setSelectedSound(sound);
+        setOpenViewModal(true);
     }
 
     return (
@@ -74,7 +81,7 @@ export default function AwarenessBasicGenerate() {
                                 font-bold rounded-md cursor-pointer
                                 transition-colors group hover:bg-indigo-50 text-gray-600 border border-gray-200
                             `}
-                            onClick={() => generateTask()}
+                            onClick={() => setOpenGenerateModal(true)}
                         >
                             <FileMusic size={20} />
                             <span>&nbsp;Generate Task</span>
@@ -200,6 +207,24 @@ export default function AwarenessBasicGenerate() {
                     )}
                 </div>
             </div>
+
+            <AwarenessSoundGenerate
+                visible={openGenerateModal}
+                onClose={() => setOpenGenerateModal(false)}
+                getData={getAwarenessSounds}
+            />
+            <AwarenessSoundView
+                visible={openViewModal}
+                onClose={() => setOpenViewModal(false)}
+                getData={getAwarenessSounds}
+                data={selectedSound}
+                patients={patients}
+            />
+
         </div>
     )
 }
+
+AwarenessBasicGenerate.propTypes = {
+    patients: PropTypes.array.isRequired,
+};
