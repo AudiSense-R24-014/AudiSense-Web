@@ -16,6 +16,7 @@ export default function Ling6Separate({ patients }) {
     const [selected, setSelected] = useState('all');
     const [loading, setLoading] = useState(false);
     const [sounds, setSounds] = useState([]);
+    const [selectedSound, setSelectedSound] = useState(null);
 
     const [openGenerateModal, setOpenGenerateModal] = useState(false);
     const [openViewModal, setOpenViewModal] = useState(false);
@@ -68,8 +69,8 @@ export default function Ling6Separate({ patients }) {
     }
 
     function handleView(sound) {
-        // Implement the view functionality
-        alert(`Viewing sound with ID ${sound._id}`);
+        setSelectedSound(sound);
+        setOpenViewModal(true);
     }
 
     return (
@@ -215,7 +216,9 @@ export default function Ling6Separate({ patients }) {
             <Ling6SeparateView
                 visible={openViewModal}
                 onClose={() => setOpenViewModal(false)}
-                data={null}
+                getData={getLing6Separate}
+                data={selectedSound}
+                patients={patients}
             />
 
 
