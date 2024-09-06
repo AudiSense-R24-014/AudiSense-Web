@@ -1,8 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { X } from "lucide-react";
 import PropTypes from "prop-types";
 
 export default function AwarenessSoundView({ visible, onClose, data }) {
+    const [error, setError] = useState("");
+
+    useEffect(() => {
+        if (visible && !data) {
+            setError("Error: No data provided.");
+        } else if (visible && typeof data !== "object") {
+            setError("Error: Invalid data format. Expected an object.");
+        } else {
+            setError(""); // Clear error if data is valid
+        }
+    }, [visible, data]);
 
     if (!visible) {
         return null;
@@ -27,14 +38,31 @@ export default function AwarenessSoundView({ visible, onClose, data }) {
                         AwarenessSoundView
                     </h1>
                 </div>
+
+                <div className="p-4">
+                    {error ? (
+                        <p className="text-red-500">{error}</p>
+                    ) : (
+                        <div>
+                            {/* Modal Content, render your data here */}
+                            {data && (
+                                <div>
+                                    {/* Example: Display data properties */}
+                                    <p>Sound Name: {data.soundName || "N/A"}</p>
+                                    <p>Duration: {data.duration || "N/A"} sec</p>
+                                    {/* Add more data fields as necessary */}
+                                </div>
+                            )}
+                        </div>
+                    )}
+                </div>
             </div>
-            {/* Modal Content */}
         </div>
-    )
+    );
 }
 
 AwarenessSoundView.propTypes = {
     visible: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
-    data: PropTypes.object,
+    data: PropTypes.object, // Expecting an object, can be null or undefined
 };
