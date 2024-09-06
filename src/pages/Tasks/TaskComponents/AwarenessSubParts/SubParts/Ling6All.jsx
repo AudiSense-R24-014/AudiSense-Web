@@ -5,13 +5,14 @@ import {
     Waves
 } from 'lucide-react';
 import moment from 'moment';
+import PropTypes from "prop-types";
 import Ling6AllService from '../../../../../services/AwarenessSerivce/Ling6All.service';
 import {
     Ling6AllGenerate,
     Ling6AllView
 } from '../../../../../components/modals/AwarenessModals';
 
-export default function Ling6All() {
+export default function Ling6All({ patients }) {
     const [selected, setSelected] = useState('all');
     const [loading, setLoading] = useState(false);
     const [sounds, setSounds] = useState([]);
@@ -207,3 +208,7 @@ export default function Ling6All() {
         </div>
     )
 }
+
+Ling6All.propTypes = {
+    patients: PropTypes.array.isRequired,
+};

@@ -5,24 +5,23 @@ import {
     FileMusic
 } from "lucide-react";
 import moment from 'moment';
+import PropTypes from "prop-types";
 import AwarenessBasicService from '../../../../../services/AwarenessSerivce/AwarenessBasic.service';
 import {
     AwarenessSoundGenerate,
     AwarenessSoundView,
 } from '../../../../../components/modals/AwarenessModals';
 
-export default function AwarenessBasicGenerate() {
+export default function AwarenessBasicGenerate({ patients }) {
     const [selected, setSelected] = useState('all');
     const [loading, setLoading] = useState(true);
     const [awarenessSounds, setAwarenessSounds] = useState([]);
     const [filteredSounds, setFilteredSounds] = useState([]);
+    const [selectedSound, setSelectedSound] = useState(null);
+
 
     const [openGenerateModal, setOpenGenerateModal] = useState(false);
     const [openViewModal, setOpenViewModal] = useState(false);
-
-    async function generateTask() {
-        alert('Generate Task');
-    }
 
     async function getAwarenessSounds() {
         AwarenessBasicService.getAwarenessSounds().then((response) => {
@@ -64,7 +63,8 @@ export default function AwarenessBasicGenerate() {
     }
 
     function handleView(sound) {
-        alert('View function needs implementation');
+        setSelectedSound(sound);
+        setOpenViewModal(true);
     }
 
     return (
@@ -216,9 +216,15 @@ export default function AwarenessBasicGenerate() {
             <AwarenessSoundView
                 visible={openViewModal}
                 onClose={() => setOpenViewModal(false)}
-                data={null}
+                getData={getAwarenessSounds}
+                data={selectedSound}
+                patients={patients}
             />
 
         </div>
     )
 }
+
+AwarenessBasicGenerate.propTypes = {
+    patients: PropTypes.array.isRequired,
+};

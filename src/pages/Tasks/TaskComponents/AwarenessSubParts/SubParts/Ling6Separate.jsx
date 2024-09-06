@@ -5,13 +5,14 @@ import {
     AudioWaveform
 } from "lucide-react";
 import moment from 'moment';
+import PropTypes from "prop-types";
 import Ling6SeparateService from '../../../../../services/AwarenessSerivce/Ling6Separate.service';
 import {
     Ling6SeparateGenerate,
     Ling6SeparateView
 } from '../../../../../components/modals/AwarenessModals';
 
-export default function Ling6Separate() {
+export default function Ling6Separate({ patients }) {
     const [selected, setSelected] = useState('all');
     const [loading, setLoading] = useState(false);
     const [sounds, setSounds] = useState([]);
@@ -221,3 +222,7 @@ export default function Ling6Separate() {
         </div>
     );
 }
+
+Ling6Separate.propTypes = {
+    patients: PropTypes.array.isRequired,
+};
