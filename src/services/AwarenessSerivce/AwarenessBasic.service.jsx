@@ -12,13 +12,12 @@ const generateAwarenessSounds = async (data) => {
     return responseData;
 }
 
-const getAwarenessSounds = async (data) => {
+const getAwarenessSounds = async () => {
     const response = await fetch(URL.AWARENESS_BASIC, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data),
     });
     const responseData = await response.json();
     return responseData;

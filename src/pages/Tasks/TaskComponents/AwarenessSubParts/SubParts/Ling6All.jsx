@@ -5,18 +5,24 @@ import {
     Waves
 } from 'lucide-react';
 import moment from 'moment';
+import PropTypes from "prop-types";
 import Ling6AllService from '../../../../../services/AwarenessSerivce/Ling6All.service';
+import {
+    Ling6AllGenerate,
+    Ling6AllView
+} from '../../../../../components/modals/AwarenessModals';
 
-export default function Ling6All() {
+export default function Ling6All({ patients }) {
     const [selected, setSelected] = useState('all');
     const [loading, setLoading] = useState(false);
     const [sounds, setSounds] = useState([]);
+    const [selectedSound, setSelectedSound] = useState(null);
 
-    async function generateTask() {
-        alert('Generate Task');
-    }
+    const [openGenerateModal, setOpenGenerateModal] = useState(false);
+    const [openViewModal, setOpenViewModal] = useState(false);
 
-    async function getLink6All() {
+
+    async function getLing6All() {
         try {
             const response = await Ling6AllService.getLing6All();
             setSounds(response);
@@ -29,7 +35,7 @@ export default function Ling6All() {
 
     useEffect(() => {
         setLoading(true);
-        getLink6All();
+        getLing6All();
     }, []);
 
     const filteredSounds = sounds.filter(sound => {
@@ -50,6 +56,11 @@ export default function Ling6All() {
         }
     }
 
+    function handleView(sound) {
+        setSelectedSound(sound);
+        setOpenViewModal(true);
+    }
+
     return (
         <div className="flex-1">
             <div className="border border-gray-300 rounded-md font-nunito p-4">
@@ -64,7 +75,7 @@ export default function Ling6All() {
                                 font-bold rounded-md cursor-pointer
                                 transition-colors group hover:bg-indigo-50 text-gray-600 border border-gray-200
                             `}
-                            onClick={() => generateTask()}
+                            onClick={() => setOpenGenerateModal(true)}
                         >
                             <Waves size={20} />
                             <span>&nbsp;Generate Task</span>
@@ -186,6 +197,23 @@ export default function Ling6All() {
                     )}
                 </div>
             </div>
+
+            <Ling6AllGenerate
+                visible={openGenerateModal}
+                onClose={() => setOpenGenerateModal(false)}
+                getData={getLing6All}
+            />
+            <Ling6AllView
+                visible={openViewModal}
+                onClose={() => setOpenViewModal(false)}
+                getData={getLing6All}
+                data={selectedSound}
+                patients={patients}
+            />
         </div>
     )
 }
+
+Ling6All.propTypes = {
+    patients: PropTypes.array.isRequired,
+};
