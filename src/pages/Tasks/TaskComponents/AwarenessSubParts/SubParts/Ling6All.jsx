@@ -16,13 +16,11 @@ export default function Ling6All({ patients }) {
     const [selected, setSelected] = useState('all');
     const [loading, setLoading] = useState(false);
     const [sounds, setSounds] = useState([]);
+    const [selectedSound, setSelectedSound] = useState(null);
 
     const [openGenerateModal, setOpenGenerateModal] = useState(false);
     const [openViewModal, setOpenViewModal] = useState(false);
 
-    async function generateTask() {
-        alert('Generate Task');
-    }
 
     async function getLing6All() {
         try {
@@ -56,6 +54,11 @@ export default function Ling6All({ patients }) {
                 console.error('Failed to delete the sound:', error);
             }
         }
+    }
+
+    function handleView(sound) {
+        setSelectedSound(sound);
+        setOpenViewModal(true);
     }
 
     return (
@@ -203,7 +206,9 @@ export default function Ling6All({ patients }) {
             <Ling6AllView
                 visible={openViewModal}
                 onClose={() => setOpenViewModal(false)}
-                data={null}
+                getData={getLing6All}
+                data={selectedSound}
+                patients={patients}
             />
         </div>
     )
