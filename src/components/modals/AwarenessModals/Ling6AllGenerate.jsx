@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { X } from "lucide-react";
 import PropTypes from "prop-types";
 
+import Ling6All from "../../../services/AwarenessSerivce/Ling6All.service";
+import Ling6AllService from "../../../services/AwarenessSerivce/Ling6All.service";
+
 export default function Ling6AllGenerate({ visible, onClose, getData }) {
     if (!visible) {
         return null;
@@ -12,6 +15,11 @@ export default function Ling6AllGenerate({ visible, onClose, getData }) {
     const [isRateChecked, setIsRateChecked] = useState(false);
     const [isPitchChecked, setIsPitchChecked] = useState(false);
     const [isBreakTimeChecked, setIsBreakTimeChecked] = useState(false);
+
+    const [generatedData, setGeneratedData] = useState({});
+
+    // State to manage loading state
+    const [loading, setLoading] = useState(false);
 
     // State for input values
     const [voice, setVoice] = useState("");
@@ -40,18 +48,71 @@ export default function Ling6AllGenerate({ visible, onClose, getData }) {
         return true;
     };
 
-    const saveData = () => {
-        // Implement save functionality
-        console.log('Save functionality not implemented');
-        const data = {
-            voice,
-            rate,
-            pitch,
-            breakTime,
-        };
 
-        console.log(data);
-    };
+    const generateSounds = () => {
+        if (validateInputs()) {
+            // Collect only the checked attributes
+
+            setLoading(true);
+
+            const selectedAttributes = {
+                voice: isVoiceChecked ? voice : null,
+                rate: isRateChecked ? rate : null,
+                pitch: isPitchChecked ? pitch : null,
+                break_time: isBreakTimeChecked ? breakTime : null,
+            };
+
+            // Disable inputs and show preview box
+            setDisableInputs(true);
+            setShowPreview(true);
+
+            console.log(selectedAttributes);
+
+            // Call the service to generate sounds
+            Ling6All.generateLing6All(selectedAttributes)
+                .then((response) => {
+                    console.log(response);
+                    setGeneratedData(response);
+                })
+                .catch((error) => {
+                    console.error(error);
+                })
+                .finally(() => {
+                    setLoading(false);
+                });
+        }
+    }
+
+    const generateAgain = () => {
+
+        // delete prev one
+        Ling6AllService.deleteLing6All(generatedData._id)
+            .then(() => {
+                console.log('Deleted previous generated data');
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+
+        // Reset all states
+        setGeneratedData({});
+        setShowPreview(false);
+        setDisableInputs(false);
+    }
+
+    const handleSave = () => {
+        setGeneratedData({});
+        setShowPreview(false);
+        setDisableInputs(false);
+        setIsBreakTimeChecked(false);
+        setIsPitchChecked(false);
+        setIsRateChecked(false);
+        setIsVoiceChecked(false);
+        setGeneratedData({});
+
+        onClose();
+        getData();
+    }
 
     return (
         <div
@@ -75,6 +136,8 @@ export default function Ling6AllGenerate({ visible, onClose, getData }) {
 
                 {/* Modal Content */}
                 <div className="font-montserrat p-2 lg:p-4 lg:px-8">
+
+
                     <div className="flex flex-col space-y-4">
                         <h3 className="text-lg font-semibold text-gray-900 mb-2">
                             Set Attributes
@@ -86,6 +149,7 @@ export default function Ling6AllGenerate({ visible, onClose, getData }) {
                         {/* Checkboxes and Inputs */}
                         <div className="flex flex-col space-y-4">
                             {/* Checkbox and Input for Voice */}
+                            {/* Checkbox and Dropdown for Voice */}
                             <div className={`flex items-center space-x-4 ${disableInputs ? 'cursor-not-allowed' : 'cursor-pointer'}`}>
                                 <input
                                     type="checkbox"
@@ -96,14 +160,19 @@ export default function Ling6AllGenerate({ visible, onClose, getData }) {
                                     className={disableInputs ? 'cursor-not-allowed' : 'cursor-pointer'}
                                 />
                                 <label htmlFor="voice" className="text-sm font-medium text-gray-900">Voice</label>
-                                <input
-                                    type="text"
+                                <select
                                     id="voiceInput"
                                     value={voice}
                                     onChange={(e) => setVoice(e.target.value)}
                                     disabled={!isVoiceChecked || disableInputs}
-                                    className={`border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent ${(!isVoiceChecked || disableInputs) ? 'bg-gray-100 cursor-not-allowed' : ''}`}
-                                />
+                                    className={`w-[200px] border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent ${(!isVoiceChecked || disableInputs) ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+                                >
+                                    <option value="">Select Voice</option>
+                                    <option value="en-US-AriaNeural">en-US-AriaNeural</option>
+                                    <option value="en-US-GuyNeural">en-US-GuyNeural</option>
+                                    <option value="en-US-DavisNeural">en-US-DavisNeural</option>
+                                    <option value="en-US-JennyNeural">en-US-JennyNeural</option>
+                                </select>
                                 <input
                                     type="checkbox"
                                     id="rate"
@@ -112,18 +181,22 @@ export default function Ling6AllGenerate({ visible, onClose, getData }) {
                                     disabled={disableInputs}
                                     className={disableInputs ? 'cursor-not-allowed' : 'cursor-pointer'}
                                 />
-                                <label htmlFor="rate" className="text-sm font-medium text-gray-900">Rate&nbsp;&nbsp;</label>
-                                <input
-                                    type="text"
+                                <label htmlFor="rate" className="text-sm font-medium text-gray-900">Rate&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                                <select
                                     id="rateInput"
                                     value={rate}
                                     onChange={(e) => setRate(e.target.value)}
                                     disabled={!isRateChecked || disableInputs}
-                                    className={`border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent ${(!isRateChecked || disableInputs) ? 'bg-gray-100 cursor-not-allowed' : ''}`}
-                                />
+                                    className={`w-[200px] border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent ${(!isRateChecked || disableInputs) ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+                                >
+                                    <option value="">Select Rate</option>
+                                    <option value="0%">0%</option>
+                                    <option value="-25%">-25%</option>
+                                    <option value="-50%">-50%</option>
+                                </select>
                             </div>
 
-                            {/* Checkbox and Input for Pitch */}
+                            {/* Checkbox and Dropdown for Pitch */}
                             <div className={`flex items-center space-x-4 ${disableInputs ? 'cursor-not-allowed' : 'cursor-pointer'}`}>
                                 <input
                                     type="checkbox"
@@ -134,14 +207,19 @@ export default function Ling6AllGenerate({ visible, onClose, getData }) {
                                     className={disableInputs ? 'cursor-not-allowed' : 'cursor-pointer'}
                                 />
                                 <label htmlFor="pitch" className="text-sm font-medium text-gray-900">Pitch</label>
-                                <input
-                                    type="text"
+                                <select
                                     id="pitchInput"
                                     value={pitch}
                                     onChange={(e) => setPitch(e.target.value)}
                                     disabled={!isPitchChecked || disableInputs}
-                                    className={`border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent ${(!isPitchChecked || disableInputs) ? 'bg-gray-100 cursor-not-allowed' : ''}`}
-                                />
+                                    className={`w-[200px] border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent ${(!isPitchChecked || disableInputs) ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+                                >
+                                    <option value="">Select Pitch</option>
+                                    <option value="-25%">-25%</option>
+                                    <option value="0%">0%</option>
+                                    <option value="25%">25%</option>
+                                </select>
+
                                 <input
                                     type="checkbox"
                                     id="breakTime"
@@ -150,15 +228,19 @@ export default function Ling6AllGenerate({ visible, onClose, getData }) {
                                     disabled={disableInputs}
                                     className={disableInputs ? 'cursor-not-allowed' : 'cursor-pointer'}
                                 />
-                                <label htmlFor="breakTime" className="text-sm font-medium text-gray-900">Space</label>
-                                <input
-                                    type="text"
+                                <label htmlFor="breakTime" className="text-sm font-medium text-gray-900">Break Time</label>
+                                <select
                                     id="breakTimeInput"
                                     value={breakTime}
                                     onChange={(e) => setBreakTime(e.target.value)}
                                     disabled={!isBreakTimeChecked || disableInputs}
-                                    className={`border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent ${(!isBreakTimeChecked || disableInputs) ? 'bg-gray-100 cursor-not-allowed' : ''}`}
-                                />
+                                    className={`w-[200px] border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent ${(!isBreakTimeChecked || disableInputs) ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+                                >
+                                    <option value="">Select Break Time</option>
+                                    <option value="1s">1s</option>
+                                    <option value="2s">2s</option>
+                                    <option value="3s">3s</option>
+                                </select>
                             </div>
 
                             {error && (
@@ -166,24 +248,7 @@ export default function Ling6AllGenerate({ visible, onClose, getData }) {
                             )}
 
                             <button
-                                onClick={() => {
-                                    if (validateInputs()) {
-                                        // Collect only the checked attributes
-                                        const selectedAttributes = {
-                                            voice: isVoiceChecked ? voice : null,
-                                            rate: isRateChecked ? rate : null,
-                                            pitch: isPitchChecked ? pitch : null,
-                                            breakTime: isBreakTimeChecked ? breakTime : null,
-                                        };
-
-                                        // Disable inputs and show preview box
-                                        setDisableInputs(true);
-                                        setShowPreview(true);
-
-                                        // Handle data submission
-                                        getData(selectedAttributes);
-                                    }
-                                }}
+                                onClick={generateSounds}
                                 disabled={disableInputs}
                                 className={`bg-purple-600 text-white py-2 rounded-lg font-medium hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-300 ${disableInputs ? 'cursor-not-allowed' : 'cursor-pointer'}`}
                             >
@@ -191,24 +256,38 @@ export default function Ling6AllGenerate({ visible, onClose, getData }) {
                             </button>
                         </div>
 
-                        {showPreview && (
+                        {/* Loading state */}
+                        {loading && (
+                            <div className="mb-4 text-blue-600 text-sm font-semibold">
+                                Generating Sounds... Please wait.
+                            </div>
+                        )}
+
+                        {showPreview && !loading && (
                             <div className="bg-gray-100 p-4 rounded-lg shadow-md">
                                 <h4 className="text-lg font-semibold text-gray-800 mb-2">Preview:</h4>
-                                <p className="text-sm text-gray-700 mb-4">Here is a preview of the generated sounds with the selected attributes.</p>
+                                {generatedData && (
+                                    <div className="mb-4">
+                                        <audio
+                                            controls
+                                            src={generatedData.soundUrl}
+                                            className="w-full"
+                                        >
+                                            Your browser does not support the
+                                            <code>audio</code> element.
+                                        </audio>
+                                    </div>
+                                )}
                                 <div className="flex space-x-4">
                                     <button
-                                        onClick={() => {
-                                            // Hide preview box and re-enable inputs
-                                            setShowPreview(false);
-                                            setDisableInputs(false);
-                                        }}
-                                        className={`bg-yellow-500 text-white py-2 px-4 rounded-lg font-medium hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-300 ${disableInputs ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                                        onClick={generateAgain}
+                                        className={`bg-yellow-500 text-white py-2 px-4 rounded-lg font-medium hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-300 cursor-pointer`}
                                     >
                                         Generate Again
                                     </button>
                                     <button
-                                        onClick={saveData}
-                                        className={`bg-green-500 text-white py-2 px-4 rounded-lg font-medium hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-300 ${disableInputs ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                                        onClick={handleSave}
+                                        className={`bg-green-500 text-white py-2 px-4 rounded-lg font-medium hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-300 cursor-pointer`}
                                     >
                                         Save
                                     </button>
