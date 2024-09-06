@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { X } from "lucide-react";
 import PropTypes from "prop-types";
 
-import Ling6All from "../../../services/AwarenessSerivce/Ling6All.service";
 import Ling6AllService from "../../../services/AwarenessSerivce/Ling6All.service";
 
 export default function Ling6AllGenerate({ visible, onClose, getData }) {
@@ -69,7 +68,7 @@ export default function Ling6AllGenerate({ visible, onClose, getData }) {
             console.log(selectedAttributes);
 
             // Call the service to generate sounds
-            Ling6All.generateLing6All(selectedAttributes)
+            Ling6AllService.generateLing6All(selectedAttributes)
                 .then((response) => {
                     console.log(response);
                     setGeneratedData(response);
