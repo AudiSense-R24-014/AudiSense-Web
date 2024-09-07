@@ -23,4 +23,9 @@ export const LING_6_SEPARATE_ID = (id) => `${BASE_URL}/ling6-separate/${id}/`;
 export const LING_6_SEPARATE_NOT_ASSIGNED = `${BASE_URL}/ling6-separate/notHavePatientID/`;
 export const LING_6_SEPARATE_BY_PATIENT_ID = (id) => `${BASE_URL}/ling6-separate/patientID/${id}/`;
 
+export const IDENTIFICATION_LEVEL1 = `${BASE_URL}/identification-level1/`;
+export const IDENTIFICATION_LEVEL1_ID = (id) => `${BASE_URL}/identification-level1/${id}/`;
+export const IDENTIFICATION_LEVEL2 = `${BASE_URL}/identification-level2/`;
+
+
 
