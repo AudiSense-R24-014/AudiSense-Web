@@ -110,6 +110,19 @@ export default function Ling6SeparateView({ visible, onClose, getData, data, pat
                             <h3 className="text-lg font-semibold text-gray-800">Assigned Patient:</h3>
                             <p className="text-md text-gray-700">Name: {patientData.fName} {patientData.lName}</p>
                             <p className="text-sm text-gray-500">Email: {patientData.email}</p>
+
+                            {data.isReponded ? (
+                                <div>
+                                    <p className="text-sm text-gray-500">Recorded on: {moment(data.updatedAt).format("MMM Do YYYY")}</p>
+                                    {data.responses.map((response, index) => (
+                                        <div key={index} className="mt-4">
+                                            <p className="text-md text-gray-700">{response.name} - {response.response}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                <p className="text-sm text-red-500">Patient has not responded.</p>
+                            )}
                         </div>
                     ) : (
                         <div className="p-4 bg-red-50 rounded-lg shadow-inner">
