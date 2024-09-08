@@ -18,7 +18,7 @@ export default function SidebarCombined() {
     dashboard: false,
     patients: false,
     tasks: false,
-    assignTasks: false,
+    assessTasks: false,
     organization: false,
     settings: false,
     support: false,
@@ -79,12 +79,16 @@ export default function SidebarCombined() {
               active={status == "tasks"}
             />
           </Link>
-          <Link to="#">
+          <Link to="/assessTasks"
+            onClick={() => {
+              localStorage.setItem("audi-sidebar-status", "assessTasks");
+              setStatus("assessTasks");
+            }}>
             <SidebarItem
               icon={<Flag size={20} />}
-              text="Assign Tasks"
-              alert={alertStatus.assignPatients}
-              active={status == "assignTasks"}
+              text="Assess Tasks"
+              alert={alertStatus.assessTasks}
+              active={status == "assessTasks"}
             />
           </Link>
           <Link
