@@ -105,11 +105,11 @@ export default function AwarenessSoundView({ visible, onClose, getData, data, pa
                             <p className="text-md text-gray-700">Name: {patientData.fName} {patientData.lName}</p>
                             <p className="text-sm text-gray-500">Email: {patientData.email}</p>
 
-                            {data.isReponded ? (
+                            {data.isResponded ? (
                                 <div>
-                                    <p className="text-sm text-gray-500">Recorded on: {moment(data.updatedAt).format("MMM Do YYYY")}</p>
+                                    <p className="text-md text-gray-500">Recorded on: {moment(data.updatedAt).format("MMM Do YYYY")}</p>
                                     <p className="text-md text-gray-700">Implant Status:
-                                        {data.implantStatus ? (
+                                        {data.isImplantOn ? (
                                             <span className="bg-green-500 text-white font-bold py-1 px-2 rounded-full">
                                                 Yes
                                             </span>
@@ -119,11 +119,32 @@ export default function AwarenessSoundView({ visible, onClose, getData, data, pa
                                             </span>
                                         )}
                                     </p>
-                                    {data.responses.map((response, index) => (
-                                        <div key={index} className="mt-4">
-                                            <p className="text-md text-gray-700">{response.name} - {response.response}</p>
-                                        </div>
-                                    ))}
+                                    <table className="min-w-full bg-white">
+                                        <thead>
+                                            <tr>
+                                                <th className="py-2 px-4 border-b text-left text-gray-600">Sound Name</th>
+                                                <th className="py-2 px-4 border-b text-left text-gray-600">Response</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {data.responses.map((response, index) => (
+                                                <tr key={index}>
+                                                    <td className="py-2 px-4 border-b text-gray-700">{response.name}</td>
+                                                    <td className="py-2 px-4 border-b">
+                                                        {response.response ? (
+                                                            <span className="bg-green-500 text-white font-bold py-1 px-2 rounded-full">
+                                                                Yes
+                                                            </span>
+                                                        ) : (
+                                                            <span className="bg-red-500 text-white font-bold py-1 px-2 rounded-full">
+                                                                No
+                                                            </span>
+                                                        )}
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
                                 </div>
                             ) : (
                                 <p className="text-sm text-red-500">Patient has not responded.</p>
