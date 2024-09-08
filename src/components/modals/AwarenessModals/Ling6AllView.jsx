@@ -109,6 +109,17 @@ export default function Ling6AllView({ visible, onClose, getData, data, patients
                             {data.isReponded ? (
                                 <div>
                                     <p className="text-sm text-gray-500">Recorded on: {moment(data.updatedAt).format("MMM Do YYYY")}</p>
+                                    <p className="text-md text-gray-700">Implant Status:
+                                        {data.implantStatus ? (
+                                            <span className="bg-green-500 text-white font-bold py-1 px-2 rounded-full">
+                                                Yes
+                                            </span>
+                                        ) : (
+                                            <span className="bg-red-500 text-white font-bold py-1 px-2 rounded-full">
+                                                No
+                                            </span>
+                                        )}
+                                    </p>
                                     <p className="text-md text-gray-700">Response: {data.response}</p>
                                 </div>
                             ) : (
