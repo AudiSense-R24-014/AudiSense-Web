@@ -5,12 +5,21 @@ import {
     AudioWaveform
 } from "lucide-react";
 import moment from 'moment';
+import PropTypes from "prop-types";
 import Ling6SeparateService from '../../../../../services/AwarenessSerivce/Ling6Separate.service';
+import {
+    Ling6SeparateGenerate,
+    Ling6SeparateView
+} from '../../../../../components/modals/AwarenessModals';
 
-export default function Ling6Separate() {
+export default function Ling6Separate({ patients }) {
     const [selected, setSelected] = useState('all');
     const [loading, setLoading] = useState(false);
     const [sounds, setSounds] = useState([]);
+    const [selectedSound, setSelectedSound] = useState(null);
+
+    const [openGenerateModal, setOpenGenerateModal] = useState(false);
+    const [openViewModal, setOpenViewModal] = useState(false);
 
     async function generateTask() {
         alert('Generate Task');
@@ -60,8 +69,8 @@ export default function Ling6Separate() {
     }
 
     function handleView(sound) {
-        // Implement the view functionality
-        alert(`Viewing sound with ID ${sound._id}`);
+        setSelectedSound(sound);
+        setOpenViewModal(true);
     }
 
     return (
@@ -78,7 +87,7 @@ export default function Ling6Separate() {
                                 font-bold rounded-md cursor-pointer
                                 transition-colors group hover:bg-indigo-50 text-gray-600 border border-gray-200
                             `}
-                            onClick={() => generateTask()}
+                            onClick={() => setOpenGenerateModal(true)}
                         >
                             <AudioWaveform size={20} />
                             <span>&nbsp;Generate Task</span>
@@ -136,7 +145,8 @@ export default function Ling6Separate() {
                                                 <th className="px-4 py-2">Rate</th>
                                                 <th className="px-4 py-2">Pitch</th>
                                                 <th className="px-4 py-2">Created Date</th>
-                                                <th className="px-4 py-2">Is Assigned</th>
+                                                <th className="px-4 py-2">Assigned</th>
+                                                <th className="px-4 py-2">Responded</th>
                                                 <th className="px-4 py-2">View</th>
                                                 <th className="px-4 py-2">Delete</th>
                                             </tr>
@@ -159,6 +169,17 @@ export default function Ling6Separate() {
                                                     </td>
                                                     <td className="border px-4 py-2">
                                                         {sound.patientID ? (
+                                                            <span className="bg-green-500 text-white font-bold py-1 px-2 rounded-full">
+                                                                Yes
+                                                            </span>
+                                                        ) : (
+                                                            <span className="bg-red-500 text-white font-bold py-1 px-2 rounded-full">
+                                                                No
+                                                            </span>
+                                                        )}
+                                                    </td>
+                                                    <td className="border px-4 py-2">
+                                                        {sound.isResponded ? (
                                                             <span className="bg-green-500 text-white font-bold py-1 px-2 rounded-full">
                                                                 Yes
                                                             </span>
@@ -198,6 +219,25 @@ export default function Ling6Separate() {
                     )}
                 </div>
             </div>
+
+            <Ling6SeparateGenerate
+                visible={openGenerateModal}
+                onClose={() => setOpenGenerateModal(false)}
+                getData={getLing6Separate}
+            />
+            <Ling6SeparateView
+                visible={openViewModal}
+                onClose={() => setOpenViewModal(false)}
+                getData={getLing6Separate}
+                data={selectedSound}
+                patients={patients}
+            />
+
+
         </div>
     );
 }
+
+Ling6Separate.propTypes = {
+    patients: PropTypes.array.isRequired,
+};
