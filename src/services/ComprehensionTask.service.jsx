@@ -36,8 +36,45 @@ const persistFeedback = async (feedback) => {
     return data;
 };
 
+const getFeedbackById = async (id) => {
+    const response = await fetch(URL.COMPREHENSIVE_FEEDBACK_BY_ID(id), {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    const data = await response.json();
+    return data;
+};
+
+const getFeedback = async () => {
+    const response = await fetch(URL.COMPREHENSIVE_FEEDBACK, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    const data = await response.json();
+    return data;
+}
+
+const createActivity = async (activity) => {
+    const response = await fetch(URL.COMPREHENSIVE_ACTIVITY, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(activity),
+    });
+    const data = await response.json();
+    return data;
+}
+
 export default {
     generate,
     persist,
-    persistFeedback
+    persistFeedback,
+    getFeedbackById,
+    getFeedback,
+    createActivity,
 };

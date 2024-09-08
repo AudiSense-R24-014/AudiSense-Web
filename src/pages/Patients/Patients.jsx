@@ -83,7 +83,7 @@ function Patients() {
                   </tr>
                 </thead>
                 <tbody>
-                  {patients.map((patient, index) => (
+                  {patients.slice().reverse().map((patient, index) => (
                     <tr
                       key={index}
                       className={

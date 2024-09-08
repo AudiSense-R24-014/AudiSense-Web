@@ -5,6 +5,7 @@ import ComprehensionTaskService from "../../services/ComprehensionTask.service";
 import Swal from "sweetalert2";
 
 export default function ComprehensiveFeedbackModal({
+  questionCount,
   generatedComprehension,
   age,
   context,
@@ -19,7 +20,7 @@ export default function ComprehensiveFeedbackModal({
     feedback_considering_provided_length: "",
   });
 
-  const handleRatingChange = (e: any) => {
+  const handleRatingChange = (e) => {
     const { name, value } = e.target;
     setRatings({
       ...ratings,
@@ -27,7 +28,7 @@ export default function ComprehensiveFeedbackModal({
     });
   };
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     persistComprehensionTask();
   };
@@ -35,19 +36,22 @@ export default function ComprehensiveFeedbackModal({
   const persistComprehensionTask = () => {
     ComprehensionTaskService.persist(generatedComprehension)
       .then((data) => {
-        persistFeedback();
+        console.log("data")
+        persistFeedback(data._id);
       })
       .catch((err) => {
         console.error("Error saving comprehensive task:", err);
       });
   };
 
-  const persistFeedback = () => {
+  const persistFeedback = (comprehensiveTaskId) => {
     const feedback = {
       Input_Age: age,
       Input_Context: context,
       Input_Length: length,
+      Question_Count: questionCount,
       Generated_Passage: generatedComprehension.passage,
+      Comprehensive_Task: comprehensiveTaskId,
       Clinician_Overall_Rating: ratings.overall_rating,
       Age_Wise_Content_Rating:
         ratings.rating_for_generated_passage_considering_age,
@@ -200,4 +204,9 @@ export default function ComprehensiveFeedbackModal({
 ComprehensiveFeedbackModal.propTypes = {
   visible: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
+  questionCount: PropTypes.any,
+  generatedComprehension: PropTypes.any,
+  age: PropTypes.any,
+  context: PropTypes.string,
+  length: PropTypes.string,
 };
