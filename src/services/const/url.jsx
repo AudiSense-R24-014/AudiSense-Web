@@ -7,6 +7,11 @@ export const COMPREHENSIVE_TASK_PERSIST = `${BASE_URL}/comprehension-task/`;
 export const COMPREHENSIVE_FEEDBACK = `${BASE_URL}/comprehension-feedback/`;
 export const PATIENTS = `${BASE_URL}/patients/`;
 
+export const DISCRIMINATION_AUTO_GEN = `${BASE_URL}/discrimination/`;
+export const DISCRIMINATION_CORRECTIVE=`${BASE_URL}/discriminationOpt/`;
+export const DISCRIMINATION_MANUAL=`${BASE_URL}/discrimination_manual/`;
+export const DISCRIMINATION_TASK_PERSIST=`${BASE_URL}/discrimination-task/`;
+export const DISCRIMINATION_QUESTION=`${BASE_URL}/discriminationQuestion/`;
 
 export const AWARENESS_BASIC = `${BASE_URL}/awareness-sound/`;
 export const AWARENESS_BASIC_ID = (id) => `${BASE_URL}/awareness-sound/${id}/`;
@@ -26,6 +31,7 @@ export const LING_6_SEPARATE_BY_PATIENT_ID = (id) => `${BASE_URL}/ling6-separate
 export const IDENTIFICATION_LEVEL1 = `${BASE_URL}/identification-level1/`;
 export const IDENTIFICATION_LEVEL1_ID = (id) => `${BASE_URL}/identification-level1/${id}/`;
 export const IDENTIFICATION_LEVEL2 = `${BASE_URL}/identification-level2/`;
+
 
 
 
