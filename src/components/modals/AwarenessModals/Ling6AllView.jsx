@@ -106,10 +106,29 @@ export default function Ling6AllView({ visible, onClose, getData, data, patients
                             <p className="text-md text-gray-700">Name: {patientData.fName} {patientData.lName}</p>
                             <p className="text-sm text-gray-500">Email: {patientData.email}</p>
 
-                            {data.isReponded ? (
+                            {data.isResponded ? (
                                 <div>
                                     <p className="text-sm text-gray-500">Recorded on: {moment(data.updatedAt).format("MMM Do YYYY")}</p>
-                                    <p className="text-md text-gray-700">Response: {data.response}</p>
+                                    <p className="text-md text-gray-700">Implant Status:
+                                        {data.implantStatus ? (
+                                            <span className="bg-green-500 text-white font-bold py-1 px-2 rounded-full">
+                                                Yes
+                                            </span>
+                                        ) : (
+                                            <span className="bg-red-500 text-white font-bold py-1 px-2 rounded-full">
+                                                No
+                                            </span>
+                                        )}
+                                    </p>
+                                    <p className="text-md text-gray-700">Response: {data.response ? (
+                                        <span className="bg-green-500 text-white font-bold py-1 px-2 rounded-full">
+                                            Yes
+                                        </span>
+                                    ) : (
+                                        <span className="bg-red-500 text-white font-bold py-1 px-2 rounded-full">
+                                            No
+                                        </span>
+                                    )}</p>
                                 </div>
                             ) : (
                                 <p className="text-sm text-red-500">Patient has not responded.</p>

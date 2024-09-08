@@ -111,14 +111,37 @@ export default function Ling6SeparateView({ visible, onClose, getData, data, pat
                             <p className="text-md text-gray-700">Name: {patientData.fName} {patientData.lName}</p>
                             <p className="text-sm text-gray-500">Email: {patientData.email}</p>
 
-                            {data.isReponded ? (
+                            {data.isResponded ? (
                                 <div>
                                     <p className="text-sm text-gray-500">Recorded on: {moment(data.updatedAt).format("MMM Do YYYY")}</p>
-                                    {data.responses.map((response, index) => (
-                                        <div key={index} className="mt-4">
-                                            <p className="text-md text-gray-700">{response.name} - {response.response}</p>
-                                        </div>
-                                    ))}
+                                    <p className="text-md text-gray-700">Implant Status:
+                                        {data.implantStatus ? (
+                                            <span className="bg-green-500 text-white font-bold py-1 px-2 rounded-full">
+                                                Yes
+                                            </span>
+                                        ) : (
+                                            <span className="bg-red-500 text-white font-bold py-1 px-2 rounded-full">
+                                                No
+                                            </span>
+                                        )}
+                                    </p>
+                                    <div className="grid grid-cols-2 gap-4">
+                                        {data.responses.map((response, index) => (
+                                            <div key={index} className="mt-4">
+                                                <p className="text-md text-gray-700">
+                                                    {response.name} - {response.response ? (
+                                                        <span className="bg-green-500 text-white font-bold py-1 px-2 rounded-full">
+                                                            Yes
+                                                        </span>
+                                                    ) : (
+                                                        <span className="bg-red-500 text-white font-bold py-1 px-2 rounded-full">
+                                                            No
+                                                        </span>
+                                                    )}
+                                                </p>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
                             ) : (
                                 <p className="text-sm text-red-500">Patient has not responded.</p>
