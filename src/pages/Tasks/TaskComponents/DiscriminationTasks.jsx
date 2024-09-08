@@ -10,11 +10,11 @@ import {
 function DiscriminationTasks() {
   const [taskTab, setTaskTab] = useState("autogenerate");
   return (
-    <div>
-      <div className="flex">
-        <h1 className="text-4xl font-nunito font-bold ">Discrimination Tasks</h1>
+    <div className="flex flex-col items-start">
+      <div className="mb-4"> {/* Margin bottom to adjust space from heading */}
+        <h1 className="text-4xl font-nunito font-bold">Discrimination Tasks</h1>
       </div>
-      <div className="pt-5 flex gap-5 cursor-pointer mr-5">
+      <div className="flex flex-col gap-4"> {/* Flex column and gap for spacing between tabs */}
         <DiscriminationBars taskList={taskTab} toggleTaskStatus={setTaskTab} />
         {taskTab === "autogenerate" && <AutoGenerate />}
         {taskTab === "generateCorrective" && <GenerateCorrectiveTask />}
