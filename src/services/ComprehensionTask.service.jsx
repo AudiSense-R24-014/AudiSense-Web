@@ -70,6 +70,28 @@ const createActivity = async (activity) => {
     return data;
 }
 
+const getAllActivity = async () => {
+    const response = await fetch(URL.COMPREHENSIVE_ACTIVITY, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    const data = await response.json();
+    return data;
+}
+
+const getActivityById = async (id) => {
+    const response = await fetch(URL.COMPREHENSIVE_ACTIVITY_BY_ID(id), {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    const data = await response.json();
+    return data;
+}
+
 export default {
     generate,
     persist,
@@ -77,4 +99,6 @@ export default {
     getFeedbackById,
     getFeedback,
     createActivity,
+    getAllActivity,
+    getActivityById,
 };

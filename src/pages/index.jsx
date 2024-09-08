@@ -8,6 +8,7 @@ import AssignPatient from "./AssignPatient/AssignPatient"; import Tasks from "./
 
 import OrganizationLanding from "./OrganizationManagement/OrganizationLanding";
 import ExistingOrganizations from "./OrganizationManagement/ExistingOrganizations";
+import AssessTasks from "./AssessTasks/AssessTasks";
 
 export {
   Dashboard,
@@ -19,4 +20,5 @@ export {
   Register,
   OrganizationLanding,
   ExistingOrganizations,
+  AssessTasks
 };

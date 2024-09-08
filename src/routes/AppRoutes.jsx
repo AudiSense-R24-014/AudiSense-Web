@@ -9,6 +9,7 @@ import {
   Register,
   OrganizationLanding,
   ExistingOrganizations,
+  AssessTasks,
 } from "../pages";
 import OnboardingLayout from "../layouts/OnboardingLayout";
 import SessionLayout from "../layouts/SessionLayout";
@@ -29,6 +30,7 @@ export default function AppRoutes() {
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="patients" element={<Patients />} />
           <Route path="assignPatient" element={<AssignPatient />} />
+          <Route path="assessTasks" element={<AssessTasks />} />
           <Route path="tasks" element={<Tasks />} />
           <Route path="organization">
             <Route index element={<OrganizationLanding />} />
