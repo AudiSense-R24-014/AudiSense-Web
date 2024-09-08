@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 import ComprehensionTaskService from "../../../services/ComprehensionTask.service";
+import ComprehensiveFeedbackModal from "../../../components/modals/ComprehensiveFeedbackModel";
 
 function ComprehensiveTasks() {
   const [feedback, setFeedback] = useState("");
+  const [age, setAge] = useState(5);
   const [length, setLength] = useState("medium");
   const [questionCount, setQuestionCount] = useState(5);
 
   const [generatedComprehension, setGeneratedComprehension] = useState({});
   const [loading, setLoading] = useState(false);
   const [isGenerated, setIsGenerated] = useState(false);
+  const [openSaveModal, setOpenSaveModal] = useState(false);
 
   const handlePassageChange = (event) => {
     setGeneratedComprehension((prevState) => ({
@@ -45,10 +48,14 @@ function ComprehensiveTasks() {
     setQuestionCount(event.target.value);
   };
 
+  const handleAgeChange = (event) => {
+    setAge(event.target.value);
+  };
+
   const handleGeneration = async (event) => {
     event.preventDefault();
     setLoading(true); // Set loading state to true
-    ComprehensionTaskService.generate(feedback, length, questionCount)
+    ComprehensionTaskService.generate(feedback, length, questionCount, age)
       .then((data) => {
         setGeneratedComprehension(data);
       })
@@ -63,14 +70,7 @@ function ComprehensiveTasks() {
 
   const saveComprehensiveTask = async (event) => {
     event.preventDefault();
-    console.log(generatedComprehension);
-    ComprehensionTaskService.persist(generatedComprehension)
-      .then((data) => {
-        console.log("Comprehensive Task saved successfully:", data);  
-      })
-      .catch((err) => {
-        console.error("Error saving comprehensive task:", err);
-      });
+    setOpenSaveModal(true);
   };
 
   const radioOptions = [
@@ -137,6 +137,18 @@ function ComprehensiveTasks() {
             className="border font-nunito border-gray-400 rounded-md p-4 h-12 mr-4"
           />
         </div>
+        <div className="mb-4 flex items-center">
+          <div className="flex w-64">
+            <p className="text-lg font-nunito font-bold">Age of Child:</p>
+          </div>
+          <input
+            type="number"
+            value={age}
+            onChange={handleAgeChange}
+            placeholder="Age of the child"
+            className="border font-nunito border-gray-400 rounded-md p-4 h-12 mr-4"
+          />
+        </div>
         <div>
           <button
             onClick={handleGeneration}
@@ -154,14 +166,14 @@ function ComprehensiveTasks() {
           <div className="flex justify-between items-center mb-4">
             <h1 className="text-2xl font-nunito font-bold">Generated Task</h1>
             <button
-            onClick={saveComprehensiveTask}
-            disabled={!isGenerated} // Disable the button when isGenerated is false
-            className={`bg-purple-400 font-nunito text-white py-2 px-4 rounded-md hover:bg-purple-600 transition-colors duration-300 ${
-              !isGenerated ? "opacity-50 cursor-not-allowed" : ""
-            }`}
-          >
-            Save & Assign
-          </button>
+              onClick={saveComprehensiveTask}
+              disabled={!isGenerated} // Disable the button when isGenerated is false
+              className={`bg-purple-400 font-nunito text-white py-2 px-4 rounded-md hover:bg-purple-600 transition-colors duration-300 ${
+                !isGenerated ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+            >
+              Save & Assign
+            </button>
           </div>
           <div className="mb-4 flex items-center">
             <div className="flex-grow w-72 mr-4">
@@ -287,6 +299,16 @@ function ComprehensiveTasks() {
           ))}
         </div>
       )}
+      <ComprehensiveFeedbackModal
+        visible={openSaveModal}
+        generatedComprehension={generatedComprehension}
+        age={age}
+        context={feedback}
+        length={length}
+        onClose={() => {
+          setOpenSaveModal(false);
+        }}
+      />
     </div>
   );
 }

@@ -15,7 +15,7 @@ TasksTopbar.propTypes = {
 
 export default function TasksTopbar({ taskList, toggleTaskStatus }) {
   const taskOptions = [
-    { id: "allTasks", label: "All Tasks", icon: <GalleryVerticalEnd size={20} /> },
+    // { id: "allTasks", label: "All Tasks", icon: <GalleryVerticalEnd size={20} /> },
     { id: "awareness", label: "Awareness", icon: <SmilePlus size={20} /> },
     { id: "discrimination", label: "Discrimination", icon: <Shapes size={20} /> },
     { id: "identification", label: "Identification", icon: <SearchCheck size={20} /> },

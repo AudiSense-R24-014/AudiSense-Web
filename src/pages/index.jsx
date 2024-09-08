@@ -4,8 +4,7 @@ import Register from "./Onboarding/Register";
 
 import Dashboard from "./Dashboard/Dashboard";
 import Patients from "./Patients/Patients";
-import AssignPatient from "./AssignPatient/AssignPatient";
-import Tasks from "./Tasks/Tasks";
+import AssignPatient from "./AssignPatient/AssignPatient"; import Tasks from "./Tasks/Tasks";
 
 import OrganizationLanding from "./OrganizationManagement/OrganizationLanding";
 import ExistingOrganizations from "./OrganizationManagement/ExistingOrganizations";
