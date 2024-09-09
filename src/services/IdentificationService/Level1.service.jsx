@@ -23,7 +23,19 @@ const getIdentificationLevel1 = async (id) => {
     return responseData;
 }
 
+const getAllTaskLevel1 = async () => {
+    const response = await fetch(URL.IDENTIFICATION_LEVEL1, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    const responseData = await response.json();
+    return responseData;
+}
+
 export default {
     generateIdentificationLevel1,
     getIdentificationLevel1,
+    getAllTaskLevel1
 }

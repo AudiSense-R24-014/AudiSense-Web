@@ -12,6 +12,19 @@ const generateIdentificationLevel2 = async (data) => {
     return responseData;
 }
 
+const getAllTaskLevel2 = async () => {
+    const response = await fetch(URL.IDENTIFICATION_LEVEL2, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    const responseData = await response.json();
+    return responseData;
+}
+
+
 export default {
     generateIdentificationLevel2,
+    getAllTaskLevel2
 }
