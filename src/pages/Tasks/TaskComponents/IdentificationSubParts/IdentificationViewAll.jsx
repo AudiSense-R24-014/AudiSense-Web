@@ -55,4 +55,5 @@ export default function IdentificationViewAll() {
             </div>
         </div>
     );
+
 }
