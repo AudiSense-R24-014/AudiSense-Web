@@ -59,10 +59,23 @@ const createDiscriminationQuestion = async(word1,word2,level) => {
     const data = await response.json();
     return data;
 }
+const getDiscriminationTasks = async () => {
+    console.log("getDiscriminationTasks");
+    const response = await fetch(URL.DISCRIMINATION_QUESTION, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    const data = await response.json();
+    return data;
+};
+
 export default {
     auto_generate,
     corrective_generate,
     manual_generate,
     persist,
-    createDiscriminationQuestion
+    createDiscriminationQuestion,
+    getDiscriminationTasks
 };
