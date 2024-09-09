@@ -92,6 +92,18 @@ const getActivityById = async (id) => {
     return data;
 }
 
+const updateActivityById = async (id, activity) => {
+    const response = await fetch(URL.COMPREHENSIVE_ACTIVITY_BY_ID(id), {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(activity),
+    });
+    const data = await response.json();
+    return data;
+}
+
 export default {
     generate,
     persist,
@@ -101,4 +113,5 @@ export default {
     createActivity,
     getAllActivity,
     getActivityById,
+    updateActivityById
 };
