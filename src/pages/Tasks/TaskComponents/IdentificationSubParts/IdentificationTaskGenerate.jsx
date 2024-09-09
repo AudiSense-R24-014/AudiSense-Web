@@ -1,6 +1,11 @@
 import { useState } from "react";
 import IdentificationLevelOneService from "../../../../services/IdentificationService/Level1.service.jsx";
 import IdentificationLevelTwoService from "../../../../services/IdentificationService/Level2.service.jsx";
+import PropTypes from "prop-types";
+
+IdentificationTaskGenerate.propTypes = {
+  patients: PropTypes.array.isRequired,
+};
 
 function IdentificationTaskGenerate({ patients }) {
   console.log("Patients:", patients);
