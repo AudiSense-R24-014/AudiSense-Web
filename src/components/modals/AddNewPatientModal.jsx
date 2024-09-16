@@ -170,7 +170,7 @@ export default function AddNewPatientModal({ visible, onClose, getPatients }) {
 
     return (
         <div
-            className="fixed inset-0 bg-opacity-20 backdrop-blur-sm bg-black flex"
+            className="fixed inset-0 bg-opacity-20 backdrop-blur-sm bg-black"
             aria-modal="true"
         >
             <div className="bg-white rounded-xl relative w-5/6 lg:w-1/2">

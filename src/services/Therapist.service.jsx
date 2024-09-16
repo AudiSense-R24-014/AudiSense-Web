@@ -14,6 +14,17 @@ const login = async (email, password) => {
     return data;
 };
 
+const createTherapist = async (therapist) => {
+    const response = await fetch(URL.THERAPISTS, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(therapist),
+    });
+    const data = await response.json();
+    return data;
+};
 
 const getTherapists = async () => {
     const response = await fetch(URL.THERAPISTS, {
@@ -30,4 +41,5 @@ const getTherapists = async () => {
 export default {
     login,
     getTherapists,
+    createTherapist,
 }
