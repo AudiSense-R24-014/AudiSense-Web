@@ -6,11 +6,12 @@ import {
   Settings,
   Users2,
   LogOut,
-  LucideBuilding2
+  LucideBuilding2,
 } from "lucide-react";
 import Sidebar, { SidebarItem } from "./Sidebar";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 
 export default function SidebarCombined() {
   const [status, setStatus] = useState();
@@ -29,8 +30,20 @@ export default function SidebarCombined() {
   }, [status]);
 
   function logout() {
-    localStorage.removeItem("token");
-    window.location.href = "/";
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You are about to log out!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, log out",
+      cancelButtonText: "No, cancel",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("audi-sidebar-status");
+        window.location.href = "/";
+      }
+    });
   }
 
   return (
@@ -79,11 +92,13 @@ export default function SidebarCombined() {
               active={status == "tasks"}
             />
           </Link>
-          <Link to="/assessTasks"
+          <Link
+            to="/assessTasks"
             onClick={() => {
               localStorage.setItem("audi-sidebar-status", "assessTasks");
               setStatus("assessTasks");
-            }}>
+            }}
+          >
             <SidebarItem
               icon={<Flag size={20} />}
               text="Assess Tasks"
