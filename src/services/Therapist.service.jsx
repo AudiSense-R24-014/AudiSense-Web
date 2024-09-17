@@ -38,8 +38,22 @@ const getTherapists = async () => {
     return data;
 }
 
+const validateToken = async () => {
+    const response = await fetch(URL.THERAPISTS_VALIDATE, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        },
+    });
+    const data = await response.json();
+    return data;
+}
+
+
 export default {
     login,
     getTherapists,
     createTherapist,
+    validateToken,
 }
