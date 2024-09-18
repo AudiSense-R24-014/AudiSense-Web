@@ -8,8 +8,8 @@ import {
   Login,
   Register,
   OrganizationLanding,
-  ExistingOrganizations,
   AssessTasks,
+  OrgnaizationManagement,
 } from "../pages";
 import OnboardingLayout from "../layouts/OnboardingLayout";
 import SessionLayout from "../layouts/SessionLayout";
@@ -34,7 +34,7 @@ export default function AppRoutes() {
           <Route path="tasks" element={<Tasks />} />
           <Route path="organization">
             <Route index element={<OrganizationLanding />} />
-            <Route path="existing" element={<ExistingOrganizations />} />
+            <Route path="assigned" element={<OrgnaizationManagement />} />
           </Route>
         </Route>
       </Routes>

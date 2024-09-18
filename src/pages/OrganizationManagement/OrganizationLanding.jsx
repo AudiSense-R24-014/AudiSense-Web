@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import orgLanding from "../../assets/images/org-landing.png";
 import NewOrgModal from "../../components/modals/NewOrgModal";
 
 const OrganizationLanding = () => {
   const [openNewOrgModal, setOpenNewOrgModal] = useState(false);
-  const [openJoinOrgModal, setOpenJoinOrgModal] = useState(false);
   return (
     <div>
       <div className="py-8 px-2 border-b-2 border-indigo-400/20 lg:px-4">

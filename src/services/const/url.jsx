@@ -4,6 +4,7 @@ export const THERAPISTS = `${BASE_URL}/therapists/`;
 export const THERAPISTS_VALIDATE = `${BASE_URL}/therapists/validate/`;
 export const THERAPISTS_LOGIN = `${BASE_URL}/therapists/login/`;
 export const PATIENTS = `${BASE_URL}/patients/`;
+export const ORGANIZATIONS = `${BASE_URL}/organizations/`;
 
 export const DISCRIMINATION_AUTO_GEN = `${BASE_URL}/discrimination/`;
 export const DISCRIMINATION_CORRECTIVE=`${BASE_URL}/discriminationOpt/`;
