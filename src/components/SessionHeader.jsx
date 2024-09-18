@@ -6,29 +6,24 @@ import Swal from "sweetalert2";
 export default function SessionHeader() {
   const [user, setUser] = useState({});
   useEffect(() => {
-    TherapistService.validateToken().then((data) => {
+    TherapistService.validateToken()
+      .then((data) => {
         setUser(data);
-        if (!(data?._id)) {
-            Swal.fire({
-                icon: "error",
-                title: "User Session Expired!",
-                text: "Please login again!",
-                preConfirm: () => {
-                    window.location.href = "/login";
-                }
-            });
-        }
-    }).catch((error) => {
-        console.error(error);
-        Swal.fire({
+        if (!data?._id) {
+          Swal.fire({
             icon: "error",
             title: "User Session Expired!",
             text: "Please login again!",
             preConfirm: () => {
-                window.location.href = "/login";
-            }
-        });
-    });
+              localStorage.removeItem("token");
+              window.location.href = "/login";
+            },
+          });
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }, []);
   return (
     <div className="flex justify-end shadow-md shadow-blue-900/20">

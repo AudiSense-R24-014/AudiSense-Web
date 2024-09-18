@@ -111,7 +111,7 @@ function GenerateTask() {
                   value={option.value}
                   checked={length === option.value}
                   onChange={handleLengthChange}
-                  className="mr-2 "
+                  className="mr-2"
                 />
                 <label htmlFor={option.value} className="mr-4 font-nunito">
                   {option.label}
