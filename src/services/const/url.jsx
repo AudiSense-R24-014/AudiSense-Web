@@ -1,6 +1,7 @@
 const BASE_URL = 'http://localhost:3000';
 
 export const THERAPISTS = `${BASE_URL}/therapists/`;
+export const THERAPISTS_VALIDATE = `${BASE_URL}/therapists/validate/`;
 export const THERAPISTS_LOGIN = `${BASE_URL}/therapists/login/`;
 export const PATIENTS = `${BASE_URL}/patients/`;
 
