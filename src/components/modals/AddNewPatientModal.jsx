@@ -170,10 +170,10 @@ export default function AddNewPatientModal({ visible, onClose, getPatients }) {
 
     return (
         <div
-            className="fixed inset-0 bg-opacity-20 backdrop-blur-sm bg-black flex"
+            className="fixed inset-0 bg-opacity-20 backdrop-blur-sm bg-black flex justify-center items-center py-2"
             aria-modal="true"
         >
-            <div className="bg-white rounded-xl relative w-5/6 lg:w-1/2">
+            <div className="bg-white rounded-xl relative w-full max-w-3xl mx-4 sm:mx-8 lg:w-2/3 xl:w-1/2 overflow-auto max-h-full p-4 sm:p-6 lg:p-8">
                 <div className="border-b-2 p-2 lg:p-4 lg:px-8">
                     <button
                         onClick={onClose}
