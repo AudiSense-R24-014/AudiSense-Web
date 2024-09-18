@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Edit, Trash } from "lucide-react";
 import AddNewPatientModal from "../../components/modals/AddNewPatientModal";
+import EditPatientModal from "../../components/modals/EditPatientModal";
 import PatientService from "../../services/Patient.service";
 
 function Patients() {
@@ -8,6 +9,7 @@ function Patients() {
   const [selectedPatient, setSelectedPatient] = useState(null);
   const [openAddNewPatientModal, setOpenAddNewPatientModal] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [openEditNewPatientModal, setOpenEditNewPatientModal] = useState(false);
 
   const getAllPatients = async () => {
     setLoading(true);
@@ -126,7 +128,7 @@ function Patients() {
                         <div className="flex justify-center">
                           <button
                             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
-                            onClick={() => handleEdit(patient)}
+                            onClick={() => setOpenEditNewPatientModal(true)}
                           >
                             <Edit size={20} />
                           </button>
@@ -157,6 +159,11 @@ function Patients() {
         visible={openAddNewPatientModal}
         onClose={() => setOpenAddNewPatientModal(false)}
         getPatients={getAllPatients}
+      />
+      <EditPatientModal
+      visible={openEditNewPatientModal}
+      onClose={() => setOpenEditNewPatientModal(false)}
+      // getPatients={getAllPatients}
       />
     </div>
   );
