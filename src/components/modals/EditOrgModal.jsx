@@ -1,11 +1,10 @@
 import { X } from "lucide-react";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Select from "react-select";
 import PropTypes from "prop-types";
 import countryList from "react-select-country-list";
 import { storage, ref, uploadBytes, getDownloadURL } from "../../../firebase"; // Adjust the import path as needed
 import OrganizationService from "../../services/Organization.service";
-import TherapistService from "../../services/Therapist.service";
 import Swal from "sweetalert2";
 
 const customCountrySelectStyles = {
@@ -45,16 +44,35 @@ const customCountrySelectStyles = {
   }),
 };
 
-export default function NewOrgModal({ visible, onClose }) {
+export default function EditOrgModal({
+  visible,
+  onClose,
+  organizationDetails,
+}) {
   // States for form inputs
   const [organizationName, setOrganizationName] = useState("");
-  const [country, setCountry] = useState("");
+  const [country, setCountry] = useState({});
   const [city, setCity] = useState("");
   const [address, setAddress] = useState("");
-  const [logoFile, setLogoFile] = useState(null); // For logo file
-  const [uploadError, setUploadError] = useState(null); // For upload errors
+  const [logoFile, setLogoFile] = useState(null); // Handle file uploads separately
+  const [uploadError, setUploadError] = useState(null); // Handle errors
 
   const countries = useMemo(() => countryList().getData(), []);
+
+  // Ensure this component doesn't render hooks conditionally
+  useEffect(() => {
+    // Reset states when organizationDetails change
+    setOrganizationName(organizationDetails?.name || "");
+    setCountry(
+      {
+        label: organizationDetails?.country,
+        value: organizationDetails?.country,
+      } || ""
+    );
+    setCity(organizationDetails?.city || "");
+    setAddress(organizationDetails?.address || "");
+    setLogoFile(organizationDetails?.companyLogo || null); // Reset file input
+  }, [organizationDetails]);
 
   if (!visible) {
     return null;
@@ -63,11 +81,11 @@ export default function NewOrgModal({ visible, onClose }) {
   // Handle logo file selection
   const handleLogoChange = (e) => {
     const file = e.target.files[0];
-    setLogoFile(file); // Store the file in state
+    setLogoFile(file);
     const reader = new FileReader();
     reader.onload = () => {
       const preview = document.getElementById("logo-preview");
-      preview.src = reader.result; // Display the image preview
+      preview.src = reader.result;
     };
     reader.readAsDataURL(file);
   };
@@ -75,13 +93,12 @@ export default function NewOrgModal({ visible, onClose }) {
   // Function to handle file upload to Firebase Storage
   const uploadLogo = async (file) => {
     try {
-      // Create a storage reference with a unique filename
-      const storageRef = ref(storage, `organization-logos/${Date.now()+file.name}`);
-      // Upload the file to Firebase Storage
+      const storageRef = ref(
+        storage,
+        `organization-logos/${Date.now()}-${file.name}`
+      );
       await uploadBytes(storageRef, file);
-      // Get the download URL after upload
-      const downloadURL = await getDownloadURL(storageRef);
-      return downloadURL;
+      return await getDownloadURL(storageRef);
     } catch (error) {
       setUploadError("File upload failed. Please try again.");
       console.error("Error uploading file:", error);
@@ -94,60 +111,55 @@ export default function NewOrgModal({ visible, onClose }) {
     e.preventDefault();
 
     try {
-      let logoUrl = null;
+      let logoUrl = organizationDetails?.companyLogo;
 
       if (logoFile) {
         // Upload the logo file and get the URL
         logoUrl = await uploadLogo(logoFile);
       }
 
-      let therpistId = await TherapistService.validateToken();
-
-      // Create the organization object
       const organization = {
         name: organizationName,
         country: country.label,
         city,
         address,
         companyLogo: logoUrl,
-        therapists: [therpistId],
-        admins: [therpistId],
       };
 
-      // Call the API to create the organization
-      OrganizationService.createOrganization(organization)
+      // Update Organization details
+      await OrganizationService.updateOrganization(
+        organizationDetails._id,
+        organization
+      )
         .then((data) => {
-          if (data?._id) {
+          if (data._id) {
             Swal.fire({
+              title: "Success!",
+              text: "Organization details updated successfully!",
               icon: "success",
-              title: "Organization Created!",
-              text: "The organization has been created successfully.",
-              preConfirm: () => {
-                let user = JSON.parse(localStorage.getItem("audi-user"));
-                user.organization = data._id;
-                localStorage.setItem("audi-user", JSON.stringify(user));
-                window.location.reload();
-              },
-            });
-          } else if (data?.message?.toString().includes("E11000")) {
-            // Handle duplicate organization name error
-            Swal.fire({
-              icon: "error",
-              title: "Organization Name Already Exists!",
-              text: "The organization already exists in the system.",
+              confirmButtonText: "OK",
+            }).then(() => {
+              onClose();
+              window.location.reload();
             });
           } else {
-            // Log other errors
-            console.error("Error creating organization:", data.message);
+            Swal.fire({
+              title: "Error",
+              text: "Failed to update organization",
+              icon: "error",
+            });
           }
         })
         .catch((error) => {
-          // Catch API call errors
-          console.error("Error creating organization:", error);
+          console.error("Error updating organization:", error);
+          Swal.fire({
+            title: "Error",
+            text: "Failed to update organization",
+            icon: "error",
+          });
         });
     } catch (error) {
-      // Catch submission errors
-      console.error("Error submitting the form:", error);
+      console.error("Error updating organization:", error);
     }
   };
 
@@ -185,7 +197,7 @@ export default function NewOrgModal({ visible, onClose }) {
                   name="name"
                   id="name"
                   value={organizationName}
-                  onChange={(e) => setOrganizationName(e.target.value)} // Update state
+                  onChange={(e) => setOrganizationName(e.target.value)}
                   className="input-field"
                   placeholder="Organization Name"
                   required
@@ -204,7 +216,7 @@ export default function NewOrgModal({ visible, onClose }) {
                   styles={customCountrySelectStyles}
                   options={countries}
                   value={country}
-                  onChange={(value) => setCountry(value)} // Update state
+                  onChange={(value) => setCountry(value)}
                   className="pt-0.5"
                 />
               </div>
@@ -220,7 +232,7 @@ export default function NewOrgModal({ visible, onClose }) {
                   name="city"
                   id="city"
                   value={city}
-                  onChange={(e) => setCity(e.target.value)} // Update state
+                  onChange={(e) => setCity(e.target.value)}
                   className="input-field"
                   placeholder="Head Branch City"
                   required
@@ -235,13 +247,14 @@ export default function NewOrgModal({ visible, onClose }) {
                 >
                   Address
                 </label>
-                <textarea
+                <input
+                  type="text"
                   name="address"
                   id="address"
                   value={address}
-                  onChange={(e) => setAddress(e.target.value)} // Update state
-                  className="input-field h-20 w-full resize-none"
-                  placeholder="Head Branch Address"
+                  onChange={(e) => setAddress(e.target.value)}
+                  className="input-field"
+                  placeholder="Address"
                   required
                 />
               </div>
@@ -249,40 +262,33 @@ export default function NewOrgModal({ visible, onClose }) {
             <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-8">
               <div className="flex-1">
                 <label
-                  htmlFor="logo"
+                  htmlFor="companyLogo"
                   className="block mb-2 text-sm font-medium text-gray-900"
                 >
-                  Organization Logo
+                  Company Logo
                 </label>
                 <input
                   type="file"
-                  name="logo"
-                  id="logo"
-                  className="input-field border border-gray-300 rounded-md py-2 px-3 w-full"
                   accept="image/*"
-                  onChange={handleLogoChange} // Handle file selection
+                  onChange={handleLogoChange}
+                  className="input-field"
                 />
-                <div className="flex justify-center items-center">
-                  {logoFile && (
-                    <img
-                      id="logo-preview"
-                      src=""
-                      alt="Logo Preview"
-                      className="w-24 h-24 object-cover rounded-md mt-2"
-                    />
-                  )}
-                </div>
                 {uploadError && (
-                  <p className="text-red-600 mt-2">{uploadError}</p>
+                  <p className="text-red-500 text-sm mt-1">{uploadError}</p>
                 )}
+                <img
+                  id="logo-preview"
+                  className="mt-4 w-32 h-32 object-cover"
+                  alt="Logo Preview"
+                />
               </div>
             </div>
-            <div className="flex justify-center py-10">
-              <button
-                type="submit"
-                className="text-white bg-audi-purple hover:bg-purple-900 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-12 py-2.5"
-              >
-                Create Organization
+            <div className="flex justify-end space-x-4">
+              <button type="button" className="btn-secondary" onClick={onClose}>
+                Cancel
+              </button>
+              <button type="submit" className="btn-primary">
+                Save Organization
               </button>
             </div>
           </form>
@@ -292,7 +298,14 @@ export default function NewOrgModal({ visible, onClose }) {
   );
 }
 
-NewOrgModal.propTypes = {
+EditOrgModal.propTypes = {
   visible: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
+  organizationDetails: PropTypes.shape({
+    name: PropTypes.string,
+    country: PropTypes.string,
+    city: PropTypes.string,
+    address: PropTypes.string,
+    companyLogo: PropTypes.string,
+  }),
 };

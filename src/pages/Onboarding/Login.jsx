@@ -67,7 +67,7 @@ const Login = () => {
       .then((response) => {
         if (response.user) {
           if (response.password) {
-            localStorage.setItem("token", response.token);
+            localStorage.setItem("audi-token", response.token);
             localStorage.setItem("audi-sidebar-status", "dashboard");
             Swal.fire({
               icon: "success",

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import orgLanding from "../../assets/images/org-landing.png";
 import NewOrgModal from "../../components/modals/NewOrgModal";
+import TherapistService from "../../services/Therapist.service";
 
 const OrganizationLanding = () => {
   const [openNewOrgModal, setOpenNewOrgModal] = useState(false);
@@ -34,7 +35,12 @@ const OrganizationLanding = () => {
           </button>
         </div>
       </div>
-      <NewOrgModal visible={openNewOrgModal} onClose={()=>{setOpenNewOrgModal(false)}}/>
+      <NewOrgModal
+        visible={openNewOrgModal}
+        onClose={() => {
+          setOpenNewOrgModal(false);
+        }}
+      />
     </div>
   );
 };

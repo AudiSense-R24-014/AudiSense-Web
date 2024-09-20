@@ -9,13 +9,15 @@ export default function SessionHeader() {
     TherapistService.validateToken()
       .then((data) => {
         setUser(data);
+        localStorage.setItem("audi-user", JSON.stringify(data));
         if (!data?._id) {
           Swal.fire({
             icon: "error",
             title: "User Session Expired!",
             text: "Please login again!",
             preConfirm: () => {
-              localStorage.removeItem("token");
+              localStorage.removeItem("audi-token");
+              localStorage.removeItem("audi-user");
               window.location.href = "/login";
             },
           });
