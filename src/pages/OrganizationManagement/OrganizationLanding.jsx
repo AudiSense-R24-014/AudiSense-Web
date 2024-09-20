@@ -6,7 +6,7 @@ const OrganizationLanding = () => {
   const [openNewOrgModal, setOpenNewOrgModal] = useState(false);
   return (
     <div>
-      <div className="py-8 px-2 border-b-2 border-indigo-400/20 lg:px-4">
+      <div className="py-8 px-2 border-b-2 border-indigo-400/20 lg:px-4 h-5/6">
         <h1 className="text-slate-900 font-montserrat font-bold text-xl lg:text-3xl">
           Organization Management
         </h1>
