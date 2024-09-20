@@ -1,5 +1,5 @@
 import * as URL from './const/url';
-const token = localStorage.getItem('token');
+const token = localStorage.getItem('audi-token');
 
 const getPatients = async () => {
     const response = await fetch(URL.PATIENTS, {

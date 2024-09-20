@@ -39,7 +39,8 @@ export default function SidebarCombined() {
       cancelButtonText: "No, cancel",
     }).then((result) => {
       if (result.isConfirmed) {
-        localStorage.removeItem("token");
+        localStorage.removeItem("audi-token");
+        localStorage.removeItem("audi-user");
         localStorage.removeItem("audi-sidebar-status");
         window.location.href = "/";
       }
@@ -107,7 +108,7 @@ export default function SidebarCombined() {
             />
           </Link>
           <Link
-            to="/organization"
+            to = {JSON.parse(localStorage.getItem("audi-user"))?.organization  ? "/organization/assigned" : "/organization"}
             onClick={() => {
               localStorage.setItem("audi-sidebar-status", "organization");
               setStatus("organization");

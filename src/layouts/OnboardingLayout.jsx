@@ -5,7 +5,7 @@ import LandingTopbar from "../components/LandingTopbar";
 
 const OnboardingLayout = () => {
   useEffect(() => {
-    if (localStorage.getItem("token")) {
+    if (localStorage.getItem("audi-token")) {
       localStorage.setItem("audi-sidebar-status", "dashboard");
       window.location.href = "/dashboard";
     }
