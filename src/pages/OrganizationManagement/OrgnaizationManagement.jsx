@@ -3,6 +3,7 @@ import OrganizationService from "../../services/Organization.service";
 import EditOrgModal from "../../components/modals/EditOrgModal";
 import TherapistEditModal from "../../components/modals/TherapistEditModal";
 import Swal from "sweetalert2";
+import OrgRequestService from "../../services/OrgRequest.service";
 import VerifyUserModal from "../../components/modals/VerifyUserModal";
 
 const OrganizationManagement = () => {
@@ -12,6 +13,7 @@ const OrganizationManagement = () => {
   const [organization, setOrganization] = useState({});
   const [therapist, setTherapist] = useState({});
   const [isAdmin, setIsAdmin] = useState(false);
+  const [orgRequests, setOrgRequests] = useState([]);
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("audi-user"));
@@ -36,6 +38,15 @@ const OrganizationManagement = () => {
     setTherapist(therapistCopy);
     setOpenEditTherapist(true);
   };
+
+  useEffect(() => {
+    OrgRequestService.getAllOrgRequests().then((data) => {
+      setOrgRequests(data);
+    }).catch((error) => {
+      console.error(error);
+    });
+  }, []);
+
 
   const leaveOrganization = () => {
     Swal.fire({
@@ -145,37 +156,44 @@ const OrganizationManagement = () => {
       </div>
 
       {/* Table Section */}
-      <div className="border border-gray-300 rounded-md font-nunito mt-10">
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr className="text-xs text-gray-700 text-left font-bold uppercase tracking-wider">
-                <th className="px-6 py-3">Name</th>
-                <th className="px-6 py-3">Position</th>
-                <th className="px-6 py-3">Email</th>
-                <th className="px-6 py-3">Contact Number</th>
-                <th className="px-6 py-3">Register Number</th>
-                {isAdmin && <th className="px-6 py-3">Actions</th>}
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200 text-sm">
-              {organization?.therapists?.map((therapist) => (
-                <tr key={therapist._id}>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {therapist.firstName} {therapist.lastName}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {therapist.position || "N/A"}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {therapist.email}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {therapist.contactNo || "N/A"}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {therapist.regNumber}
-                  </td>
+      <div className="flex flex-col justify-between font-montserrat bg-white p-5 rounded-lg shadow-md mt-5">
+        <div className="mt-5">
+          <h3>
+            Therapists
+          </h3>
+        </div>
+        <div className="border border-gray-300 rounded-md font-nunito mt-5">
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr className="text-xs text-gray-700 text-left font-bold uppercase tracking-wider">
+                  <th className="px-6 py-3">Name</th>
+                  <th className="px-6 py-3">Position</th>
+                  <th className="px-6 py-3">Email</th>
+                  <th className="px-6 py-3">Contact Number</th>
+                  <th className="px-6 py-3">Register Number</th>
+                  {isAdmin && <th className="px-6 py-3">Actions</th>}
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200 text-sm">
+                {/* Therapist Details */}
+                {organization?.therapists?.map((therapist) => (
+                  <tr key={therapist._id}>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {therapist.firstName} {therapist.lastName}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {therapist.position || "N/A"}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {therapist.email}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {therapist.contactNo || "N/A"}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {therapist.regNumber}
+                    </td>
                   {isAdmin && (
                     <td className="px-6 py-4 whitespace-nowrap">
                       <button className="bg-red-500 hover:bg-red-800 text-white font-bold py-2 px-4 mr-2 rounded">
@@ -183,16 +201,76 @@ const OrganizationManagement = () => {
                       </button>
                       <button
                         className="bg-amber-500 hover:bg-amber-800 text-white font-bold py-2 px-7 rounded"
+                          onClick={() => handleEditTherapist(therapist)}
+                        >
+                          Edit
+                        </button>
+                      </td>
+                    )}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      {/* Beginning of table 2 */}
+      <div className="flex flex-col justify-between font-montserrat bg-white p-5 rounded-lg shadow-md mt-5">
+        <div className="mt-5">
+          <h3>
+            Requests
+            <span className="ml-3 text-gray-500">({organization?.orgRequest?.length})</span>
+          </h3>
+        </div>
+        <div className="border border-gray-300 rounded-md font-nunito mt-5">
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr className="text-xs text-gray-700 text-left font-bold uppercase tracking-wider">
+                  <th className="px-6 py-3">Name</th>
+                  <th className="px-6 py-3">Email</th>
+                  <th className="px-6 py-3">Contact Number</th>
+                  <th className="px-6 py-3">Register Number</th>
+                  <th className="px-6 py-3">Rquest Type</th>
+                  {isAdmin && <th className="px-6 py-3">Actions</th>}
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200 text-sm">
+                {/* Therapist Details */}
+                {orgRequests?.map((orgRequest) => (
+                  <tr key={orgRequest._id}>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {orgRequest?.therapist?.firstName} {orgRequest?.therapist?.lastName}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {orgRequest?.therapist?.email}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {orgRequest?.therapist?.contactNo || "N/A"}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {orgRequest?.therapist?.regNumber}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {orgRequest?.requestType}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <button className="bg-green-500 hover:bg-emerald-500 text-white font-bold py-2 px-4 mr-2 rounded">
+                        Accept
+                      </button>
+                      <button
+                        className="bg-red-500 hover:bg-red-800 text-white font-bold py-2 px-4 rounded"
                         onClick={() => handleEditTherapist(therapist)}
                       >
-                        Edit
+                        Decline
                       </button>
                     </td>
-                  )}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
 
