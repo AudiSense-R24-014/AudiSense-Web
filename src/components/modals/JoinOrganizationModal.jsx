@@ -1,24 +1,54 @@
 import { X } from "lucide-react";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 import OrganizationService from "../../services/Organization.service";
 import Swal from "sweetalert2";
+import OrgRequestService from "../../services/OrgRequest.service";
 
 
 export default function JoinOrganizationModal({ visible, onClose }) {
     // States for form inputs
     const [joinCode, setJoinCode] = useState("");
     const [organization, setOrganization] = useState(null);
+    const [therapist,setTherapist] = useState({});
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem("audi-user"));
+        setTherapist(user);
+    }, []);
+
 
     if (!visible) {
         return null;
     }
 
+    const handleRequestToJoin = () => {
+        OrgRequestService.createOrgRequest({
+            requestType: "Join",
+            organization: organization._id,
+            therapist: therapist._id,
+        }).then((data) => {
+            if(data._id){
+                Swal.fire({
+                    title: "Request Sent!",
+                    text: "Your request to join the organization has been sent successfully.",
+                    icon: "success",
+                });
+            }else{
+                Swal.fire({
+                    title: "Request Failed!",
+                    text: "Your request to join the organization has failed. Please Try Again Later",
+                    icon: "error",
+                });
+            }
+        }).catch((err) => {
+            console.error("Error sending request to join organization: ", err);
+        });
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        OrganizationService.getOrganizationByJoinCode("TA6KM8").then((data) => {
+        OrganizationService.getOrganizationByJoinCode(joinCode).then((data) => {
             setOrganization(data);
-            console.log(data);
         }).catch((err) => {
             console.error("Error getting organization by join code: ", err);
         });
@@ -35,16 +65,13 @@ export default function JoinOrganizationModal({ visible, onClose }) {
             confirmButtonText: "Yes, join it!"
         }).then((result) => {
             if (result.isConfirmed) {
-                Swal.fire(
-                    "Joined!",
-                    "You have successfully joined the organization.",
-                    "success"
-                );
+                handleRequestToJoin();
                 // You can trigger additional actions like closing the modal or sending data
                 onClose(); // Close the modal after confirmation
             }
         });
     };
+    
 
     return (
         <div
