@@ -8,7 +8,7 @@ import Swal from "sweetalert2";
 export default function JoinOrganizationModal({ visible, onClose }) {
     // States for form inputs
     const [joinCode, setJoinCode] = useState("");
-    const [organization, setOrganization] = useState({});
+    const [organization, setOrganization] = useState(null);
 
     if (!visible) {
         return null;
@@ -54,7 +54,11 @@ export default function JoinOrganizationModal({ visible, onClose }) {
             <div className="bg-white rounded-xl relative w-full max-w-3xl mx-4 sm:mx-8 lg:w-2/3 xl:w-1/2 overflow-auto max-h-full p-4 sm:p-6 lg:p-8">
                 <div className="pb-2">
                     <button
-                        onClick={onClose}
+                        onClick={() => {
+                            onClose();
+                            setJoinCode(""); // Reset the form
+                            setOrganization(null); // Reset the organization data
+                        }}
                         className="absolute top-3 right-4 p-1 rounded-lg text-gray-400 bg-white hover:bg-gray-50 hover:text-gray-600"
                         aria-label="Close"
                     >
@@ -87,7 +91,7 @@ export default function JoinOrganizationModal({ visible, onClose }) {
                                 />
                             </div>
                         </div>
-                        <div className="flex justify-center py-10">
+                        <div className="flex justify-center pt-3 pb-6">
                             <button
                                 type="submit"
                                 className="text-white bg-audi-purple hover:bg-purple-900 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-12 py-2.5"
@@ -100,14 +104,24 @@ export default function JoinOrganizationModal({ visible, onClose }) {
                 {/* Display the organization data when available */}
                 {organization && (
                     <div>
-                        <div className="mt-8 p-4 border border-gray-300 rounded-lg">
-                            <h2 className="text-xl font-semibold">Organization Details</h2>
-                            <p><strong>Name:</strong> {organization.name}</p>
-                            <p><strong>Address:</strong> {organization.address}</p>
-                            <p><strong>Country:</strong> {organization.country}</p>
-                            <p><strong>City:</strong> {organization.city}</p>
-                            {/* Add more fields as needed based on the organization's structure */}
-                            <div className="flex justify-center mt-4">
+                        <div className="mt-8 p-4 border border-gray-300 rounded-lg ">
+                            <div className="flex flex-col lg:flex-row items-start justify-between">
+                                <div>
+                                    {/* Organization Details */}
+                                    <p className="text-xl font-montserrat"><strong>{organization.name}</strong></p>
+                                    <p className="font-montserrat">{organization.address}</p>
+                                </div>
+                                <div className="mt-4 lg:mt-0 lg:ml-6">
+                                    {/* Organization Image */}
+                                    <img
+                                        src={organization.companyLogo || "https://via.placeholder.com/150"}
+                                        alt="Organization Logo"
+                                        className="w-32 h-32 object-contain ml-6 rounded-lg mr-10"
+                                    />
+                                </div>
+
+                            </div>
+                            <div className="flex justify-center">
                                 <button
                                     type="submit"
                                     onClick={handleJoinOrganization}
