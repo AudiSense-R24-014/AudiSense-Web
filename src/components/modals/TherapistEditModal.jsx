@@ -3,6 +3,7 @@ import { X } from "lucide-react";
 import PropTypes from "prop-types";
 import TherapistService from "../../services/Therapist.service";
 import Swal from "sweetalert2";
+import OrganizationService from "../../services/Organization.service";
 
 export default function TherapistEditModal({ visible, onClose, therapist }) {
   const [formData, setFormData] = useState({});
@@ -30,7 +31,44 @@ export default function TherapistEditModal({ visible, onClose, therapist }) {
     });
   };
 
-  const handleMakeAdmin = () => {};
+  const handleMakeAdmin = () => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: `You are about to make ${therapist.firstName} ${therapist.lastName} an admin`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, make admin",
+      cancelButtonText: "No, cancel",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        OrganizationService.makeTherapistAdmin(
+          therapist?.organization,
+          therapist?._id
+        )
+          .then((data) => {
+            if (data?.message === "Therapist made admin successfully") {
+              Swal.fire({
+                title: "Success",
+                text: "Therapist made admin successfully",
+                icon: "success",
+                preConfirm: () => {
+                  window.location.reload();
+                },
+              });
+            } else {
+              Swal.fire({
+                title: "Error",
+                text: "Error making therapist an admin",
+                icon: "error",
+              });
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+    });
+  };
 
   const submit = (e) => {
     e.preventDefault();

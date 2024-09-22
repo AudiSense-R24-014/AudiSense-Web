@@ -71,7 +71,6 @@ export default function EditOrgModal({
     );
     setCity(organizationDetails?.city || "");
     setAddress(organizationDetails?.address || "");
-    setLogoFile(organizationDetails?.companyLogo || null); // Reset file input
   }, [organizationDetails]);
 
   if (!visible) {
@@ -109,15 +108,11 @@ export default function EditOrgModal({
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    let logoUrl = organizationDetails?.companyLogo;
     try {
-      let logoUrl = organizationDetails?.companyLogo;
-
       if (logoFile) {
-        // Upload the logo file and get the URL
         logoUrl = await uploadLogo(logoFile);
       }
-
       const organization = {
         name: organizationName,
         country: country.label,
@@ -278,17 +273,18 @@ export default function EditOrgModal({
                 )}
                 <img
                   id="logo-preview"
-                  className="mt-4 w-32 h-32 object-cover"
+                  className="mt-4 w-32 h-32 object-cover self-center"
                   alt="Logo Preview"
+                  src={organizationDetails?.companyLogo}
                 />
               </div>
             </div>
-            <div className="flex justify-end space-x-4">
-              <button type="button" className="btn-secondary" onClick={onClose}>
-                Cancel
-              </button>
-              <button type="submit" className="btn-primary">
-                Save Organization
+            <div className="flex justify-center py-10">
+              <button
+                type="submit"
+                className="text-white bg-audi-purple hover:bg-purple-900 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-12 py-2.5"
+              >
+                Save
               </button>
             </div>
           </form>
