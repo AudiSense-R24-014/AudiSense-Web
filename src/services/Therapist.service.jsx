@@ -1,5 +1,5 @@
 import * as URL from './const/url';
-const token = localStorage.getItem('token');
+const token = localStorage.getItem('audi-token');
 
 
 const login = async (email, password) => {
@@ -50,10 +50,24 @@ const validateToken = async () => {
     return data;
 }
 
+const updateTherapist = async (id, therapist) => {
+    const response = await fetch(URL.THERAPIST_BY_ID(id), {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(therapist),
+    });
+    const data = await response.json();
+    return data;
+}
+
 
 export default {
     login,
     getTherapists,
     createTherapist,
     validateToken,
+    updateTherapist
 }

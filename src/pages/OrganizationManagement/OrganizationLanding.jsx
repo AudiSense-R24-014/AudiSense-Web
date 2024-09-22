@@ -3,6 +3,7 @@ import orgLanding from "../../assets/images/org-landing.png";
 import NewOrgModal from "../../components/modals/NewOrgModal";
 import JoinOrganizationModal from "../../components/modals/JoinOrganizationModal";
 import OrganizationService from "../../services/Organization.service";
+import TherapistService from "../../services/Therapist.service";
 
 
 const OrganizationLanding = () => {
@@ -41,7 +42,12 @@ const OrganizationLanding = () => {
         </div>
       </div>
       <JoinOrganizationModal visible={openJoinOrgModal} onClose={()=>{setOpenJoinOrgModal(false)}}/>
-      <NewOrgModal visible={openNewOrgModal} onClose={()=>{setOpenNewOrgModal(false)}}/>
+      <NewOrgModal
+        visible={openNewOrgModal}
+        onClose={() => {
+          setOpenNewOrgModal(false);
+        }}
+      />
     </div>
   );
 };
