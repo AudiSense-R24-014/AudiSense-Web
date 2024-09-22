@@ -14,6 +14,17 @@ const createOrganization = async (organization) => {
     return data;
 };
 
+const getOrganizationByJoinCode = async (code) => {
+    const response = await fetch(URL.ORGANIZATION_BY_JOIN_CODE(code), {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        },
+    });
+    const data = await response.json();
+    return data;
+}
 const getOrganizationById = async (id) => {
     const response = await fetch(URL.ORGANIZATION_BY_ID(id), {
         method: 'GET',
@@ -52,10 +63,10 @@ const removeTherapist = async (organizationId, therapistId) => {
     return data;
 }
 
-
 export default {
     createOrganization,
     getOrganizationById,
     updateOrganization,
     removeTherapist,
+    getOrganizationByJoinCode,
 };

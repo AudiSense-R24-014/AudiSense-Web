@@ -8,8 +8,10 @@ export const THERAPISTS_LOGIN = `${BASE_URL}/therapists/login/`;
 export const PATIENTS = `${BASE_URL}/patients/`;
 
 export const ORGANIZATIONS = `${BASE_URL}/organizations/`;
+export const ORGANIZATION_BY_JOIN_CODE = (code) => `${BASE_URL}/organizations/joincode/${code}/`;
 export const ORGANIZATION_BY_ID = (id) => `${BASE_URL}/organizations/${id}/`;
 export const ORGANIZATION_REMOVE_THERAPIST = `${BASE_URL}/organizations/therapist/remove/`;
+
 
 export const DISCRIMINATION_AUTO_GEN = `${BASE_URL}/discrimination/`;
 export const DISCRIMINATION_CORRECTIVE=`${BASE_URL}/discriminationOpt/`;
