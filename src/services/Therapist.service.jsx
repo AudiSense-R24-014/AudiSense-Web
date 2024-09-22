@@ -63,11 +63,24 @@ const updateTherapist = async (id, therapist) => {
     return data;
 }
 
+const verifyUser = async (email, password) => {
+    const response = await fetch(URL.THERAPISTS_VERIFY, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ email, password }),
+    });
+    const data = await response.json();
+    return data;
+}
 
 export default {
     login,
     getTherapists,
     createTherapist,
     validateToken,
-    updateTherapist
+    updateTherapist,
+    verifyUser,
 }

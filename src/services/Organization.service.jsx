@@ -52,10 +52,23 @@ const removeTherapist = async (organizationId, therapistId) => {
     return data;
 }
 
+const  makeTherapistAdmin = async (organizationId, therapistId) => {
+    const response = await fetch(URL.ORGANIZATION_MAKE_ADMIN, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ organizationId, therapistId }),
+    });
+    const data = await response.json();
+    return data;
+}
 
 export default {
     createOrganization,
     getOrganizationById,
     updateOrganization,
     removeTherapist,
+    makeTherapistAdmin,
 };
