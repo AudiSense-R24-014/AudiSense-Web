@@ -25,6 +25,7 @@ const getOrganizationByJoinCode = async (code) => {
     const data = await response.json();
     return data;
 }
+
 const getOrganizationById = async (id) => {
     const response = await fetch(URL.ORGANIZATION_BY_ID(id), {
         method: 'GET',
