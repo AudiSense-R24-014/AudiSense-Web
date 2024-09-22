@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from "react";
 import orgLanding from "../../assets/images/org-landing.png";
 import NewOrgModal from "../../components/modals/NewOrgModal";
+import JoinOrganizationModal from "../../components/modals/JoinOrganizationModal";
+import OrganizationService from "../../services/Organization.service";
+
 
 const OrganizationLanding = () => {
   const [openNewOrgModal, setOpenNewOrgModal] = useState(false);
+  const [openJoinOrgModal, setOpenJoinOrgModal] = useState(false);
+
+  
   return (
     <div>
       <div className="py-8 px-2 border-b-2 border-indigo-400/20 lg:px-4 h-5/6">
@@ -26,7 +32,7 @@ const OrganizationLanding = () => {
           </button>
           <button
             onClick={() => {
-              window.location = "./login";
+              setOpenJoinOrgModal(true);
             }}
             className="bg-audi-purple text-white text-sm font-semibold py-2 px-8 md:py-2.5 rounded-md hover:bg-purple-900"
           >
@@ -34,6 +40,7 @@ const OrganizationLanding = () => {
           </button>
         </div>
       </div>
+      <JoinOrganizationModal visible={openJoinOrgModal} onClose={()=>{setOpenJoinOrgModal(false)}}/>
       <NewOrgModal visible={openNewOrgModal} onClose={()=>{setOpenNewOrgModal(false)}}/>
     </div>
   );
