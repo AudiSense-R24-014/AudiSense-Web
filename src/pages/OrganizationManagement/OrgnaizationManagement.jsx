@@ -194,12 +194,13 @@ const OrganizationManagement = () => {
       cancelButtonText: "No, cancel",
     }).then((result) => {
       if (result.isConfirmed) {
-        OrganizationService.makeTherapistAdmin(
-          orgRequest.therapist.organization,
+        OrgRequestService.approveAdminOrgRequest(
+          orgRequest._id,
+          organization._id,
           orgRequest.therapist._id
         )
           .then((data) => {
-            if (data?.message === "Therapist made admin successfully") {
+            if (data?.message === "Therapist made admin of organization successfully") {
               Swal.fire({
                 title: "Success",
                 text: "Therapist made admin successfully",
