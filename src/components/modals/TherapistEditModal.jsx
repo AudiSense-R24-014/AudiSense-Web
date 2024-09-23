@@ -7,6 +7,7 @@ import OrganizationService from "../../services/Organization.service";
 
 export default function TherapistEditModal({ visible, onClose, therapist }) {
   const [formData, setFormData] = useState({});
+  const [isTherapistAdmin, setIsTherapistAdmin] = useState(false);
 
   useEffect(() => {
     if (therapist) {
@@ -18,6 +19,17 @@ export default function TherapistEditModal({ visible, onClose, therapist }) {
         position: therapist?.position || "",
       });
     }
+
+    OrganizationService.isTherapistAdmin(
+      therapist?.organization,
+      therapist?._id
+    )
+      .then((data) => {
+        setIsTherapistAdmin(data?.isAdmin);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }, [therapist]);
 
   if (!visible) {
@@ -28,6 +40,45 @@ export default function TherapistEditModal({ visible, onClose, therapist }) {
     setFormData({
       ...formData,
       [name]: value,
+    });
+  };
+
+  const handleRemoveAdmin = () => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: `You are about to remove ${therapist.firstName} ${therapist.lastName} from admin`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, remove admin",
+      cancelButtonText: "No, cancel",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        OrganizationService.removeAdminPrivileges(
+          therapist?.organization,
+          therapist?._id
+        )
+          .then((data) => {
+            if (data?.message === "Admin privileges removed successfully") {
+              Swal.fire({
+                title: "Success",
+                text: "Admin privileges removed successfully",
+                icon: "success",
+                preConfirm: () => {
+                  window.location.reload();
+                },
+              });
+            } else {
+              Swal.fire({
+                title: "Error",
+                text: "Error removing admin privileges",
+                icon: "error",
+              });
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
     });
   };
 
@@ -237,13 +288,23 @@ export default function TherapistEditModal({ visible, onClose, therapist }) {
               </div>
             </div>
             <div className="flex justify-between pt-5 pb-3">
-              <button
-                type="button"
-                className="text-white bg-green-600 hover:bg-emerald-700 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-12 py-2.5"
-                onClick={handleMakeAdmin}
-              >
-                Make an Admin
-              </button>
+              {isTherapistAdmin ? (
+                <button
+                  type="button"
+                  className="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-12 py-2.5"
+                  onClick={handleRemoveAdmin}
+                >
+                  Remove Admin
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  className="text-white bg-green-600 hover:bg-emerald-700 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-12 py-2.5"
+                  onClick={handleMakeAdmin}
+                >
+                  Make an Admin
+                </button>
+              )}
 
               <button
                 type="submit"

@@ -30,13 +30,13 @@ export default function JoinOrganizationModal({ visible, onClose }) {
             if(data._id){
                 Swal.fire({
                     title: "Request Sent!",
-                    text: "Your request to join the organization has been sent successfully.",
+                    text: "Your request to join the organization has been sent successfully",
                     icon: "success",
                 });
             }else{
                 Swal.fire({
                     title: "Request Failed!",
-                    text: "Your request to join the organization has failed. Please Try Again Later",
+                    text: "Your request to join the organization has failed",
                     icon: "error",
                 });
             }

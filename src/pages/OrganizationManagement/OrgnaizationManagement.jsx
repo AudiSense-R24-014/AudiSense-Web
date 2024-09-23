@@ -10,10 +10,13 @@ const OrganizationManagement = () => {
   const [openEditTherapist, setOpenEditTherapist] = useState(false);
   const [openEditOrg, setOpenEditOrg] = useState(false);
   const [openVerifyUser, setOpenVerifyUser] = useState(false);
+  const [openVerifyUserToRemoveTherapist, setOpenVerifyUserToRemoveTherapist] =
+    useState(false);
   const [organization, setOrganization] = useState({});
   const [therapist, setTherapist] = useState({});
   const [isAdmin, setIsAdmin] = useState(false);
-  const [orgRequests, setOrgRequests] = useState([]);
+  const [pendingOrgRequests, setPendingOrgRequests] = useState([]);
+  const [removingTherapist, setRemovingTherapist] = useState({});
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("audi-user"));
@@ -32,7 +35,8 @@ const OrganizationManagement = () => {
 
         OrgRequestService.getOrgRequestsByOrgId(organizationId)
           .then((data) => {
-            setOrgRequests(data);
+            let pendingReqs = data.filter((req) => req.status === "Pending");
+            setPendingOrgRequests(pendingReqs);
           })
           .catch((error) => {
             console.error(error);
@@ -47,15 +51,53 @@ const OrganizationManagement = () => {
     setOpenEditTherapist(true);
   };
 
-  useEffect(() => {
-    OrgRequestService.getAllOrgRequests()
-      .then((data) => {
-        setOrgRequests(data);
+  const removingTherapistFromOrg = (therapist) => {
+    setRemovingTherapist(therapist);
+    setOpenVerifyUserToRemoveTherapist(true);
+  };
+
+  const removeTherapist = (therapist) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: `You are about to remove ${therapist.firstName} ${therapist.lastName} from the organization`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, remove",
+      cancelButtonText: "No, cancel",
+    })
+      .then((result) => {
+        if (result.isConfirmed) {
+          OrganizationService.removeTherapist(organization._id, therapist._id)
+            .then((data) => {
+              if (
+                data?.message ===
+                "Therapist removed from organization successfully"
+              ) {
+                Swal.fire({
+                  title: "Success",
+                  text: "Therapist removed from organization successfully",
+                  icon: "success",
+                  preConfirm: () => {
+                    window.location.reload();
+                  },
+                });
+              } else {
+                Swal.fire({
+                  title: "Error",
+                  text: "Error removing therapist from organization",
+                  icon: "error",
+                });
+              }
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        }
       })
       .catch((error) => {
         console.error(error);
       });
-  }, []);
+  };
 
   const leaveOrganization = () => {
     Swal.fire({
@@ -189,6 +231,47 @@ const OrganizationManagement = () => {
     }
   };
 
+  const requestToBecomeAdmin = () => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You are about to request to become an admin of the organization",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, request",
+      cancelButtonText: "No, cancel",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const orgRequest = {
+          therapist: therapist._id,
+          organization: organization._id,
+          requestType: "Admin",
+        };
+        OrgRequestService.createOrgRequest(orgRequest)
+          .then((data) => {
+            if (data?._id) {
+              Swal.fire({
+                title: "Success",
+                text: "Request sent successfully",
+                icon: "success",
+                preConfirm: () => {
+                  window.location.reload();
+                },
+              });
+            } else {
+              Swal.fire({
+                title: "Error",
+                text: "You have already sent a request",
+                icon: "error",
+              });
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+    });
+  };
+
   const declineOrgRequest = (orgRequest) => {
     Swal.fire({
       title: "Are you sure?",
@@ -266,12 +349,19 @@ const OrganizationManagement = () => {
           {/* Edit buttons (Centered on mobile view) */}
 
           <div className="text-sm flex flex-col sm:flex-row items-center sm:items-start">
-            {isAdmin && (
+            {isAdmin ? (
               <button
                 className="bg-purple-500 mb-2 hover:bg-audi-purple text-white font-semibold py-2 px-6 rounded sm:mr-2"
                 onClick={() => setOpenEditOrg(true)}
               >
                 Edit Organization Details
+              </button>
+            ) : (
+              <button
+                className="bg-purple-500 mb-2 hover:bg-audi-purple text-white font-semibold py-2 px-6 rounded sm:mr-2"
+                onClick={() => requestToBecomeAdmin()}
+              >
+                Request to Become Admin
               </button>
             )}
             <button
@@ -332,7 +422,10 @@ const OrganizationManagement = () => {
                     </td>
                     {isAdmin && (
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <button className="bg-red-500 hover:bg-red-800 text-white font-bold py-2 px-4 mr-2 rounded">
+                        <button
+                          className="bg-red-500 hover:bg-red-800 text-white font-bold py-2 px-4 mr-2 rounded"
+                          onClick={() => removingTherapistFromOrg(therapist)}
+                        >
                           Remove
                         </button>
                         <button
@@ -358,7 +451,7 @@ const OrganizationManagement = () => {
             <h3>
               Requests
               <span className="ml-3 text-pink-600">
-                ({orgRequests?.length})
+                ({pendingOrgRequests?.length})
               </span>
             </h3>
           </div>
@@ -377,7 +470,7 @@ const OrganizationManagement = () => {
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200 text-sm">
                   {/* Therapist Details */}
-                  {orgRequests?.map((orgRequest) => (
+                  {pendingOrgRequests?.map((orgRequest) => (
                     <tr key={orgRequest._id}>
                       <td className="px-6 py-4 whitespace-nowrap">
                         {orgRequest?.therapist?.firstName}{" "}
@@ -437,6 +530,14 @@ const OrganizationManagement = () => {
         titleText="Do you really wish to leave the organization?"
         optionalText="You will no longer have access to the organization. Please verify your password to proceed."
         onConfirm={leaveOrganization}
+      />
+
+      <VerifyUserModal
+        visible={openVerifyUserToRemoveTherapist}
+        onClose={() => setOpenVerifyUserToRemoveTherapist(false)}
+        titleText="Do you really wish to remove the therapist?"
+        optionalText="The therapist will no longer have access to the organization. Please verify your password to proceed."
+        onConfirm={() => removeTherapist(removingTherapist)}
       />
     </div>
   );
