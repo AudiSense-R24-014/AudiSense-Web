@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import orgLanding from "../../assets/images/org-landing.png";
 import NewOrgModal from "../../components/modals/NewOrgModal";
 import JoinOrganizationModal from "../../components/modals/JoinOrganizationModal";
-import OrganizationService from "../../services/Organization.service";
-import TherapistService from "../../services/Therapist.service";
 
 
 const OrganizationLanding = () => {

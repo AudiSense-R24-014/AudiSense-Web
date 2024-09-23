@@ -29,6 +29,14 @@ const OrganizationManagement = () => {
             }
           });
         });
+
+        OrgRequestService.getOrgRequestsByOrgId(organizationId)
+          .then((data) => {
+            setOrgRequests(data);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
       }
     }
   }, []);
@@ -40,13 +48,14 @@ const OrganizationManagement = () => {
   };
 
   useEffect(() => {
-    OrgRequestService.getAllOrgRequests().then((data) => {
-      setOrgRequests(data);
-    }).catch((error) => {
-      console.error(error);
-    });
+    OrgRequestService.getAllOrgRequests()
+      .then((data) => {
+        setOrgRequests(data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }, []);
-
 
   const leaveOrganization = () => {
     Swal.fire({
@@ -91,6 +100,134 @@ const OrganizationManagement = () => {
     setOpenVerifyUser(true);
   };
 
+  const acceptTherapistToOrg = (orgRequest) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: `You are about to accept ${orgRequest.therapist.firstName} ${orgRequest.therapist.lastName}'s request to join the organization`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, accept",
+      cancelButtonText: "No, cancel",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        OrgRequestService.addTherapistToOrg(
+          orgRequest._id,
+          organization._id,
+          orgRequest.therapist._id
+        )
+          .then((data) => {
+            if (
+              data?.message === "Therapist added to organization successfully"
+            ) {
+              Swal.fire({
+                title: "Success",
+                text: "Therapist added to organization successfully",
+                icon: "success",
+                preConfirm: () => {
+                  window.location.reload();
+                },
+              });
+            } else {
+              Swal.fire({
+                title: "Error",
+                text: "Error adding therapist to organization",
+                icon: "error",
+              });
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+    });
+  };
+
+  const acceptAdminRequest = (orgRequest) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: `You are about to make ${orgRequest.therapist.firstName} ${orgRequest.therapist.lastName} an admin`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, make admin",
+      cancelButtonText: "No, cancel",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        OrganizationService.makeTherapistAdmin(
+          orgRequest.therapist.organization,
+          orgRequest.therapist._id
+        )
+          .then((data) => {
+            if (data?.message === "Therapist made admin successfully") {
+              Swal.fire({
+                title: "Success",
+                text: "Therapist made admin successfully",
+                icon: "success",
+                preConfirm: () => {
+                  window.location.reload();
+                },
+              });
+            } else {
+              Swal.fire({
+                title: "Error",
+                text: "Error making therapist an admin",
+                icon: "error",
+              });
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+    });
+  };
+
+  const acceptOrgRequest = (orgRequest) => {
+    if (orgRequest?.requestType === "Join") {
+      acceptTherapistToOrg(orgRequest);
+    } else if (orgRequest?.requestType === "Admin") {
+      acceptAdminRequest(orgRequest);
+    }
+  };
+
+  const declineOrgRequest = (orgRequest) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: `You are about to decline ${orgRequest.therapist.firstName} ${orgRequest.therapist.lastName}'s request`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, decline",
+      cancelButtonText: "No, cancel",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        OrgRequestService.updateOrgRequest(orgRequest._id, {
+          ...orgRequest,
+          status: "Rejected",
+        })
+          .then((data) => {
+            if (data?._id) {
+              Swal.fire({
+                title: "Success",
+                text: "Request declined successfully",
+                icon: "success",
+                preConfirm: () => {
+                  window.location.reload();
+                },
+              });
+            } else {
+              Swal.fire({
+                title: "Error",
+                text: "Error declining request",
+                icon: "error",
+              });
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+    });
+  };
+
   return (
     <div className="p-4 px-10">
       <div className="flex flex-col sm:flex-row items-center justify-between font-montserrat bg-white p-5 rounded-lg shadow-md mt-5">
@@ -127,22 +264,23 @@ const OrganizationManagement = () => {
           </div>
 
           {/* Edit buttons (Centered on mobile view) */}
-          {isAdmin && (
-            <div className="text-sm flex flex-col sm:flex-row items-center sm:items-start">
+
+          <div className="text-sm flex flex-col sm:flex-row items-center sm:items-start">
+            {isAdmin && (
               <button
                 className="bg-purple-500 mb-2 hover:bg-audi-purple text-white font-semibold py-2 px-6 rounded sm:mr-2"
                 onClick={() => setOpenEditOrg(true)}
               >
                 Edit Organization Details
               </button>
-              <button
-                className="bg-red-500 mb-2 hover:bg-red-800 text-white font-semibold py-2 px-11 rounded"
-                onClick={verifyUser}
-              >
-                Leave Organization
-              </button>
-            </div>
-          )}
+            )}
+            <button
+              className="bg-red-500 mb-2 hover:bg-red-800 text-white font-semibold py-2 px-11 rounded"
+              onClick={verifyUser}
+            >
+              Leave Organization
+            </button>
+          </div>
         </div>
 
         {/* Right Section: Organization Logo (Hidden on mobile, shown on larger screens) */}
@@ -158,9 +296,7 @@ const OrganizationManagement = () => {
       {/* Table Section */}
       <div className="flex flex-col justify-between font-montserrat bg-white p-5 rounded-lg shadow-md mt-5">
         <div className="mt-5">
-          <h3>
-            Therapists
-          </h3>
+          <h3>Therapists</h3>
         </div>
         <div className="border border-gray-300 rounded-md font-nunito mt-5">
           <div className="overflow-x-auto">
@@ -194,13 +330,13 @@ const OrganizationManagement = () => {
                     <td className="px-6 py-4 whitespace-nowrap">
                       {therapist.regNumber}
                     </td>
-                  {isAdmin && (
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <button className="bg-red-500 hover:bg-red-800 text-white font-bold py-2 px-4 mr-2 rounded">
-                        Remove
-                      </button>
-                      <button
-                        className="bg-amber-500 hover:bg-amber-800 text-white font-bold py-2 px-7 rounded"
+                    {isAdmin && (
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <button className="bg-red-500 hover:bg-red-800 text-white font-bold py-2 px-4 mr-2 rounded">
+                          Remove
+                        </button>
+                        <button
+                          className="bg-amber-500 hover:bg-amber-800 text-white font-bold py-2 px-7 rounded"
                           onClick={() => handleEditTherapist(therapist)}
                         >
                           Edit
@@ -216,63 +352,71 @@ const OrganizationManagement = () => {
       </div>
 
       {/* Beginning of table 2 */}
-      <div className="flex flex-col justify-between font-montserrat bg-white p-5 rounded-lg shadow-md mt-5">
-        <div className="mt-5">
-          <h3>
-            Requests
-            <span className="ml-3 text-gray-500">({organization?.orgRequest?.length})</span>
-          </h3>
-        </div>
-        <div className="border border-gray-300 rounded-md font-nunito mt-5">
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr className="text-xs text-gray-700 text-left font-bold uppercase tracking-wider">
-                  <th className="px-6 py-3">Name</th>
-                  <th className="px-6 py-3">Email</th>
-                  <th className="px-6 py-3">Contact Number</th>
-                  <th className="px-6 py-3">Register Number</th>
-                  <th className="px-6 py-3">Rquest Type</th>
-                  {isAdmin && <th className="px-6 py-3">Actions</th>}
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200 text-sm">
-                {/* Therapist Details */}
-                {orgRequests?.map((orgRequest) => (
-                  <tr key={orgRequest._id}>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {orgRequest?.therapist?.firstName} {orgRequest?.therapist?.lastName}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {orgRequest?.therapist?.email}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {orgRequest?.therapist?.contactNo || "N/A"}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {orgRequest?.therapist?.regNumber}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {orgRequest?.requestType}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <button className="bg-green-500 hover:bg-emerald-500 text-white font-bold py-2 px-4 mr-2 rounded">
-                        Accept
-                      </button>
-                      <button
-                        className="bg-red-500 hover:bg-red-800 text-white font-bold py-2 px-4 rounded"
-                        onClick={() => handleEditTherapist(therapist)}
-                      >
-                        Decline
-                      </button>
-                    </td>
+      {isAdmin && (
+        <div className="flex flex-col justify-between font-montserrat bg-white p-5 rounded-lg shadow-md mt-5">
+          <div className="mt-5">
+            <h3>
+              Requests
+              <span className="ml-3 text-pink-600">
+                ({orgRequests?.length})
+              </span>
+            </h3>
+          </div>
+          <div className="border border-gray-300 rounded-md font-nunito mt-5">
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr className="text-xs text-gray-700 text-left font-bold uppercase tracking-wider">
+                    <th className="px-6 py-3">Name</th>
+                    <th className="px-6 py-3">Email</th>
+                    <th className="px-6 py-3">Contact Number</th>
+                    <th className="px-6 py-3">Register Number</th>
+                    <th className="px-6 py-3">Rquest Type</th>
+                    {isAdmin && <th className="px-6 py-3">Actions</th>}
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200 text-sm">
+                  {/* Therapist Details */}
+                  {orgRequests?.map((orgRequest) => (
+                    <tr key={orgRequest._id}>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {orgRequest?.therapist?.firstName}{" "}
+                        {orgRequest?.therapist?.lastName}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {orgRequest?.therapist?.email}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {orgRequest?.therapist?.contactNo || "N/A"}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {orgRequest?.therapist?.regNumber}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {orgRequest?.requestType}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <button
+                          className="bg-green-500 hover:bg-emerald-500 text-white font-bold py-2 px-4 mr-2 rounded"
+                          onClick={() => acceptOrgRequest(orgRequest)}
+                        >
+                          Accept
+                        </button>
+                        <button
+                          className="bg-red-500 hover:bg-red-800 text-white font-bold py-2 px-4 rounded"
+                          onClick={() => declineOrgRequest(orgRequest)}
+                        >
+                          Decline
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Modals */}
       <TherapistEditModal

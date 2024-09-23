@@ -15,7 +15,9 @@ export const ORGANIZATION_REMOVE_THERAPIST = `${BASE_URL}/organizations/therapis
 export const ORGANIZATION_MAKE_ADMIN = `${BASE_URL}/organizations/admin/`;
 
 export const ORG_REQUESTS = `${BASE_URL}/orgRequests/`;
-
+export const ORG_REQUESTS_BY_ID = (id) => `${BASE_URL}/orgRequests/${id}/`;
+export const ORG_REQUESTS_BY_ORGID = (id) => `${BASE_URL}/orgRequests/organization/${id}/`;
+export const ORG_REQUESTS_ADD_THERAPIST = `${BASE_URL}/orgRequests/addTherapist/`;
 
 export const DISCRIMINATION_AUTO_GEN = `${BASE_URL}/discrimination/`;
 export const DISCRIMINATION_CORRECTIVE=`${BASE_URL}/discriminationOpt/`;
