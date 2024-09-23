@@ -194,12 +194,16 @@ const OrganizationManagement = () => {
       cancelButtonText: "No, cancel",
     }).then((result) => {
       if (result.isConfirmed) {
-        OrganizationService.makeTherapistAdmin(
-          orgRequest.therapist.organization,
+        OrgRequestService.approveAdminOrgRequest(
+          orgRequest._id,
+          organization._id,
           orgRequest.therapist._id
         )
           .then((data) => {
-            if (data?.message === "Therapist made admin successfully") {
+            if (
+              data?.message ===
+              "Therapist made admin of organization successfully"
+            ) {
               Swal.fire({
                 title: "Success",
                 text: "Therapist made admin successfully",
@@ -445,7 +449,7 @@ const OrganizationManagement = () => {
       </div>
 
       {/* Beginning of table 2 */}
-      {isAdmin && (
+      {isAdmin && pendingOrgRequests?.length > 0 && (
         <div className="flex flex-col justify-between font-montserrat bg-white p-5 rounded-lg shadow-md mt-5">
           <div className="mt-5">
             <h3>

@@ -76,11 +76,25 @@ const deleteOrgRequest = async (id) => {
   return data;
 };
 
+const approveAdminOrgRequest = async (orgReqId, organizationId, therapistId) => {
+  const response = await fetch(URL.ORG_REQUESTS_APPROVE_ADMIN, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ orgReqId, organizationId, therapistId }),
+  });
+  const data = await response.json();
+  return data;
+};
+
 export default {
   createOrgRequest,
   getAllOrgRequests,
   getOrgRequestsByOrgId,
   addTherapistToOrg,
   updateOrgRequest,
-  deleteOrgRequest
+  deleteOrgRequest,
+  approveAdminOrgRequest,
 };
