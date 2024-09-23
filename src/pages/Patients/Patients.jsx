@@ -64,12 +64,12 @@ function Patients() {
           <p>Loading patients...</p>
         </div>
       ) : (
-        <div className="min-w-full overflow-hidden overflow-x-scroll">
+        <div className="min-w-full overflow-hidden overflow-x-scroll font-montserrat">
           <div className="w-full">
             <div className="overflow-y-auto h-96">
-              <table className="w-full table-auto">
-                <thead className="bg-purple-600 text-white font-nunito sticky top-0">
-                  <tr>
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr className="text-xs text-gray-700 text-left font-bold uppercase tracking-wider">
                     <th className="px-4 py-2">First Name</th>
                     <th className="px-4 py-2">Last Name</th>
                     <th className="px-4 py-2">Gender</th>
@@ -90,8 +90,8 @@ function Patients() {
                       key={index}
                       className={
                         index % 2 === 0
-                          ? "bg-purple-200 font-nunito"
-                          : "bg-purple-300 font-nunito"
+                          ? "bg-gray-200 font-montserrat"
+                          : "bg-gray-300 font-montserrat"
                       }
                     >
                       <td className="border px-4 py-2">{patient.fName}</td>
