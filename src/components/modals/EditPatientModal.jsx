@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 
 import PatientService from "../../services/Patient.service";
 
-const customCountrySelectStyles = {
+const customSelectStyles = {
     control: (provided, state) => ({
         ...provided,
         borderColor: state.isFocused ? "transparent" : provided.borderColor,
@@ -44,8 +44,8 @@ const customCountrySelectStyles = {
 
 export default function AddNewPatientModal({ visible, onClose, getPatients }) {
     const [formData, setFormData] = useState({
-        fName: "",
-        lName: "",
+        firstName: "",
+        lastName: "",
         dob: "",
         gender: null,
         contactNo: "",
@@ -138,8 +138,8 @@ export default function AddNewPatientModal({ visible, onClose, getPatients }) {
         e.preventDefault();
 
         const patient = {
-            fName: formData.fName,
-            lName: formData.lName,
+            firstName: formData.firstName,
+            lastName: formData.lastName,
             dob: formData.dob,
             gender: formData.gender.value,
             email: formData.email,
@@ -161,8 +161,8 @@ export default function AddNewPatientModal({ visible, onClose, getPatients }) {
 
                 // Reset the form
                 setFormData({
-                    fName: "",
-                    lName: "",
+                    firstName: "",
+                    lastName: "",
                     dob: "",
                     gender: null,
                     contactNo: "",
@@ -237,18 +237,18 @@ export default function AddNewPatientModal({ visible, onClose, getPatients }) {
                                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 my-2">
                                         <div className="flex-1">
                                             <label
-                                                htmlFor="fName"
+                                                htmlFor="firstName"
                                                 className="block mb-2 text-sm font-medium text-gray-900"
                                             >
                                                 First Name
                                             </label>
                                             <input
                                                 type="text"
-                                                name="fName"
-                                                id="fName"
+                                                name="firstName"
+                                                id="firstName"
                                                 className="input-field"
                                                 placeholder="First Name"
-                                                value={formData.fName}
+                                                value={formData.firstName}
                                                 onChange={handleInputChange}
                                                 required
                                             />
@@ -284,7 +284,7 @@ export default function AddNewPatientModal({ visible, onClose, getPatients }) {
                                                 Gender
                                             </label>
                                             <Select
-                                                styles={customCountrySelectStyles}
+                                                styles={customSelectStyles}
                                                 options={genders}
                                                 value={
                                                     { "value": formData.gender, "label": formData.gender }
@@ -360,7 +360,7 @@ export default function AddNewPatientModal({ visible, onClose, getPatients }) {
                                                 AVT Level
                                             </label>
                                             <Select
-                                                styles={customCountrySelectStyles}
+                                                styles={customSelectStyles}
                                                 options={avtLevels}
                                                 value={formData.avtLevel}
                                                 onChange={handleAvtLevelChange}
@@ -375,7 +375,7 @@ export default function AddNewPatientModal({ visible, onClose, getPatients }) {
                                                 Is Implanted?
                                             </label>
                                             <Select
-                                                styles={customCountrySelectStyles}
+                                                styles={customSelectStyles}
                                                 options={yesno}
                                                 value={formData.isImplanted}
                                                 onChange={handleIsImplantedChange}
@@ -976,5 +976,5 @@ export default function AddNewPatientModal({ visible, onClose, getPatients }) {
 AddNewPatientModal.propTypes = {
     visible: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
-    getPatients: PropTypes.func.isRequired,
+    getPatients: PropTypes.func,
 };

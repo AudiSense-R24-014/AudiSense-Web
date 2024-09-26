@@ -3,13 +3,17 @@ import { Edit, Trash } from "lucide-react";
 import AddNewPatientModal from "../../components/modals/AddNewPatientModal";
 import EditPatientModal from "../../components/modals/EditPatientModal";
 import PatientService from "../../services/Patient.service";
+import Swal from "sweetalert2";
+import VerifyUserModal from "../../components/modals/VerifyUserModal";
 
 function Patients() {
   const [patients, setPatients] = useState([]);
-  const [selectedPatient, setSelectedPatient] = useState(null);
   const [openAddNewPatientModal, setOpenAddNewPatientModal] = useState(false);
   const [loading, setLoading] = useState(true);
   const [openEditNewPatientModal, setOpenEditNewPatientModal] = useState(false);
+  const [selectedPatient, setSelectedPatient] = useState({});
+  const [openRemovePatientUserVerify, setOpenRemovePatientUserVerify] =
+    useState(false);
 
   const getAllPatients = async () => {
     setLoading(true);
@@ -28,20 +32,36 @@ function Patients() {
     getAllPatients();
   }, []);
 
-  const handleEdit = (patient) => {
-    // Implement your edit logic here
-    console.log("Edit", patient);
+  const handleDelete = async (patient) => {
+    setSelectedPatient(patient);
+    setOpenRemovePatientUserVerify(true);
   };
 
-  const handleDelete = async (patient) => {
-    // Implement your delete logic here
+  const deletePatient = async (patient) => {
     await PatientService.deletePatient(patient._id)
-      .then(() => {
-        alert(patient.fName + " " + patient.lName + " has been deleted.");
-        getAllPatients();
+      .then((response) => {
+        if (response.message === "Patient deleted successfully") {
+          Swal.fire({
+            icon: "success",
+            title: "Patient deleted successfully",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          getAllPatients();
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Error deleting patient",
+            text: response.message,
+          });
+        }
       })
       .catch((error) => {
-        console.error(error);
+        Swal.fire({
+          icon: "error",
+          title: "Error deleting patient",
+          text: error.response.data.message,
+        });
       });
   };
 
@@ -51,7 +71,7 @@ function Patients() {
         <h1 className="text-4xl font-nunito font-bold">Patients</h1>
         <button
           type="button"
-          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+          className="text-white font-montserrat bg-purple-400 hover:bg-purple-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none"
           onClick={() => setOpenAddNewPatientModal(true)}
         >
           Add New Patient
@@ -85,69 +105,76 @@ function Patients() {
                   </tr>
                 </thead>
                 <tbody>
-                  {patients.slice().reverse().map((patient, index) => (
-                    <tr
-                      key={index}
-                      className={
-                        index % 2 === 0
-                          ? "bg-gray-200 font-montserrat"
-                          : "bg-gray-300 font-montserrat"
-                      }
-                    >
-                      <td className="border px-4 py-2">{patient.fName}</td>
-                      <td className="border px-4 py-2">{patient.lName}</td>
-                      <td className="border px-4 py-2">{patient.gender}</td>
-                      <td className="border px-4 py-2">
-                        {patient.dob ? patient.dob.slice(0, 10) : "N/A"}
-                      </td>
-                      <td className="border px-4 py-2">{patient.contactNo}</td>
-                      <td className="border px-4 py-2">{patient.email}</td>
-                      <td className="border px-4 py-2">{patient.AVTLevel}</td>
-                      <td className="border px-4 py-2">
-                        {patient.implant.isImplanted ? (
-                          <span className="bg-green-500 text-white font-bold py-1 px-2 rounded-full">
-                            Yes
-                          </span>
-                        ) : (
-                          <span className="bg-red-500 text-white font-bold py-1 px-2 rounded-full">
-                            No
-                          </span>
-                        )}
-                      </td>
-                      <td className="border px-4 py-2">
-                        {patient.implant.surgeryDate
-                          ? patient.implant.surgeryDate.slice(0, 10)
-                          : "N/A"}
-                      </td>
-                      <td className="border px-4 py-2">
-                        {patient.implant.switchOnDate
-                          ? patient.implant.switchOnDate.slice(0, 10)
-                          : "N/A"}
-                      </td>
-                      <td className="border px-4 py-2">
-                        <div className="flex justify-center">
-                          <button
-                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
-                            onClick={() => setOpenEditNewPatientModal(true)}
-                          >
-                            <Edit size={20} />
-                          </button>
-                        </div>
-                      </td>
-                      <td className="border px-4 py-2">
-                        <div className="flex justify-center">
-                          <button
-                            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                            onClick={() => {
-                              handleDelete(patient);
-                            }}
-                          >
-                            <Trash size={20} />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                  {patients
+                    .slice()
+                    .reverse()
+                    .map((patient, index) => (
+                      <tr
+                        key={index}
+                        className={
+                          index % 2 === 0
+                            ? "bg-gray-200 font-montserrat"
+                            : "bg-gray-300 font-montserrat"
+                        }
+                      >
+                        <td className="border px-4 py-2">
+                          {patient.firstName}
+                        </td>
+                        <td className="border px-4 py-2">{patient.lastName}</td>
+                        <td className="border px-4 py-2">{patient.gender}</td>
+                        <td className="border px-4 py-2">
+                          {patient.dob ? patient.dob.slice(0, 10) : "N/A"}
+                        </td>
+                        <td className="border px-4 py-2">
+                          {patient.contactNo}
+                        </td>
+                        <td className="border px-4 py-2">{patient.email}</td>
+                        <td className="border px-4 py-2">{patient.AVTLevel}</td>
+                        <td className="border px-4 py-2">
+                          {patient.implant.isImplanted ? (
+                            <span className="bg-green-500 text-white font-bold py-1 px-2 rounded-full">
+                              Yes
+                            </span>
+                          ) : (
+                            <span className="bg-red-500 text-white font-bold py-1 px-2 rounded-full">
+                              No
+                            </span>
+                          )}
+                        </td>
+                        <td className="border px-4 py-2">
+                          {patient.implant.surgeryDate
+                            ? patient.implant.surgeryDate.slice(0, 10)
+                            : "N/A"}
+                        </td>
+                        <td className="border px-4 py-2">
+                          {patient.implant.switchOnDate
+                            ? patient.implant.switchOnDate.slice(0, 10)
+                            : "N/A"}
+                        </td>
+                        <td className="border px-4 py-2">
+                          <div className="flex justify-center">
+                            <button
+                              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
+                              onClick={() => setOpenEditNewPatientModal(true)}
+                            >
+                              <Edit size={20} />
+                            </button>
+                          </div>
+                        </td>
+                        <td className="border px-4 py-2">
+                          <div className="flex justify-center">
+                            <button
+                              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                              onClick={() => {
+                                handleDelete(patient);
+                              }}
+                            >
+                              <Trash size={20} />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
             </div>
@@ -158,12 +185,19 @@ function Patients() {
       <AddNewPatientModal
         visible={openAddNewPatientModal}
         onClose={() => setOpenAddNewPatientModal(false)}
-        getPatients={getAllPatients}
       />
       <EditPatientModal
-      visible={openEditNewPatientModal}
-      onClose={() => setOpenEditNewPatientModal(false)}
-      // getPatients={getAllPatients}
+        visible={openEditNewPatientModal}
+        onClose={() => setOpenEditNewPatientModal(false)}
+        // getPatients={getAllPatients}
+      />
+
+      <VerifyUserModal
+        visible={openRemovePatientUserVerify}
+        onClose={() => setOpenRemovePatientUserVerify(false)}
+        onConfirm={() =>deletePatient(selectedPatient)}
+        titleText="Delete Patient"
+        optionalText="Are you sure you want to delete this patient?"
       />
     </div>
   );
