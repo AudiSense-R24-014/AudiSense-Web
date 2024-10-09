@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import {
   Dashboard,
   Patients,
+  PatientDetails,
   Landing,
   AssignPatient,
   Tasks,
@@ -29,6 +30,7 @@ export default function AppRoutes() {
         <Route path="/*" element={<SessionLayout />}>
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="patients" element={<Patients />} />
+          <Route path="patients/:id" element={<PatientDetails />} />
           <Route path="assignPatient" element={<AssignPatient />} />
           <Route path="assessTasks" element={<AssessTasks />} />
           <Route path="tasks" element={<Tasks />} />
