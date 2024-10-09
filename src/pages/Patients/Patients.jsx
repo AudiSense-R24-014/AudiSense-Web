@@ -5,6 +5,7 @@ import EditPatientModal from "../../components/modals/EditPatientModal";
 import PatientService from "../../services/Patient.service";
 import Swal from "sweetalert2";
 import VerifyUserModal from "../../components/modals/VerifyUserModal";
+import { useNavigate } from "react-router-dom";
 
 function Patients() {
   const [patients, setPatients] = useState([]);
@@ -12,6 +13,7 @@ function Patients() {
   const [loading, setLoading] = useState(true);
   const [openEditNewPatientModal, setOpenEditNewPatientModal] = useState(false);
   const [selectedPatient, setSelectedPatient] = useState({});
+  const navigate = useNavigate();
   const [openRemovePatientUserVerify, setOpenRemovePatientUserVerify] =
     useState(false);
 
@@ -64,6 +66,10 @@ function Patients() {
         });
       });
   };
+  const handleRowClick = (patientId) => {
+    // Redirect to the patient details page
+    navigate(`/patients/${patientId}`);
+  };
 
   return (
     <div className="p-4 px-10">
@@ -100,8 +106,6 @@ function Patients() {
                     <th className="px-4 py-2">Is Implanted</th>
                     <th className="px-4 py-2">Surgery Date</th>
                     <th className="px-4 py-2">Switched on Date</th>
-                    <th className="px-4 py-2">Edit</th>
-                    <th className="px-4 py-2">Delete</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -116,6 +120,8 @@ function Patients() {
                             ? "bg-gray-200 font-montserrat"
                             : "bg-gray-300 font-montserrat"
                         }
+                        onClick={() => handleRowClick(patient._id)}
+                        style={{ cursor: "pointer" }}
                       >
                         <td className="border px-4 py-2">
                           {patient.firstName}
@@ -151,28 +157,6 @@ function Patients() {
                             ? patient.implant.switchOnDate.slice(0, 10)
                             : "N/A"}
                         </td>
-                        <td className="border px-4 py-2">
-                          <div className="flex justify-center">
-                            <button
-                              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
-                              onClick={() => setOpenEditNewPatientModal(true)}
-                            >
-                              <Edit size={20} />
-                            </button>
-                          </div>
-                        </td>
-                        <td className="border px-4 py-2">
-                          <div className="flex justify-center">
-                            <button
-                              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                              onClick={() => {
-                                handleDelete(patient);
-                              }}
-                            >
-                              <Trash size={20} />
-                            </button>
-                          </div>
-                        </td>
                       </tr>
                     ))}
                 </tbody>
@@ -189,13 +173,13 @@ function Patients() {
       <EditPatientModal
         visible={openEditNewPatientModal}
         onClose={() => setOpenEditNewPatientModal(false)}
-        // getPatients={getAllPatients}
+      // getPatients={getAllPatients}
       />
 
       <VerifyUserModal
         visible={openRemovePatientUserVerify}
         onClose={() => setOpenRemovePatientUserVerify(false)}
-        onConfirm={() =>deletePatient(selectedPatient)}
+        onConfirm={() => deletePatient(selectedPatient)}
         titleText="Delete Patient"
         optionalText="Are you sure you want to delete this patient?"
       />
