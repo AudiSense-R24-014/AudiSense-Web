@@ -42,7 +42,7 @@ const customSelectStyles = {
     }),
 };
 
-export default function AddNewPatientModal({ visible, onClose, getPatients }) {
+export default function EditPatientModal({ visible, onClose, patient }) {
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
@@ -201,7 +201,6 @@ export default function AddNewPatientModal({ visible, onClose, getPatients }) {
                 handleAvtLevelChange(null);
                 handleGenderChange(null);
                 handleIsImplantedChange(null);
-                getPatients();
                 onClose();
             }).catch((error) => {
                 alert("Error adding patient");
@@ -973,8 +972,8 @@ export default function AddNewPatientModal({ visible, onClose, getPatients }) {
     );
 }
 
-AddNewPatientModal.propTypes = {
+EditPatientModal.propTypes = {
     visible: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
-    getPatients: PropTypes.func,
+    patient: PropTypes.object,
 };

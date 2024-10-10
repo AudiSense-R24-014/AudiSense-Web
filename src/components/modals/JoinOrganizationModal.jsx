@@ -1,5 +1,5 @@
 import { X } from "lucide-react";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import OrganizationService from "../../services/Organization.service";
 import Swal from "sweetalert2";

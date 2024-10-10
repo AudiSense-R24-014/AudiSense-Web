@@ -63,12 +63,10 @@ export default function EditOrgModal({
   useEffect(() => {
     // Reset states when organizationDetails change
     setOrganizationName(organizationDetails?.name || "");
-    setCountry(
-      {
-        label: organizationDetails?.country,
-        value: organizationDetails?.country,
-      } || ""
-    );
+    setCountry({
+      label: organizationDetails?.country,
+      value: organizationDetails?.country,
+    });
     setCity(organizationDetails?.city || "");
     setAddress(organizationDetails?.address || "");
   }, [organizationDetails]);
@@ -298,6 +296,7 @@ EditOrgModal.propTypes = {
   visible: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   organizationDetails: PropTypes.shape({
+    _id: PropTypes.string,
     name: PropTypes.string,
     country: PropTypes.string,
     city: PropTypes.string,
