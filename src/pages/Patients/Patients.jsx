@@ -1,27 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { Edit, Trash } from "lucide-react";
 import AddNewPatientModal from "../../components/modals/AddNewPatientModal";
-import EditPatientModal from "../../components/modals/EditPatientModal";
 import PatientService from "../../services/Patient.service";
-import Swal from "sweetalert2";
-import VerifyUserModal from "../../components/modals/VerifyUserModal";
 import { useNavigate } from "react-router-dom";
 
 function Patients() {
+  const therapistUser = JSON.parse(localStorage.getItem("audi-user"));
   const [patients, setPatients] = useState([]);
   const [openAddNewPatientModal, setOpenAddNewPatientModal] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [openEditNewPatientModal, setOpenEditNewPatientModal] = useState(false);
-  const [selectedPatient, setSelectedPatient] = useState({});
   const navigate = useNavigate();
-  const [openRemovePatientUserVerify, setOpenRemovePatientUserVerify] =
-    useState(false);
-
   const getAllPatients = async () => {
     setLoading(true);
     try {
-      const response = await PatientService.getPatients();
-      // console.log(response);
+      const response = await PatientService.getPatientsForOrganization(therapistUser?.organization);
       setPatients(response);
     } catch (error) {
       console.error(error);
@@ -34,38 +25,6 @@ function Patients() {
     getAllPatients();
   }, []);
 
-  const handleDelete = async (patient) => {
-    setSelectedPatient(patient);
-    setOpenRemovePatientUserVerify(true);
-  };
-
-  const deletePatient = async (patient) => {
-    await PatientService.deletePatient(patient._id)
-      .then((response) => {
-        if (response.message === "Patient deleted successfully") {
-          Swal.fire({
-            icon: "success",
-            title: "Patient deleted successfully",
-            showConfirmButton: false,
-            timer: 1500,
-          });
-          getAllPatients();
-        } else {
-          Swal.fire({
-            icon: "error",
-            title: "Error deleting patient",
-            text: response.message,
-          });
-        }
-      })
-      .catch((error) => {
-        Swal.fire({
-          icon: "error",
-          title: "Error deleting patient",
-          text: error.response.data.message,
-        });
-      });
-  };
   const handleRowClick = (patientId) => {
     // Redirect to the patient details page
     navigate(`/patients/${patientId}`);
@@ -114,12 +73,12 @@ function Patients() {
                     .reverse()
                     .map((patient, index) => (
                       <tr
-                        key={index}
-                        className={
-                          index % 2 === 0
-                            ? "bg-gray-200 font-montserrat"
-                            : "bg-gray-300 font-montserrat"
-                        }
+                        key={index + "patient"}
+                        className={`text-sm hover:bg-purple-200 ${
+                          index % 2 == 0
+                            ? "bg-gray-200"
+                            : "bg-gray-300"
+                        }`}
                         onClick={() => handleRowClick(patient._id)}
                         style={{ cursor: "pointer" }}
                       >
@@ -169,19 +128,6 @@ function Patients() {
       <AddNewPatientModal
         visible={openAddNewPatientModal}
         onClose={() => setOpenAddNewPatientModal(false)}
-      />
-      <EditPatientModal
-        visible={openEditNewPatientModal}
-        onClose={() => setOpenEditNewPatientModal(false)}
-      // getPatients={getAllPatients}
-      />
-
-      <VerifyUserModal
-        visible={openRemovePatientUserVerify}
-        onClose={() => setOpenRemovePatientUserVerify(false)}
-        onConfirm={() => deletePatient(selectedPatient)}
-        titleText="Delete Patient"
-        optionalText="Are you sure you want to delete this patient?"
       />
     </div>
   );

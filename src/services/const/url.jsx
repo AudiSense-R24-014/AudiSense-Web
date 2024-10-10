@@ -7,6 +7,8 @@ export const THERAPISTS_LOGIN = `${BASE_URL}/therapists/login/`;
 export const THERAPISTS_VERIFY = `${BASE_URL}/therapists/ensurePassword/`;
 
 export const PATIENTS = `${BASE_URL}/patients/`;
+export const PATIENT_BY_ID = (id) => `${BASE_URL}/patients/${id}/`;
+export const PATIENTS_FOR_ORGANIZATION = (id) => `${BASE_URL}/patients/organization/${id}/`;
 
 export const ORGANIZATIONS = `${BASE_URL}/organizations/`;
 export const ORGANIZATION_BY_JOIN_CODE = (code) => `${BASE_URL}/organizations/joincode/${code}/`;

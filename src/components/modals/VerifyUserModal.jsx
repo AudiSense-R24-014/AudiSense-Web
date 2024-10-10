@@ -58,7 +58,7 @@ export default function VerifyUserModal({
     TherapistService.verifyUser(userEmail, password)
       .then((data) => {
         console.log(data);
-        if (data?.user == true && data?.password == true) {
+        if (data?.user && data?.password) {
           console.log("User verified successfully");
           onConfirm();
         } else{

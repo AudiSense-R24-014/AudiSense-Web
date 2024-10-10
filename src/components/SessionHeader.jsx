@@ -67,9 +67,10 @@ export default function SessionHeader() {
       </div>
       {/* Sidebar */}
       <div
-        className={`fixed top-0 right-0 h-full bg-white shadow-lg transition-transform duration-300 ${sidebarExpanded ? "translate-x-0" : "translate-x-full"
-          }`}
-        style={{ width: "250px",  zIndex: 50  }} // adjust the width as per your design
+        className={`fixed top-0 right-0 h-full bg-white shadow-lg transition-transform duration-300 ${
+          sidebarExpanded ? "translate-x-0" : "translate-x-full"
+        }`}
+        style={{ width: "250px", zIndex: 50 }} // adjust the width as per your design
       >
         <div className="p-4">
           <div className="flex justify-between items-center mb-4">
@@ -93,14 +94,20 @@ export default function SessionHeader() {
               <h3 className="text-lg font-bold">
                 {user.firstName} {user.lastName}
               </h3>
-              <p className="text-sm text-gray-600 font-bold">{user.regNumber || "Therapist"}</p>
+              <p className="text-sm text-gray-600 font-bold">
+                {user.regNumber || "Therapist"}
+              </p>
               <p className="text-gray-600">{user.email}</p>
               <p className="text-gray-600">{user.position || "Therapist"}</p>
 
               <div className="mt-4 w-full">
                 <h4 className="text-sm font-semibold mb-1">Contact</h4>
-                <p className="text-sm text-gray-600">Phone: {user.phone || 'N/A'}</p>
-                <p className="text-sm text-gray-600">Address: {user.address || 'N/A'}</p>
+                <p className="text-sm text-gray-600">
+                  Phone: {user.phone || "N/A"}
+                </p>
+                <p className="text-sm text-gray-600">
+                  Address: {user.address || "N/A"}
+                </p>
               </div>
               {/* Edit Button */}
               <div className="flex justify-end">
@@ -117,7 +124,14 @@ export default function SessionHeader() {
           </div>
         </div>
       </div>
-      <EditTherapistDetailsModal visible={openEditTherapistModal} onClose={()=>{setOpenEditTherapistModal(false)}}/>
+      <div className="z-50">
+        <EditTherapistDetailsModal
+          visible={openEditTherapistModal}
+          onClose={() => {
+            setOpenEditTherapistModal(false);
+          }}
+        />
+      </div>
     </div>
   );
 }

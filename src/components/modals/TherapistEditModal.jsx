@@ -176,10 +176,9 @@ export default function TherapistEditModal({ visible, onClose, therapist }) {
                   className="block mb-2 text-sm font-medium text-gray-900"
                 >
                   First Name
-                  <span className="text-red-600 text-xs">
-                    {" "}
+                  <p className="text-red-600 text-xs">
                     (Only for viewing)
-                  </span>
+                  </p>
                 </label>
                 <input
                   type="text"
@@ -198,10 +197,9 @@ export default function TherapistEditModal({ visible, onClose, therapist }) {
                   className="block mb-2 text-sm font-medium text-gray-900"
                 >
                   Last Name
-                  <span className="text-red-600 text-xs">
-                    {" "}
+                  <p className="text-red-600 text-xs">
                     (Only for viewing)
-                  </span>
+                  </p>
                 </label>
                 <input
                   type="text"
@@ -248,10 +246,9 @@ export default function TherapistEditModal({ visible, onClose, therapist }) {
                   className="block mb-2 text-sm font-medium text-gray-900"
                 >
                   Email
-                  <span className="text-red-600 text-xs">
-                    {" "}
+                  <p className="text-red-600 text-xs">
                     (Only for viewing)
-                  </span>
+                  </p>
                 </label>
                 <input
                   type="email"
@@ -270,10 +267,9 @@ export default function TherapistEditModal({ visible, onClose, therapist }) {
                   className="block mb-2 text-sm font-medium text-gray-900"
                 >
                   Contact Number
-                  <span className="text-red-600 text-xs">
-                    {" "}
+                  <p className="text-red-600 text-xs">
                     (Only for viewing)
-                  </span>
+                  </p>
                 </label>
                 <input
                   type="text"

@@ -56,9 +56,12 @@ export default function AddNewPatientModal({ visible, onClose }) {
     hearingAge: "",
     avtLevel: null,
     isImplanted: null,
+    organization: "",
     surgeryDate: "",
     switchOnDate: "",
   });
+
+  const therapistWithOrg = JSON.parse(localStorage.getItem("audi-user"));
 
   const genders = [
     { value: "Male", label: "Male" },
@@ -124,6 +127,7 @@ export default function AddNewPatientModal({ visible, onClose }) {
       contactNo: formData.contactNo,
       password: formData.password,
       hearingAge: formData.hearingAge,
+      organization: therapistWithOrg?.organization,
       implant: {
         isImplanted: formData.isImplanted.value,
         surgeryDate: formData.surgeryDate,
@@ -132,7 +136,7 @@ export default function AddNewPatientModal({ visible, onClose }) {
       AVTLevel: formData.avtLevel.value,
     };
 
-    // console.log(patient);
+    console.log(patient);
 
     PatientService.createPatient(patient)
       .then((response) => {
