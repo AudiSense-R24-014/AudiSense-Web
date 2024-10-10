@@ -64,7 +64,7 @@ export default function SessionHeader() {
       <div
         className={`fixed top-0 right-0 h-full bg-white shadow-lg transition-transform duration-300 ${sidebarExpanded ? "translate-x-0" : "translate-x-full"
           }`}
-        style={{ width: "250px" }} // adjust the width as per your design
+        style={{ width: "250px",  zIndex: 50  }} // adjust the width as per your design
       >
         <div className="p-4">
           <div className="flex justify-between items-center mb-4">
