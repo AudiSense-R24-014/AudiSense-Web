@@ -1,5 +1,5 @@
 import React from "react";
-import { AudioLines, Combine, Columns4 } from "lucide-react";
+import { AudioLines, Columns4 } from "lucide-react";
 import PropTypes from "prop-types";
 
 ComprehensionTabs.propTypes = {

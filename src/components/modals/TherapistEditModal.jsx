@@ -43,6 +43,10 @@ export default function TherapistEditModal({ visible, onClose, therapist }) {
     });
   };
 
+  function handleSuccessReload() {
+    window.location.reload();
+  }
+
   const handleRemoveAdmin = () => {
     Swal.fire({
       title: "Are you sure?",
@@ -63,9 +67,7 @@ export default function TherapistEditModal({ visible, onClose, therapist }) {
                 title: "Success",
                 text: "Admin privileges removed successfully",
                 icon: "success",
-                preConfirm: () => {
-                  window.location.reload();
-                },
+                preConfirm: handleSuccessReload,
               });
             } else {
               Swal.fire({
@@ -102,9 +104,7 @@ export default function TherapistEditModal({ visible, onClose, therapist }) {
                 title: "Success",
                 text: "Therapist made admin successfully",
                 icon: "success",
-                preConfirm: () => {
-                  window.location.reload();
-                },
+                preConfirm: handleSuccessReload,
               });
             } else {
               Swal.fire({

@@ -56,6 +56,10 @@ const OrganizationManagement = () => {
     setOpenVerifyUserToRemoveTherapist(true);
   };
 
+  function handleSuccessReload() {
+    window.location.reload();
+  }
+
   const removeTherapist = (therapist) => {
     Swal.fire({
       title: "Are you sure?",
@@ -77,9 +81,7 @@ const OrganizationManagement = () => {
                   title: "Success",
                   text: "Therapist removed from organization successfully",
                   icon: "success",
-                  preConfirm: () => {
-                    window.location.reload();
-                  },
+                  preConfirm: handleSuccessReload,
                 });
               } else {
                 Swal.fire({
@@ -119,9 +121,7 @@ const OrganizationManagement = () => {
                 title: "Success",
                 text: "You have left the organization",
                 icon: "success",
-                preConfirm: () => {
-                  window.location.href = "./";
-                },
+                preConfirm: handleSuccessReload,
               });
             } else {
               Swal.fire({
@@ -165,9 +165,7 @@ const OrganizationManagement = () => {
                 title: "Success",
                 text: "Therapist added to organization successfully",
                 icon: "success",
-                preConfirm: () => {
-                  window.location.reload();
-                },
+                preConfirm: handleSuccessReload,
               });
             } else {
               Swal.fire({
@@ -208,9 +206,7 @@ const OrganizationManagement = () => {
                 title: "Success",
                 text: "Therapist made admin successfully",
                 icon: "success",
-                preConfirm: () => {
-                  window.location.reload();
-                },
+                preConfirm: handleSuccessReload,
               });
             } else {
               Swal.fire({
@@ -257,9 +253,7 @@ const OrganizationManagement = () => {
                 title: "Success",
                 text: "Request sent successfully",
                 icon: "success",
-                preConfirm: () => {
-                  window.location.reload();
-                },
+                preConfirm: handleSuccessReload,
               });
             } else {
               Swal.fire({
@@ -296,9 +290,7 @@ const OrganizationManagement = () => {
                 title: "Success",
                 text: "Request declined successfully",
                 icon: "success",
-                preConfirm: () => {
-                  window.location.reload();
-                },
+                preConfirm: handleSuccessReload,
               });
             } else {
               Swal.fire({
@@ -453,10 +445,8 @@ const OrganizationManagement = () => {
         <div className="flex flex-col justify-between font-montserrat bg-white p-5 rounded-lg shadow-md mt-5">
           <div className="mt-5">
             <h3>
-              Requests
-              <span className="ml-3 text-pink-600">
-                ({pendingOrgRequests?.length})
-              </span>
+              Requests{" "}
+              <span className="ml-3 text-pink-600">({pendingOrgRequests?.length})</span>
             </h3>
           </div>
           <div className="border border-gray-300 rounded-md font-nunito mt-5">

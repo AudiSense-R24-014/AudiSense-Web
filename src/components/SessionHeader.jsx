@@ -36,10 +36,6 @@ export default function SessionHeader() {
     setSidebarExpanded((prevState) => !prevState);
   };
 
-  const closeSidebar = () => {
-    setSidebarExpanded(false);
-  };
-
   return (
     <div className="flex justify-end shadow-md shadow-blue-900/20">
       <div className="px-2 lg:px-4 py-2">

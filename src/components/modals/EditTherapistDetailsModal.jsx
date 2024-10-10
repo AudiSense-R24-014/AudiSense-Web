@@ -1,38 +1,18 @@
 import { X } from "lucide-react";
-import React, { useEffect, useMemo, useState } from "react";
-import Select from "react-select";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
-import countryList from "react-select-country-list";
-import { storage, ref, uploadBytes, getDownloadURL } from "../../../firebase"; // Adjust the import path as needed
-import OrganizationService from "../../services/Organization.service";
-import Swal from "sweetalert2";
 
 
 export default function EditTherapistDetailsModal({
   visible,
-  onClose,
-  organizationDetails,
+  onClose
 }) {
   // States for form inputs
   const [organizationName, setOrganizationName] = useState("");
-  const [country, setCountry] = useState({});
-  const [city, setCity] = useState("");
   const [address, setAddress] = useState("");
   const [regNo, setRegNo] = useState("");
   const [email, setEmail] = useState("");
   const [contactNo, setContactNo] = useState("");
-  const [logoFile, setLogoFile] = useState(null); // Handle file uploads separately
-  const [uploadError, setUploadError] = useState(null); // Handle errors
-
-  const countries = useMemo(() => countryList().getData(), []);
-
-  // Ensure this component doesn't render hooks conditionally
-  useEffect(() => {
-    // Reset states when organizationDetails change
-    setOrganizationName(organizationDetails?.name || "");
-    setAddress(organizationDetails?.address || "");
-    setRegNo(organizationDetails?.regNo || "");
-  }, [organizationDetails]);
 
   if (!visible) {
     return null;
@@ -192,11 +172,4 @@ export default function EditTherapistDetailsModal({
 EditTherapistDetailsModal.propTypes = {
   visible: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  organizationDetails: PropTypes.shape({
-    name: PropTypes.string,
-    country: PropTypes.string,
-    city: PropTypes.string,
-    address: PropTypes.string,
-    companyLogo: PropTypes.string,
-  }),
 };
