@@ -52,12 +52,17 @@ export default function SessionHeader() {
               {user.position || "Therapist"}
             </h2>
           </div>
-          <img
-            className="w-11 h-11 rounded-full ring-2 ring-purple-300"
-            src={userIcon}
-            alt="Bordered avatar"
+          <button
+            className="w-11 h-11 rounded-full ring-2 ring-purple-300 p-0"
             onClick={toggleSidebar}
-          />
+            aria-label="Toggle Sidebar"
+          >
+            <img
+              className="w-full h-full rounded-full"
+              src={userIcon}
+              alt="User avatar"
+            />
+          </button>
         </div>
       </div>
       {/* Sidebar */}
