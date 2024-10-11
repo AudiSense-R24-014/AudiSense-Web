@@ -3,11 +3,13 @@ import userIcon from "../assets/images/user.png";
 import TherapistService from "../services/Therapist.service";
 import Swal from "sweetalert2";
 import EditTherapistDetailsModal from "./modals/EditTherapistDetailsModal";
+import ChangePasswordModal from "./modals/ChangePasswordModal"; // Import the new modal
 
 export default function SessionHeader() {
   const [user, setUser] = useState({});
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
   const [openEditTherapistModal, setOpenEditTherapistModal] = useState(false);
+  const [openChangePasswordModal, setOpenChangePasswordModal] = useState(false); // New state for change password modal
 
   useEffect(() => {
     TherapistService.validateToken()
@@ -69,8 +71,7 @@ export default function SessionHeader() {
         style={{ width: "250px", zIndex: 50 }} // adjust the width as per your design
       >
         <div className="p-4">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-semibold">Profile Details</h2>
+          <div className="flex justify-end items-center mb-4">
             <button
               className="text-gray-500 hover:text-gray-800"
               onClick={() => setSidebarExpanded(false)}
@@ -80,40 +81,41 @@ export default function SessionHeader() {
           </div>
 
           {/* User Profile Information */}
-          <div className="bg-white p-6 rounded-lg shadow-xl border-2 border-blue-950">
+          <div className="bg-white font-nunito px-6">
             <div className="flex flex-col items-center">
               <img
                 src={userIcon}
                 alt="User avatar"
-                className="w-16 h-16 rounded-full mb-4 ring-2 ring-purple-300"
+                className="w-24 h-24 rounded-full mb-4 ring-2 ring-purple-300"
               />
-              <h3 className="text-lg font-bold">
+              <h3 className="text-xl font-semibold text-gray-800">
                 {user.firstName} {user.lastName}
               </h3>
-              <p className="text-sm text-gray-600 font-bold">
+              <p className="text-gray-600 font-bold ">
+                {user.position || "Therapist"}
+              </p>
+              <p className="text-sm text-gray-600 font-bold mb-1">
                 {user.regNumber || "Therapist"}
               </p>
               <p className="text-gray-600">{user.email}</p>
-              <p className="text-gray-600">{user.position || "Therapist"}</p>
+              <p className="text-gray-600">{user.contactNo || "N/A"}</p>
 
-              <div className="mt-4 w-full">
-                <h4 className="text-sm font-semibold mb-1">Contact</h4>
-                <p className="text-sm text-gray-600">
-                  Phone: {user.phone || "N/A"}
-                </p>
-                <p className="text-sm text-gray-600">
-                  Address: {user.address || "N/A"}
-                </p>
-              </div>
               {/* Edit Button */}
-              <div className="flex justify-end">
+              <div className="flex justify-center w-full mt-6">
                 <button
-                  onClick={() => {
-                    setOpenEditTherapistModal(true);
-                  }}
-                  className="mt-6 ml-28 bg-purple-500 text-white py-1 px-4 rounded-md hover:bg-purple-700 transition"
+                  onClick={() => setOpenEditTherapistModal(true)}
+                  className="bg-purple-500 text-base font-medium text-white py-1 px-16 rounded-md hover:bg-purple-700 transition"
                 >
                   Edit
+                </button>
+              </div>
+              {/* Change Password Button */}
+              <div className="flex justify-center w-full mt-2">
+                <button
+                  onClick={() => setOpenChangePasswordModal(true)} // Open change password modal
+                  className="bg-orange-500 text-base font-medium text-white py-1 px-3 rounded-md hover:bg-orange-700 transition"
+                >
+                  Change Password
                 </button>
               </div>
             </div>
@@ -123,9 +125,11 @@ export default function SessionHeader() {
       <div className="z-50">
         <EditTherapistDetailsModal
           visible={openEditTherapistModal}
-          onClose={() => {
-            setOpenEditTherapistModal(false);
-          }}
+          onClose={() => setOpenEditTherapistModal(false)}
+        />
+        <ChangePasswordModal // Add the change password modal here
+          visible={openChangePasswordModal}
+          onClose={() => setOpenChangePasswordModal(false)}
         />
       </div>
     </div>

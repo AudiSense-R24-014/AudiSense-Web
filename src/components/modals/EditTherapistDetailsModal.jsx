@@ -1,18 +1,40 @@
 import { X } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
+import TherapistService from "../../services/Therapist.service";
+import Swal from "sweetalert2";
 
-
-export default function EditTherapistDetailsModal({
-  visible,
-  onClose
-}) {
+export default function EditTherapistDetailsModal({ visible, onClose }) {
   // States for form inputs
-  const [organizationName, setOrganizationName] = useState("");
-  const [address, setAddress] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [regNo, setRegNo] = useState("");
   const [email, setEmail] = useState("");
   const [contactNo, setContactNo] = useState("");
+
+  // Individual error states
+  const [firstNameError, setFirstNameError] = useState("");
+  const [lastNameError, setLastNameError] = useState("");
+  const [regNoError, setRegNoError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [contactNoError, setContactNoError] = useState(""); // New state for contact number error
+
+  const [therapistDetails, setTherapistDetails] = useState({});
+
+  // Load therapist details from localStorage
+  useEffect(() => {
+    const storedDetails = JSON.parse(localStorage.getItem("audi-user"));
+    setTherapistDetails(storedDetails);
+
+    // Populate form fields with existing data
+    if (storedDetails) {
+      setFirstName(storedDetails.firstName);
+      setLastName(storedDetails.lastName);
+      setRegNo(storedDetails.regNumber);
+      setEmail(storedDetails.email);
+      setContactNo(storedDetails.contactNo || "");
+    }
+  }, []);
 
   if (!visible) {
     return null;
@@ -20,7 +42,128 @@ export default function EditTherapistDetailsModal({
 
   // Handle form submission
   const handleSubmit = async (e) => {
-    
+    e.preventDefault();
+
+    // Reset error states
+    setFirstNameError("");
+    setLastNameError("");
+    setRegNoError("");
+    setEmailError("");
+    setContactNoError("");
+
+    let valid = true;
+
+    // First name validation
+    if (!firstName) {
+      setFirstNameError("First name is required.");
+      valid = false;
+    }
+
+    // Last name validation
+    if (!lastName) {
+      setLastNameError("Last name is required.");
+      valid = false;
+    }
+
+    // Registration number validation
+    if (!regNo) {
+      setRegNoError("Registration number is required.");
+      valid = false;
+    }
+
+    // Email validation
+    if (!email) {
+      setEmailError("Email is required.");
+      valid = false;
+    } else if (!/^\S+@\S+\.\S+$/.test(email)) {
+      setEmailError("Please enter a valid email.");
+      valid = false;
+    }
+
+    // Contact number validation (optional)
+    if (contactNo && !/^\d{10}$/.test(contactNo)) {
+      // Adjust the regex to your phone number format
+      setContactNoError("Please enter a valid 10-digit contact number.");
+      valid = false;
+    }
+
+    // If any field is invalid, stop submission
+    if (!valid) {
+      return;
+    } else {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You are about to update your profile details!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, update",
+        cancelButtonText: "No, cancel",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            title: "Updating Therapist Details",
+            text: "Please wait...",
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            allowEnterKey: false,
+            didOpen: () => {
+              Swal.showLoading();
+            },
+          });
+          TherapistService.updateTherapist(therapistDetails._id, {
+            firstName,
+            lastName,
+            regNumber: regNo,
+            email,
+            contactNo,
+          })
+            .then((response) => {
+              if (response._id != null) {
+                // Update the therapist details in localStorage
+                localStorage.setItem(
+                  "audi-user",
+                  JSON.stringify({
+                    ...therapistDetails,
+                    firstName,
+                    lastName,
+                    regNumber: regNo,
+                    email,
+                    contactNo,
+                  })
+                );
+                Swal.fire({
+                  icon: "success",
+                  title: "Success",
+                  text: "Therapist details updated successfully.",
+                });
+              } else {
+                Swal.fire({
+                  icon: "error",
+                  title: "Error",
+                  text: "Failed to update therapist details.",
+                });
+              }
+            })
+            .catch((error) => {
+              console.error(error);
+              Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "Failed to update therapist details.",
+              });
+            });
+        }
+      });
+    }
+
+    // Handle the submission logic here (e.g., API call to save changes)
+    console.log("Form submitted:", {
+      firstName,
+      lastName,
+      regNo,
+      email,
+      contactNo,
+    });
   };
 
   return (
@@ -44,72 +187,76 @@ export default function EditTherapistDetailsModal({
         {/* Modal Content */}
         <div className="font-montserrat pt-4">
           <form className="space-y-6" onSubmit={handleSubmit}>
+            {/* First Name */}
             <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-8">
               <div className="flex-1">
                 <label
-                  htmlFor="name"
+                  htmlFor="firstName"
                   className="block mb-2 text-sm font-medium text-gray-900"
                 >
-                  Therapist Name
+                  First Name
                 </label>
-              </div>
-              <div className="flex-1">
                 <input
                   type="text"
-                  name="name"
-                  id="name"
-                  value={organizationName}
-                  onChange={(e) => setOrganizationName(e.target.value)}
+                  name="firstName"
+                  id="firstName"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
                   className="input-field"
-                  // placeholder="Organization Name"
-                  required
                 />
+                {firstNameError && (
+                  <p className="text-red-500 text-sm mt-1">{firstNameError}</p>
+                )}
               </div>
             </div>
+
+            {/* Last Name */}
             <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-8">
               <div className="flex-1">
                 <label
-                  htmlFor="registerNo"
+                  htmlFor="lastName"
                   className="block mb-2 text-sm font-medium text-gray-900"
                 >
-                  Register No.
+                  Last Name
                 </label>
-              </div>
-              <div className="flex-1">
                 <input
                   type="text"
-                  name="registerNo"
-                  id="registerNo"
+                  name="lastName"
+                  id="lastName"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  className="input-field"
+                />
+                {lastNameError && (
+                  <p className="text-red-500 text-sm mt-1">{lastNameError}</p>
+                )}
+              </div>
+            </div>
+
+            {/* Registration Number */}
+            <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-8">
+              <div className="flex-1">
+                <label
+                  htmlFor="regNo"
+                  className="block mb-2 text-sm font-medium text-gray-900"
+                >
+                  Registration Number
+                </label>
+                <input
+                  type="text"
+                  name="regNo"
+                  id="regNo"
                   value={regNo}
                   onChange={(e) => setRegNo(e.target.value)}
                   className="input-field"
-                  // placeholder="Address"
-                  required
                 />
+                {regNoError && (
+                  <p className="text-red-500 text-sm mt-1">{regNoError}</p>
+                )}
               </div>
             </div>
-            <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-8">
-              <div className="flex-1">
-                <label
-                  htmlFor="address"
-                  className="block mb-2 text-sm font-medium text-gray-900"
-                >
-                  Address
-                </label>
-              </div>
-              <div className="flex-1">
-                <input
-                  type="text"
-                  name="address"
-                  id="address"
-                  value={address}
-                  onChange={(e) => setAddress(e.target.value)}
-                  className="input-field"
-                  // placeholder="Address"
-                  required
-                />
-              </div>
-            </div>
+
+            {/* Email */}
             <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-8">
               <div className="flex-1">
                 <label
@@ -118,42 +265,44 @@ export default function EditTherapistDetailsModal({
                 >
                   Email
                 </label>
-              </div>
-              <div className="flex-1">
                 <input
-                  type="email"
+                  type="text"
                   name="email"
                   id="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="input-field"
-                  // placeholder="Address"
-                  required
                 />
+                {emailError && (
+                  <p className="text-red-500 text-sm mt-1">{emailError}</p>
+                )}
               </div>
             </div>
+
+            {/* Contact Number (optional) */}
             <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-8">
               <div className="flex-1">
                 <label
                   htmlFor="contactNo"
                   className="block mb-2 text-sm font-medium text-gray-900"
                 >
-                  Contact Number
+                  Contact Number (Optional)
                 </label>
-              </div>
-              <div className="flex-1">
                 <input
-                  type="tel"
+                  type="text"
                   name="contactNo"
                   id="contactNo"
                   value={contactNo}
                   onChange={(e) => setContactNo(e.target.value)}
                   className="input-field"
-                  // placeholder="Address"
-                  required
                 />
+                {contactNoError && (
+                  <p className="text-red-500 text-sm mt-1">{contactNoError}</p>
+                )}
               </div>
             </div>
+
+            {/* Save Changes Button */}
             <div className="flex justify-center py-10">
               <button
                 type="submit"

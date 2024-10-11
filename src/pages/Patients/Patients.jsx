@@ -49,7 +49,7 @@ function Patients() {
           <p>Loading patients...</p>
         </div>
       ) : (
-        <div className="min-w-full overflow-hidden overflow-x-scroll font-montserrat">
+        <div className="min-w-full overflow-hidden overflow-x-scroll font-nunito">
           <div className="w-full">
             <div className="overflow-y-auto h-96">
               <table className="min-w-full divide-y divide-gray-200">
@@ -62,7 +62,7 @@ function Patients() {
                     <th className="px-4 py-2">Contact No</th>
                     <th className="px-4 py-2">Email</th>
                     <th className="px-4 py-2">AVT Level</th>
-                    <th className="px-4 py-2">Is Implanted</th>
+                    <th className="px-4 py-2 text-center">Is Implanted</th>
                     <th className="px-4 py-2">Surgery Date</th>
                     <th className="px-4 py-2">Switched on Date</th>
                   </tr>
@@ -74,28 +74,24 @@ function Patients() {
                     .map((patient, index) => (
                       <tr
                         key={index + "patient"}
-                        className={`text-sm hover:bg-purple-200 ${
-                          index % 2 == 0
-                            ? "bg-gray-200"
-                            : "bg-gray-300"
-                        }`}
+                        className={`text-sm hover:bg-purple-200`}
                         onClick={() => handleRowClick(patient._id)}
                         style={{ cursor: "pointer" }}
                       >
-                        <td className="border px-4 py-2">
+                        <td className="border-b px-4 py-2">
                           {patient.firstName}
                         </td>
-                        <td className="border px-4 py-2">{patient.lastName}</td>
-                        <td className="border px-4 py-2">{patient.gender}</td>
-                        <td className="border px-4 py-2">
+                        <td className="border-b px-4 py-2">{patient.lastName}</td>
+                        <td className="border-b px-4 py-2">{patient.gender}</td>
+                        <td className="border-b px-4 py-2">
                           {patient.dob ? patient.dob.slice(0, 10) : "N/A"}
                         </td>
-                        <td className="border px-4 py-2">
+                        <td className="border-b px-4 py-2">
                           {patient.contactNo}
                         </td>
-                        <td className="border px-4 py-2">{patient.email}</td>
-                        <td className="border px-4 py-2">{patient.AVTLevel}</td>
-                        <td className="border px-4 py-2">
+                        <td className="border-b px-4 py-2">{patient.email}</td>
+                        <td className="border-b px-4 py-2">{patient.AVTLevel}</td>
+                        <td className="border-b px-4 py-2  text-center">
                           {patient.implant.isImplanted ? (
                             <span className="bg-green-500 text-white font-bold py-1 px-2 rounded-full">
                               Yes
@@ -106,12 +102,12 @@ function Patients() {
                             </span>
                           )}
                         </td>
-                        <td className="border px-4 py-2">
+                        <td className="border-b px-4 py-2">
                           {patient.implant.surgeryDate
                             ? patient.implant.surgeryDate.slice(0, 10)
                             : "N/A"}
                         </td>
-                        <td className="border px-4 py-2">
+                        <td className="border-b px-4 py-2">
                           {patient.implant.switchOnDate
                             ? patient.implant.switchOnDate.slice(0, 10)
                             : "N/A"}
