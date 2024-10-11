@@ -27,7 +27,7 @@ function Tasks() {
       <TasksTopbar taskList={taskTab} toggleTaskStatus={setTaskTab} />
       {/* {taskTab === "allTasks" && <AllTasks />} */}
       {taskTab === "awareness" && <AwarenessTasks patients={patients} />}
-      {taskTab === "identification" && <IdentificationTasks />}
+      {taskTab === "identification" && <IdentificationTasks patients={patients} />}
       {taskTab === "discrimination" && <DiscriminationTasks />}
       {taskTab === "comprehension" && <ComprehensiveTasks />}
     </div>

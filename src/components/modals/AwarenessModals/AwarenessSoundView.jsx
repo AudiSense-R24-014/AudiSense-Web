@@ -1,11 +1,30 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { X } from "lucide-react";
 import PropTypes from "prop-types";
 import moment from "moment";
 import AwarenessBasicService from "../../../services/AwarenessSerivce/AwarenessBasic.service";
+import PatientService from '../../../services/Patient.service'
 
 export default function AwarenessSoundView({ visible, onClose, getData, data, patients }) {
     const [selectedPatient, setSelectedPatient] = useState(null);
+    const [patientData, setPatientData] = useState(null);
+
+
+    useEffect(() => {
+        if (data?.patientID) {
+            PatientService.getPatient(data.patientID)
+                .then((response) => {
+                    setPatientData(response);
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
+        else {
+            setPatientData(null);
+        }
+    }, [data]);
+
 
     if (!visible) {
         return null;
@@ -80,11 +99,56 @@ export default function AwarenessSoundView({ visible, onClose, getData, data, pa
                     )}
 
                     {/* Assign or View Patient */}
-                    {data.patientID ? (
+                    {patientData ? (
                         <div className="p-4 bg-green-50 rounded-lg shadow-inner">
                             <h3 className="text-lg font-semibold text-gray-800">Assigned Patient:</h3>
-                            {/* <p className="text-md text-gray-700">Name: {data.patient.fName}</p>
-                            <p className="text-sm text-gray-500">Email: {data.patient.email}</p> */}
+                            <p className="text-md text-gray-700">Name: {patientData.fName} {patientData.lName}</p>
+                            <p className="text-sm text-gray-500">Email: {patientData.email}</p>
+
+                            {data.isResponded ? (
+                                <div>
+                                    <p className="text-md text-gray-500">Recorded on: {moment(data.updatedAt).format("MMM Do YYYY")}</p>
+                                    <p className="text-md text-gray-700">Implant Status:
+                                        {data.isImplantOn ? (
+                                            <span className="bg-green-500 text-white font-bold py-1 px-2 rounded-full">
+                                                Yes
+                                            </span>
+                                        ) : (
+                                            <span className="bg-red-500 text-white font-bold py-1 px-2 rounded-full">
+                                                No
+                                            </span>
+                                        )}
+                                    </p>
+                                    <table className="min-w-full bg-white">
+                                        <thead>
+                                            <tr>
+                                                <th className="py-2 px-4 border-b text-left text-gray-600">Sound Name</th>
+                                                <th className="py-2 px-4 border-b text-left text-gray-600">Response</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {data.responses.map((response, index) => (
+                                                <tr key={index}>
+                                                    <td className="py-2 px-4 border-b text-gray-700">{response.name}</td>
+                                                    <td className="py-2 px-4 border-b">
+                                                        {response.response ? (
+                                                            <span className="bg-green-500 text-white font-bold py-1 px-2 rounded-full">
+                                                                Yes
+                                                            </span>
+                                                        ) : (
+                                                            <span className="bg-red-500 text-white font-bold py-1 px-2 rounded-full">
+                                                                No
+                                                            </span>
+                                                        )}
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            ) : (
+                                <p className="text-sm text-red-500">Patient has not responded.</p>
+                            )}
                         </div>
                     ) : (
                         <div className="p-4 bg-red-50 rounded-lg shadow-inner">

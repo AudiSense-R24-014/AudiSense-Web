@@ -4,19 +4,23 @@ import Register from "./Onboarding/Register";
 
 import Dashboard from "./Dashboard/Dashboard";
 import Patients from "./Patients/Patients";
+import PatientDetails from "./Patients/PatientDetails";
 import AssignPatient from "./AssignPatient/AssignPatient"; import Tasks from "./Tasks/Tasks";
 
 import OrganizationLanding from "./OrganizationManagement/OrganizationLanding";
-import ExistingOrganizations from "./OrganizationManagement/ExistingOrganizations";
+import OrgnaizationManagement from "./OrganizationManagement/OrgnaizationManagement";
+import AssessTasks from "./AssessTasks/AssessTasks";
 
 export {
   Dashboard,
   Patients,
+  PatientDetails,
   Landing,
   AssignPatient,
   Tasks,
   Login,
   Register,
   OrganizationLanding,
-  ExistingOrganizations,
+  OrgnaizationManagement,
+  AssessTasks
 };

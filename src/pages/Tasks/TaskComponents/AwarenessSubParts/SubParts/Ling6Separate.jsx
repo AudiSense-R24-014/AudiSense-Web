@@ -145,7 +145,8 @@ export default function Ling6Separate({ patients }) {
                                                 <th className="px-4 py-2">Rate</th>
                                                 <th className="px-4 py-2">Pitch</th>
                                                 <th className="px-4 py-2">Created Date</th>
-                                                <th className="px-4 py-2">Is Assigned</th>
+                                                <th className="px-4 py-2">Assigned</th>
+                                                <th className="px-4 py-2">Responded</th>
                                                 <th className="px-4 py-2">View</th>
                                                 <th className="px-4 py-2">Delete</th>
                                             </tr>
@@ -168,6 +169,17 @@ export default function Ling6Separate({ patients }) {
                                                     </td>
                                                     <td className="border px-4 py-2">
                                                         {sound.patientID ? (
+                                                            <span className="bg-green-500 text-white font-bold py-1 px-2 rounded-full">
+                                                                Yes
+                                                            </span>
+                                                        ) : (
+                                                            <span className="bg-red-500 text-white font-bold py-1 px-2 rounded-full">
+                                                                No
+                                                            </span>
+                                                        )}
+                                                    </td>
+                                                    <td className="border px-4 py-2">
+                                                        {sound.isResponded ? (
                                                             <span className="bg-green-500 text-white font-bold py-1 px-2 rounded-full">
                                                                 Yes
                                                             </span>

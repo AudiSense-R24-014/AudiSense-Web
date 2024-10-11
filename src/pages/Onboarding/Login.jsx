@@ -3,6 +3,7 @@ import LoginRight from "../../assets/images/login-right.png";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import TherapistService from "../../services/Therapist.service";
+import Swal from "sweetalert2";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -66,15 +67,29 @@ const Login = () => {
       .then((response) => {
         if (response.user) {
           if (response.password) {
-            alert("Login successful!");
-            localStorage.setItem("token", response.token);
-            window.location.href = "/dashboard";
+            localStorage.setItem("audi-token", response.token);
+            localStorage.setItem("audi-sidebar-status", "dashboard");
+            Swal.fire({
+              icon: "success",
+              title: "Login successful!",
+              text: "Welcome back!",
+              preConfirm: () => {
+                window.location.href = "/dashboard";
+              }
+            });
           } else {
-            alert("Incorrect password! Check the password again.");
+            Swal.fire({
+              icon: "error",
+              title: "Something went wrong!",
+              text: "Incorrect password! Please try again.",
+            });
           }
-
         } else {
-          alert("User not found! Check the email again.");
+          Swal.fire({
+            icon: "error",
+            title: "User not found!",
+            text: "Check the email again.",
+          });
         }
       }
       ).catch((error) => {

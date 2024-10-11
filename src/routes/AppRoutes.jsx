@@ -2,13 +2,15 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import {
   Dashboard,
   Patients,
+  PatientDetails,
   Landing,
   AssignPatient,
   Tasks,
   Login,
   Register,
   OrganizationLanding,
-  ExistingOrganizations,
+  AssessTasks,
+  OrgnaizationManagement,
 } from "../pages";
 import OnboardingLayout from "../layouts/OnboardingLayout";
 import SessionLayout from "../layouts/SessionLayout";
@@ -28,11 +30,13 @@ export default function AppRoutes() {
         <Route path="/*" element={<SessionLayout />}>
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="patients" element={<Patients />} />
+          <Route path="patients/:id" element={<PatientDetails />} />
           <Route path="assignPatient" element={<AssignPatient />} />
+          <Route path="assessTasks" element={<AssessTasks />} />
           <Route path="tasks" element={<Tasks />} />
           <Route path="organization">
             <Route index element={<OrganizationLanding />} />
-            <Route path="existing" element={<ExistingOrganizations />} />
+            <Route path="assigned" element={<OrgnaizationManagement />} />
           </Route>
         </Route>
       </Routes>

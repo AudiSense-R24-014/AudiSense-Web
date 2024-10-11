@@ -6,11 +6,12 @@ import {
   Settings,
   Users2,
   LogOut,
-  LucideBuilding2
+  LucideBuilding2,
 } from "lucide-react";
 import Sidebar, { SidebarItem } from "./Sidebar";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 
 export default function SidebarCombined() {
   const [status, setStatus] = useState();
@@ -18,7 +19,7 @@ export default function SidebarCombined() {
     dashboard: false,
     patients: false,
     tasks: false,
-    assignTasks: false,
+    assessTasks: false,
     organization: false,
     settings: false,
     support: false,
@@ -29,8 +30,21 @@ export default function SidebarCombined() {
   }, [status]);
 
   function logout() {
-    localStorage.removeItem("token");
-    window.location.href = "/";
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You are about to log out!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, log out",
+      cancelButtonText: "No, cancel",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        localStorage.removeItem("audi-token");
+        localStorage.removeItem("audi-user");
+        localStorage.removeItem("audi-sidebar-status");
+        window.location.href = "/";
+      }
+    });
   }
 
   return (
@@ -79,16 +93,22 @@ export default function SidebarCombined() {
               active={status == "tasks"}
             />
           </Link>
-          <Link to="#">
+          <Link
+            to="/assessTasks"
+            onClick={() => {
+              localStorage.setItem("audi-sidebar-status", "assessTasks");
+              setStatus("assessTasks");
+            }}
+          >
             <SidebarItem
               icon={<Flag size={20} />}
-              text="Assign Tasks"
-              alert={alertStatus.assignPatients}
-              active={status == "assignTasks"}
+              text="Assess Tasks"
+              alert={alertStatus.assessTasks}
+              active={status == "assessTasks"}
             />
           </Link>
           <Link
-            to="/organization"
+            to = {JSON.parse(localStorage.getItem("audi-user"))?.organization  ? "/organization/assigned" : "/organization"}
             onClick={() => {
               localStorage.setItem("audi-sidebar-status", "organization");
               setStatus("organization");

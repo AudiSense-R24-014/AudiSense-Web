@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { Edit, Trash } from "lucide-react";
 import AddNewPatientModal from "../../components/modals/AddNewPatientModal";
 import PatientService from "../../services/Patient.service";
+import { useNavigate } from "react-router-dom";
 
 function Patients() {
+  const therapistUser = JSON.parse(localStorage.getItem("audi-user"));
   const [patients, setPatients] = useState([]);
-  const [selectedPatient, setSelectedPatient] = useState(null);
   const [openAddNewPatientModal, setOpenAddNewPatientModal] = useState(false);
   const [loading, setLoading] = useState(true);
-
+  const navigate = useNavigate();
   const getAllPatients = async () => {
     setLoading(true);
     try {
-      const response = await PatientService.getPatients();
-      // console.log(response);
+      const response = await PatientService.getPatientsForOrganization(therapistUser?.organization);
       setPatients(response);
     } catch (error) {
       console.error(error);
@@ -26,21 +25,9 @@ function Patients() {
     getAllPatients();
   }, []);
 
-  const handleEdit = (patient) => {
-    // Implement your edit logic here
-    console.log("Edit", patient);
-  };
-
-  const handleDelete = async (patient) => {
-    // Implement your delete logic here
-    await PatientService.deletePatient(patient._id)
-      .then(() => {
-        alert(patient.fName + " " + patient.lName + " has been deleted.");
-        getAllPatients();
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+  const handleRowClick = (patientId) => {
+    // Redirect to the patient details page
+    navigate(`/patients/${patientId}`);
   };
 
   return (
@@ -49,7 +36,7 @@ function Patients() {
         <h1 className="text-4xl font-nunito font-bold">Patients</h1>
         <button
           type="button"
-          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+          className="text-white font-montserrat bg-purple-400 hover:bg-purple-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none"
           onClick={() => setOpenAddNewPatientModal(true)}
         >
           Add New Patient
@@ -62,12 +49,12 @@ function Patients() {
           <p>Loading patients...</p>
         </div>
       ) : (
-        <div className="min-w-full overflow-hidden overflow-x-scroll">
+        <div className="min-w-full overflow-hidden overflow-x-scroll font-nunito">
           <div className="w-full">
             <div className="overflow-y-auto h-96">
-              <table className="w-full table-auto">
-                <thead className="bg-purple-600 text-white font-nunito sticky top-0">
-                  <tr>
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr className="text-xs text-gray-700 text-left font-bold uppercase tracking-wider">
                     <th className="px-4 py-2">First Name</th>
                     <th className="px-4 py-2">Last Name</th>
                     <th className="px-4 py-2">Gender</th>
@@ -75,77 +62,58 @@ function Patients() {
                     <th className="px-4 py-2">Contact No</th>
                     <th className="px-4 py-2">Email</th>
                     <th className="px-4 py-2">AVT Level</th>
-                    <th className="px-4 py-2">Is Implanted</th>
+                    <th className="px-4 py-2 text-center">Is Implanted</th>
                     <th className="px-4 py-2">Surgery Date</th>
                     <th className="px-4 py-2">Switched on Date</th>
-                    <th className="px-4 py-2">Edit</th>
-                    <th className="px-4 py-2">Delete</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {patients.map((patient, index) => (
-                    <tr
-                      key={index}
-                      className={
-                        index % 2 === 0
-                          ? "bg-purple-200 font-nunito"
-                          : "bg-purple-300 font-nunito"
-                      }
-                    >
-                      <td className="border px-4 py-2">{patient.fName}</td>
-                      <td className="border px-4 py-2">{patient.lName}</td>
-                      <td className="border px-4 py-2">{patient.gender}</td>
-                      <td className="border px-4 py-2">
-                        {patient.dob ? patient.dob.slice(0, 10) : "N/A"}
-                      </td>
-                      <td className="border px-4 py-2">{patient.contactNo}</td>
-                      <td className="border px-4 py-2">{patient.email}</td>
-                      <td className="border px-4 py-2">{patient.AVTLevel}</td>
-                      <td className="border px-4 py-2">
-                        {patient.implant.isImplanted ? (
-                          <span className="bg-green-500 text-white font-bold py-1 px-2 rounded-full">
-                            Yes
-                          </span>
-                        ) : (
-                          <span className="bg-red-500 text-white font-bold py-1 px-2 rounded-full">
-                            No
-                          </span>
-                        )}
-                      </td>
-                      <td className="border px-4 py-2">
-                        {patient.implant.surgeryDate
-                          ? patient.implant.surgeryDate.slice(0, 10)
-                          : "N/A"}
-                      </td>
-                      <td className="border px-4 py-2">
-                        {patient.implant.switchOnDate
-                          ? patient.implant.switchOnDate.slice(0, 10)
-                          : "N/A"}
-                      </td>
-                      <td className="border px-4 py-2">
-                        <div className="flex justify-center">
-                          <button
-                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
-                            onClick={() => handleEdit(patient)}
-                          >
-                            <Edit size={20} />
-                          </button>
-                        </div>
-                      </td>
-                      <td className="border px-4 py-2">
-                        <div className="flex justify-center">
-                          <button
-                            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                            onClick={() => {
-                              handleDelete(patient);
-                            }}
-                          >
-                            <Trash size={20} />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                  {patients
+                    .slice()
+                    .reverse()
+                    .map((patient, index) => (
+                      <tr
+                        key={index + "patient"}
+                        className={`text-sm hover:bg-purple-200`}
+                        onClick={() => handleRowClick(patient._id)}
+                        style={{ cursor: "pointer" }}
+                      >
+                        <td className="border-b px-4 py-2">
+                          {patient.firstName}
+                        </td>
+                        <td className="border-b px-4 py-2">{patient.lastName}</td>
+                        <td className="border-b px-4 py-2">{patient.gender}</td>
+                        <td className="border-b px-4 py-2">
+                          {patient.dob ? patient.dob.slice(0, 10) : "N/A"}
+                        </td>
+                        <td className="border-b px-4 py-2">
+                          {patient.contactNo}
+                        </td>
+                        <td className="border-b px-4 py-2">{patient.email}</td>
+                        <td className="border-b px-4 py-2">{patient.AVTLevel}</td>
+                        <td className="border-b px-4 py-2  text-center">
+                          {patient.implant.isImplanted ? (
+                            <span className="bg-green-500 text-white font-bold py-1 px-2 rounded-full">
+                              Yes
+                            </span>
+                          ) : (
+                            <span className="bg-red-500 text-white font-bold py-1 px-2 rounded-full">
+                              No
+                            </span>
+                          )}
+                        </td>
+                        <td className="border-b px-4 py-2">
+                          {patient.implant.surgeryDate
+                            ? patient.implant.surgeryDate.slice(0, 10)
+                            : "N/A"}
+                        </td>
+                        <td className="border-b px-4 py-2">
+                          {patient.implant.switchOnDate
+                            ? patient.implant.switchOnDate.slice(0, 10)
+                            : "N/A"}
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
             </div>
@@ -156,7 +124,6 @@ function Patients() {
       <AddNewPatientModal
         visible={openAddNewPatientModal}
         onClose={() => setOpenAddNewPatientModal(false)}
-        getPatients={getAllPatients}
       />
     </div>
   );

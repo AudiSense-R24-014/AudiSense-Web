@@ -1,9 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Footer from "../components/Footer";
 import { Outlet } from "react-router-dom";
 import LandingTopbar from "../components/LandingTopbar";
 
 const OnboardingLayout = () => {
+  useEffect(() => {
+    if (localStorage.getItem("audi-token")) {
+      localStorage.setItem("audi-sidebar-status", "dashboard");
+      window.location.href = "/dashboard";
+    }
+  }, []);
   return (
     <div className="flex flex-col min-h-screen bg-gray-100">
       <LandingTopbar />
