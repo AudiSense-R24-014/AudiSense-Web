@@ -3,11 +3,13 @@ import userIcon from "../assets/images/user.png";
 import TherapistService from "../services/Therapist.service";
 import Swal from "sweetalert2";
 import EditTherapistDetailsModal from "./modals/EditTherapistDetailsModal";
+import ChangePasswordModal from "./modals/ChangePasswordModal"; // Import the new modal
 
 export default function SessionHeader() {
   const [user, setUser] = useState({});
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
   const [openEditTherapistModal, setOpenEditTherapistModal] = useState(false);
+  const [openChangePasswordModal, setOpenChangePasswordModal] = useState(false); // New state for change password modal
 
   useEffect(() => {
     TherapistService.validateToken()
@@ -89,7 +91,9 @@ export default function SessionHeader() {
               <h3 className="text-xl font-semibold text-gray-800">
                 {user.firstName} {user.lastName}
               </h3>
-              <p className="text-gray-600 font-bold ">{user.position || "Therapist"}</p>
+              <p className="text-gray-600 font-bold ">
+                {user.position || "Therapist"}
+              </p>
               <p className="text-sm text-gray-600 font-bold mb-1">
                 {user.regNumber || "Therapist"}
               </p>
@@ -100,9 +104,18 @@ export default function SessionHeader() {
               <div className="flex justify-center w-full mt-6">
                 <button
                   onClick={() => setOpenEditTherapistModal(true)}
-                  className="bg-purple-500 text-white py-1 px-4 rounded-md hover:bg-purple-700 transition"
+                  className="bg-purple-500 text-base font-medium text-white py-1 px-16 rounded-md hover:bg-purple-700 transition"
                 >
                   Edit
+                </button>
+              </div>
+              {/* Change Password Button */}
+              <div className="flex justify-center w-full mt-2">
+                <button
+                  onClick={() => setOpenChangePasswordModal(true)} // Open change password modal
+                  className="bg-orange-500 text-base font-medium text-white py-1 px-3 rounded-md hover:bg-orange-700 transition"
+                >
+                  Change Password
                 </button>
               </div>
             </div>
@@ -113,6 +126,10 @@ export default function SessionHeader() {
         <EditTherapistDetailsModal
           visible={openEditTherapistModal}
           onClose={() => setOpenEditTherapistModal(false)}
+        />
+        <ChangePasswordModal // Add the change password modal here
+          visible={openChangePasswordModal}
+          onClose={() => setOpenChangePasswordModal(false)}
         />
       </div>
     </div>
