@@ -11,6 +11,12 @@ export const PATIENTS = `${BASE_URL}/patients/`;
 export const PATIENT_BY_ID = (id) => `${BASE_URL}/patients/${id}/`;
 export const PATIENTS_FOR_ORGANIZATION = (id) => `${BASE_URL}/patients/organization/${id}/`;
 
+export const CHILDREN = `${BASE_URL}/children/`;
+export const CHILD_BY_ID = (id) => `${BASE_URL}/children/${id}/`;
+
+export const CLFS = `${BASE_URL}/clfs/`;
+export const CLF_BY_ID = (id) => `${BASE_URL}/clfs/${id}/`;
+
 export const ORGANIZATIONS = `${BASE_URL}/organizations/`;
 export const ORGANIZATION_BY_JOIN_CODE = (code) => `${BASE_URL}/organizations/joincode/${code}/`;
 export const ORGANIZATION_BY_ID = (id) => `${BASE_URL}/organizations/${id}/`;
