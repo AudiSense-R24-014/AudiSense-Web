@@ -53,7 +53,6 @@ export default function EditPatientModal({ visible, onClose, patient }) {
         password: "",
         repeatPassword: "",
         hearingAge: "",
-        avtLevel: null,
         isImplanted: null,
         surgeryDate: "",
         switchOnDate: "",
@@ -93,13 +92,6 @@ export default function EditPatientModal({ visible, onClose, patient }) {
         { value: false, label: "No" },
     ];
 
-    const avtLevels = [
-        { value: "Awareness", label: "Awareness" },
-        { value: "Identification", label: "Identification" },
-        { value: "Discrimination", label: "Discrimination" },
-        { value: "Comprehension", label: "Comprehension" },
-    ];
-
     if (!visible) {
         return null;
     }
@@ -117,13 +109,6 @@ export default function EditPatientModal({ visible, onClose, patient }) {
         setFormData((prevState) => ({
             ...prevState,
             gender: selectedOption.value,
-        }));
-    };
-
-    const handleAvtLevelChange = (selectedOption) => {
-        setFormData((prevState) => ({
-            ...prevState,
-            avtLevel: selectedOption,
         }));
     };
 
@@ -349,21 +334,6 @@ export default function EditPatientModal({ visible, onClose, patient }) {
                                                 placeholder="Hearing Age"
                                                 onChange={handleInputChange}
                                                 required
-                                            />
-                                        </div>
-                                        <div className="flex-1">
-                                            <label
-                                                htmlFor="avtLevel"
-                                                className="block mb-2 text-sm font-medium text-gray-900"
-                                            >
-                                                AVT Level
-                                            </label>
-                                            <Select
-                                                styles={customSelectStyles}
-                                                options={avtLevels}
-                                                value={formData.avtLevel}
-                                                onChange={handleAvtLevelChange}
-                                                className="pt-0.5"
                                             />
                                         </div>
                                         <div className="flex-1">
