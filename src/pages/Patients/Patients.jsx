@@ -61,7 +61,6 @@ function Patients() {
                     <th className="px-4 py-2">DOB</th>
                     <th className="px-4 py-2">Contact No</th>
                     <th className="px-4 py-2">Email</th>
-                    <th className="px-4 py-2">AVT Level</th>
                     <th className="px-4 py-2 text-center">Is Implanted</th>
                     <th className="px-4 py-2">Surgery Date</th>
                     <th className="px-4 py-2">Switched on Date</th>
@@ -90,7 +89,6 @@ function Patients() {
                           {patient.contactNo}
                         </td>
                         <td className="border-b px-4 py-2">{patient.email}</td>
-                        <td className="border-b px-4 py-2">{patient.AVTLevel}</td>
                         <td className="border-b px-4 py-2  text-center">
                           {patient.implant.isImplanted ? (
                             <span className="bg-green-500 text-white font-bold py-1 px-2 rounded-full">

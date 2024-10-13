@@ -88,7 +88,7 @@ export default function SessionHeader() {
                 alt="User avatar"
                 className="w-24 h-24 rounded-full mb-4 ring-2 ring-purple-300"
               />
-              <h3 className="text-xl font-semibold text-gray-800">
+              <h3 className="text-xl font-semibold text-gray-800 text-center">
                 {user.firstName} {user.lastName}
               </h3>
               <p className="text-gray-600 font-bold ">

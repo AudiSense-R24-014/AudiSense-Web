@@ -54,7 +54,6 @@ export default function AddNewPatientModal({ visible, onClose }) {
     password: "",
     repeatPassword: "",
     hearingAge: "",
-    avtLevel: null,
     isImplanted: null,
     organization: "",
     surgeryDate: "",
@@ -73,13 +72,6 @@ export default function AddNewPatientModal({ visible, onClose }) {
     { value: false, label: "No" },
   ];
 
-  const avtLevels = [
-    { value: "Awareness", label: "Awareness" },
-    { value: "Identification", label: "Identification" },
-    { value: "Discrimination", label: "Discrimination" },
-    { value: "Comprehension", label: "Comprehension" },
-  ];
-
   if (!visible) {
     return null;
   }
@@ -96,13 +88,6 @@ export default function AddNewPatientModal({ visible, onClose }) {
     setFormData((prevState) => ({
       ...prevState,
       gender: selectedOption,
-    }));
-  };
-
-  const handleAvtLevelChange = (selectedOption) => {
-    setFormData((prevState) => ({
-      ...prevState,
-      avtLevel: selectedOption,
     }));
   };
 
@@ -356,25 +341,6 @@ export default function AddNewPatientModal({ visible, onClose }) {
               </div>
               <div className="flex-1">
                 <label
-                  htmlFor="avtLevel"
-                  className="block mb-2 text-sm font-medium text-gray-900"
-                >
-                  AVT Level
-                </label>
-                <Select
-                  styles={customSelectStyles}
-                  options={avtLevels}
-                  value={formData.avtLevel}
-                  onChange={handleAvtLevelChange}
-                  className="pt-0.5"
-                />
-              </div>
-            </div>
-
-            {/* isImplanted, surgeryDate & switchOnDate */}
-            <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-8">
-              <div className="flex-1">
-                <label
                   htmlFor="isImplanted"
                   className="block mb-2 text-sm font-medium text-gray-900"
                 >
@@ -388,6 +354,10 @@ export default function AddNewPatientModal({ visible, onClose }) {
                   className="pt-0.5"
                 />
               </div>
+            </div>
+
+            {/* isImplanted, surgeryDate & switchOnDate */}
+            <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-8">
               <div className="flex-1">
                 <label
                   htmlFor="surgeryDate"
