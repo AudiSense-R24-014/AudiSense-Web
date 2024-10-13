@@ -218,7 +218,7 @@ export default function EditPatientModal({ visible, onClose, patient }) {
                             <div>
                                 <div className="">
                                     {/* First Name and Last Name */}
-                                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 my-2">
+                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 my-2">
                                         <div className="flex-1">
                                             <label
                                                 htmlFor="firstName"
@@ -233,6 +233,24 @@ export default function EditPatientModal({ visible, onClose, patient }) {
                                                 className="input-field"
                                                 placeholder="First Name"
                                                 value={formData.firstName}
+                                                onChange={handleInputChange}
+                                                required
+                                            />
+                                        </div>
+                                        <div className="flex-1">
+                                            <label
+                                                htmlFor="lastName"
+                                                className="block mb-2 text-sm font-medium text-gray-900"
+                                            >
+                                                Last Name
+                                            </label>
+                                            <input
+                                                type="text"
+                                                name="lastName"
+                                                id="lastName"
+                                                className="input-field"
+                                                placeholder="Last Name"
+                                                value={formData.lastName}
                                                 onChange={handleInputChange}
                                                 required
                                             />

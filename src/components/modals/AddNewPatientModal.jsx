@@ -118,10 +118,9 @@ export default function AddNewPatientModal({ visible, onClose }) {
         surgeryDate: formData.surgeryDate,
         switchOnDate: formData.switchOnDate,
       },
-      AVTLevel: formData.avtLevel.value,
     };
 
-    console.log(patient);
+
 
     PatientService.createPatient(patient)
       .then((response) => {
@@ -320,7 +319,7 @@ export default function AddNewPatientModal({ visible, onClose }) {
               </div>
             </div>
 
-            {/* hearingAge and AVT Level */}
+            {/* hearingAge */}
             <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-8">
               <div className="flex-1">
                 <label
