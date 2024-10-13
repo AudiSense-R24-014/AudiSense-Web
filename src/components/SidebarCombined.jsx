@@ -66,6 +66,20 @@ export default function SidebarCombined() {
             />
           </Link>
           <Link
+            to = {JSON.parse(localStorage.getItem("audi-user"))?.organization  ? "/organization/assigned" : "/organization"}
+            onClick={() => {
+              localStorage.setItem("audi-sidebar-status", "organization");
+              setStatus("organization");
+            }}
+          >
+            <SidebarItem
+              icon={<LucideBuilding2 size={20} />}
+              text="Organization"
+              alert={alertStatus.organization}
+              active={status == "organization"}
+            />
+          </Link>
+          <Link
             to="/patients"
             onClick={() => {
               localStorage.setItem("audi-sidebar-status", "patients");
@@ -105,20 +119,6 @@ export default function SidebarCombined() {
               text="Assess Tasks"
               alert={alertStatus.assessTasks}
               active={status == "assessTasks"}
-            />
-          </Link>
-          <Link
-            to = {JSON.parse(localStorage.getItem("audi-user"))?.organization  ? "/organization/assigned" : "/organization"}
-            onClick={() => {
-              localStorage.setItem("audi-sidebar-status", "organization");
-              setStatus("organization");
-            }}
-          >
-            <SidebarItem
-              icon={<LucideBuilding2 size={20} />}
-              text="Organization"
-              alert={alertStatus.organization}
-              active={status == "organization"}
             />
           </Link>
         </div>
