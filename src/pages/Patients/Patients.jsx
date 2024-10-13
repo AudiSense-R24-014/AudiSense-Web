@@ -82,7 +82,7 @@ function Patients() {
                         </td>
                         <td className="border-b px-4 py-2">{patient.lastName}</td>
                         <td className="border-b px-4 py-2">{patient.gender}</td>
-                        <td className="border-b px-4 py-2">
+                        <td className="border-b px-4 py-2 whitespace-nowrap">
                           {patient.dob ? patient.dob.slice(0, 10) : "N/A"}
                         </td>
                         <td className="border-b px-4 py-2">
@@ -100,12 +100,12 @@ function Patients() {
                             </span>
                           )}
                         </td>
-                        <td className="border-b px-4 py-2">
+                        <td className="border-b px-4 py-2  whitespace-nowrap">
                           {patient.implant.surgeryDate
                             ? patient.implant.surgeryDate.slice(0, 10)
                             : "N/A"}
                         </td>
-                        <td className="border-b px-4 py-2">
+                        <td className="border-b px-4 py-2  whitespace-nowrap">
                           {patient.implant.switchOnDate
                             ? patient.implant.switchOnDate.slice(0, 10)
                             : "N/A"}
