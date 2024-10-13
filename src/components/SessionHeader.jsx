@@ -130,6 +130,7 @@ export default function SessionHeader() {
         <ChangePasswordModal // Add the change password modal here
           visible={openChangePasswordModal}
           onClose={() => setOpenChangePasswordModal(false)}
+          user={user}
         />
       </div>
     </div>
