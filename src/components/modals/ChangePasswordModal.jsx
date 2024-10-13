@@ -1,8 +1,11 @@
 import { X } from "lucide-react";
 import React, { useState } from "react";
 import PropTypes from "prop-types";
+import TherapistService from "../../services/Therapist.service";
+import Swal from "sweetalert2";
+import "sweetalert2/dist/sweetalert2.min.css";
 
-export default function ChangePasswordModal({ visible, onClose }) {
+export default function ChangePasswordModal({ visible, onClose, user }) {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -43,8 +46,57 @@ export default function ChangePasswordModal({ visible, onClose }) {
     // Clear errors if validation passes
     setErrors({});
 
-    // Handle password change logic here
-    console.log("Password changed successfully");
+    // Handle password change logic
+    TherapistService.changePassword(user.email, currentPassword, newPassword)
+      .then((data) => {
+        if (data.status !== 200) {
+          // Handle errors based on the returned status and message
+          if (data.status === 404) {
+            setErrors({ email: data.message });
+            Swal.fire({
+              icon: "error",
+              title: "User Not Found",
+              text: data.message,
+            });
+          } else if (data.status === 401) {
+            setErrors({ currentPassword: data.message });
+            Swal.fire({
+              icon: "error",
+              title: "Incorrect Password",
+              text: data.message,
+            });
+          } else {
+            setErrors({ general: "An error occurred. Please try again." });
+            Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: "An error occurred. Please try again.",
+            });
+          }
+        } else {
+          // Password updated successfully, show success alert and close the modal
+          Swal.fire({
+            icon: "success",
+            title: "Success",
+            text: "Password updated successfully!",
+          }).then(() => {
+            localStorage.removeItem("audi-token");
+            localStorage.removeItem("audi-user");
+            localStorage.removeItem("audi-sidebar-status");
+            window.location.href = "/";
+          });
+        }
+      })
+      .catch((error) => {
+        // Handle unexpected errors
+        console.error(error);
+        setErrors({ general: "An unexpected error occurred." });
+        Swal.fire({
+          icon: "error",
+          title: "Unexpected Error",
+          text: "An unexpected error occurred. Please try again later.",
+        });
+      });
   };
 
   return (
@@ -78,12 +130,17 @@ export default function ChangePasswordModal({ visible, onClose }) {
                 type="password"
                 name="currentPassword"
                 id="currentPassword"
+                placeholder="Current Password"
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
-                className={`input-field ${errors.currentPassword ? "border-red-500" : ""}`}
+                className={`input-field ${
+                  errors.currentPassword ? "border-red-500" : ""
+                }`}
               />
               {errors.currentPassword && (
-                <p className="text-red-500 text-sm mt-1">{errors.currentPassword}</p>
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.currentPassword}
+                </p>
               )}
             </div>
 
@@ -99,12 +156,17 @@ export default function ChangePasswordModal({ visible, onClose }) {
                 type="password"
                 name="newPassword"
                 id="newPassword"
+                placeholder="New Password"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
-                className={`input-field ${errors.newPassword ? "border-red-500" : ""}`}
+                className={`input-field ${
+                  errors.newPassword ? "border-red-500" : ""
+                }`}
               />
               {errors.newPassword && (
-                <p className="text-red-500 text-sm mt-1">{errors.newPassword}</p>
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.newPassword}
+                </p>
               )}
             </div>
 
@@ -120,12 +182,17 @@ export default function ChangePasswordModal({ visible, onClose }) {
                 type="password"
                 name="confirmPassword"
                 id="confirmPassword"
+                placeholder="Confirm New Password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className={`input-field ${errors.confirmPassword ? "border-red-500" : ""}`}
+                className={`input-field ${
+                  errors.confirmPassword ? "border-red-500" : ""
+                }`}
               />
               {errors.confirmPassword && (
-                <p className="text-red-500 text-sm mt-1">{errors.confirmPassword}</p>
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.confirmPassword}
+                </p>
               )}
             </div>
 
@@ -148,4 +215,5 @@ export default function ChangePasswordModal({ visible, onClose }) {
 ChangePasswordModal.propTypes = {
   visible: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
 };
