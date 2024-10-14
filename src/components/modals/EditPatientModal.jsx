@@ -4,6 +4,7 @@ import Select from "react-select";
 import PropTypes from "prop-types";
 
 import PatientService from "../../services/Patient.service";
+import Swal from "sweetalert2";
 
 const customSelectStyles = {
     control: (provided, state) => ({
@@ -135,7 +136,6 @@ export default function EditPatientModal({ visible, onClose, patientId }) {
             await PatientService.getPatientById(patientId)
                 .then((res) => {
                     setFormData(res);
-                    console.log(res);
                 })
                 .catch((err) => {
                     console.error(err);
@@ -182,12 +182,37 @@ export default function EditPatientModal({ visible, onClose, patientId }) {
         }));
     };
 
-    const updatePatient = async (e) => {
+    const updatePatient = (e) => {
         e.preventDefault();
-        try {
-        } catch (err) {
-            console.error(err);
-        }
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You are about to update patient details!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, update",
+            cancelButtonText: "No, cancel",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                PatientService.updatePatient(patientId, formData)
+                    .then(() => {
+                        Swal.fire({
+                            title: "Success!",
+                            text: "Patient details updated successfully!",
+                            icon: "success",
+                        }).then(() => {
+                            window.location.reload();
+                        });
+                    })
+                    .catch((err) => {
+                        Swal.fire({
+                            title: "Error!",
+                            text: "An error occurred while updating patient details!",
+                            icon: "error",
+                        });
+                        console.error(err);
+                    });
+            }
+        });
     };
 
     useEffect(() => {
@@ -289,7 +314,7 @@ export default function EditPatientModal({ visible, onClose, patientId }) {
                                                 Gender
                                             </label>
                                             <Select
-                                            id="gender"
+                                                id="gender"
                                                 styles={customSelectStyles}
                                                 options={genders}
                                                 value={{
@@ -370,7 +395,7 @@ export default function EditPatientModal({ visible, onClose, patientId }) {
                                                 Is Implanted?
                                             </label>
                                             <Select
-                                            id="isImplanted"
+                                                id="isImplanted"
                                                 styles={customSelectStyles}
                                                 options={yesno}
                                                 value={{
@@ -454,7 +479,9 @@ export default function EditPatientModal({ visible, onClose, patientId }) {
                                                 className="input-field"
                                                 placeholder="Enter complaints"
                                                 rows="6" // Adjust as needed
-                                                value={formData?.child?.complaint}
+                                                value={
+                                                    formData?.child?.complaint
+                                                }
                                                 onChange={handleInputChange}
                                             ></textarea>
                                         </div>
@@ -495,7 +522,8 @@ export default function EditPatientModal({ visible, onClose, patientId }) {
                                             className="input-field"
                                             placeholder="Age When Noticed"
                                             value={
-                                                formData.child?.onSet?.ageWhenNoticed
+                                                formData.child?.onSet
+                                                    ?.ageWhenNoticed
                                             }
                                             onChange={handleInputChange}
                                         />
@@ -1137,7 +1165,8 @@ export default function EditPatientModal({ visible, onClose, patientId }) {
                                             className="input-field"
                                             placeholder="Responses Observed"
                                             value={
-                                                formData?.child?.limitations?.motor
+                                                formData?.child?.limitations
+                                                    ?.motor
                                             }
                                             onChange={handleInputChange}
                                         />
@@ -1159,7 +1188,7 @@ export default function EditPatientModal({ visible, onClose, patientId }) {
                                             placeholder="Responses Observed"
                                             value={
                                                 formData?.child?.limitations
-                                                ?.speech
+                                                    ?.speech
                                             }
                                             onChange={handleInputChange}
                                         />
@@ -1251,7 +1280,8 @@ export default function EditPatientModal({ visible, onClose, patientId }) {
                                             placeholder="Enter any Unusual Behaviors Observed"
                                             rows="4" // Adjust as needed
                                             value={
-                                                formData?.child?.unsualBehaviours
+                                                formData?.child
+                                                    ?.unsualBehaviours
                                             }
                                             onChange={handleInputChange}
                                         ></textarea>
@@ -1325,8 +1355,8 @@ export default function EditPatientModal({ visible, onClose, patientId }) {
                                             rows="6"
                                             value={
                                                 formData?.child
-                                                ?.communicationSkills
-                                                ?.language
+                                                    ?.communicationSkills
+                                                    ?.language
                                             }
                                             onChange={handleInputChange}
                                         ></textarea>
@@ -1350,8 +1380,8 @@ export default function EditPatientModal({ visible, onClose, patientId }) {
                                             rows="6"
                                             value={
                                                 formData?.child
-                                                ?.communicationSkills
-                                                ?.speech
+                                                    ?.communicationSkills
+                                                    ?.speech
                                             }
                                             onChange={handleInputChange}
                                         ></textarea>
@@ -1413,7 +1443,6 @@ export default function EditPatientModal({ visible, onClose, patientId }) {
                                             rows="6" // Adjust as needed
                                             value={formData?.child?.testResults}
                                             onChange={handleInputChange}
-                                            
                                         ></textarea>
                                     </div>
                                 </div>
@@ -1431,7 +1460,6 @@ export default function EditPatientModal({ visible, onClose, patientId }) {
                                             rows="6" // Adjust as needed
                                             value={formData?.child?.impression}
                                             onChange={handleInputChange}
-                                            
                                         ></textarea>
                                     </div>
                                 </div>
@@ -1447,9 +1475,10 @@ export default function EditPatientModal({ visible, onClose, patientId }) {
                                             className="input-field"
                                             placeholder="Any Recommendations"
                                             rows="6" // Adjust as needed
-                                            value={formData?.child?.recommendation}
+                                            value={
+                                                formData?.child?.recommendation
+                                            }
                                             onChange={handleInputChange}
-                                            
                                         ></textarea>
                                     </div>
                                 </div>
