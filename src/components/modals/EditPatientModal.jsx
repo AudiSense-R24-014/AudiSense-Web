@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { X } from "lucide-react";
 import Select from "react-select";
 import PropTypes from "prop-types";
@@ -42,45 +42,83 @@ const customSelectStyles = {
     }),
 };
 
-export default function EditPatientModal({ visible, onClose, patient }) {
+export default function EditPatientModal({ visible, onClose, patientId }) {
+    if (!visible) {
+        return null;
+    }
+
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
         dob: "",
-        gender: null,
-        contactNo: "",
+        gender: undefined,
         email: "",
-        password: "",
-        repeatPassword: "",
-        hearingAge: "",
-        isImplanted: null,
-        surgeryDate: "",
-        switchOnDate: "",
-        complaints: "",
-        enrolledDate: "",
-        ageWhenNoticed: "",
-        ageWhenAttentionSought: "",
-        earlyTreatment: "",
-        previousPregnancies: "",
-        prenatal: "",
-        birthCry: "",
-        birthweight: "",
-        postnatal: "",
-        headHeldUp: "",
-        turnover: "",
-        crawling: "",
-        walkingIndependently: "",
-        babbling: "",
-        firstWord: "",
-        twoWordPhrases: "",
-        sentences: "",
-        handedness: "",
-        schoolType: "",
-        mediumOfInstruction: "",
-        difficulties: "",
+        contactNo: "",
+        hearingAge: 0,
+        implant: {
+            isImplanted: undefined,
+            surgeryDate: "",
+            switchOnDate: "",
+        },
+        child: {
+            complaint: "",
+            handedness: "",
+            onSet: {
+                ageWhenNoticed: "",
+                ageWhenFirstSight: "",
+                treatmentHistory: "",
+            },
+            natalHistory: {
+                previousPregnancies: "",
+                preNatal: "",
+                preNatalBirthCry: "",
+                postNatal: "",
+                birthWeight: "",
+            },
+            motorMilestones: {
+                headHeldUp: "",
+                turnedOver: "",
+                crawling: "",
+                walkingIndependently: "",
+            },
+            speechNLangMilestones: {
+                babbling: "",
+                firstWord: "",
+                twoWordPhrases: "",
+                sentences: "",
+            },
+            educationalHistory: {
+                typeOfSchool: "",
+                mediumOfInstruction: "",
+                difficulties: "",
+            },
+            sensoryDevelopment: {
+                responseToEnvSounds: "",
+                responseToNameCall: "",
+            },
+            limitations: {
+                motor: "",
+                speech: "",
+            },
+            socialSkills: {
+                socialSmile: "",
+                initiatesInteractions: "",
+                playsWithPeerGroup: "",
+            },
+            unsualBehaviours: "",
+            communicationSkills: {
+                audition: "",
+                language: "",
+                speech: "",
+            },
+            vegetativeSkillsOPEM: "",
+            testResults: "",
+            impression: "",
+            recommendation: "",
+        },
     });
 
-    const [step, setStep] = useState(1);  // Track the current step
+    const [step, setStep] = useState(1); // Track the current step
 
     const genders = [
         { value: "Male", label: "Male" },
@@ -92,17 +130,39 @@ export default function EditPatientModal({ visible, onClose, patient }) {
         { value: false, label: "No" },
     ];
 
-    if (!visible) {
-        return null;
-    }
+    const setupFormData = async () => {
+        if (patientId) {
+            await PatientService.getPatientById(patientId)
+                .then((res) => {
+                    setFormData(res);
+                    console.log(res);
+                })
+                .catch((err) => {
+                    console.error(err);
+                });
+        }
+    };
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setFormData((prevState) => ({
-            ...prevState,
-            [name]: value,
-        }));
-        console.log(formData);
+        const updateNestedField = (path, value, obj) => {
+            const keys = path.split(".");
+            let current = obj;
+            keys.forEach((key, index) => {
+                if (index === keys.length - 1) {
+                    current[key] = value;
+                } else {
+                    current[key] = current[key] || {};
+                    current = current[key];
+                }
+            });
+        };
+
+        setFormData((prevState) => {
+            const updatedFormData = { ...prevState };
+            updateNestedField(name, value, updatedFormData);
+            return updatedFormData;
+        });
     };
 
     const handleGenderChange = (selectedOption) => {
@@ -115,83 +175,24 @@ export default function EditPatientModal({ visible, onClose, patient }) {
     const handleIsImplantedChange = (selectedOption) => {
         setFormData((prevState) => ({
             ...prevState,
-            isImplanted: selectedOption,
+            implant: {
+                ...prevState.implant,
+                isImplanted: selectedOption.value,
+            },
         }));
     };
 
-    const addPatient = (e) => {
+    const updatePatient = async (e) => {
         e.preventDefault();
-
-        const patient = {
-            firstName: formData.firstName,
-            lastName: formData.lastName,
-            dob: formData.dob,
-            gender: formData.gender.value,
-            email: formData.email,
-            contactNo: formData.contactNo,
-            password: formData.password,
-            hearingAge: formData.hearingAge,
-            implant: {
-                isImplanted: formData.isImplanted.value,
-                surgeryDate: formData.surgeryDate,
-                switchOnDate: formData.switchOnDate,
-            },
-            AVTLevel: formData.avtLevel.value,
-        };
-
-        PatientService.createPatient(patient)
-            .then((response) => {
-                alert("Patient added successfully");
-                console.log(response);
-
-                // Reset the form
-                setFormData({
-                    firstName: "",
-                    lastName: "",
-                    dob: "",
-                    gender: null,
-                    contactNo: "",
-                    email: "",
-                    password: "",
-                    repeatPassword: "",
-                    hearingAge: "",
-                    avtLevel: null,
-                    isImplanted: null,
-                    surgeryDate: "",
-                    switchOnDate: "",
-                    complaints: "",
-                    enrolledDate: "",
-                    ageWhenNoticed: "",
-                    ageWhenAttentionSought: "",
-                    earlyTreatment: "",
-                    previousPregnancies: "",
-                    prenatal: "",
-                    birthCry: "",
-                    birthweight: "",
-                    postnatal: "",
-                    headHeldUp: "",
-                    turnover: "",
-                    crawling: "",
-                    walkingIndependently: "",
-                    babbling: "",
-                    firstWord: "",
-                    twoWordPhrases: "",
-                    sentences: "",
-                    handedness: "",
-                    schoolType: "",
-                    mediumOfInstruction: "",
-                    difficulties: "",
-                });
-
-                handleAvtLevelChange(null);
-                handleGenderChange(null);
-                handleIsImplantedChange(null);
-                onClose();
-            }).catch((error) => {
-                alert("Error adding patient");
-                console.log(error);
-            });
+        try {
+        } catch (err) {
+            console.error(err);
+        }
     };
+
+    useEffect(() => {
+        setupFormData();
+    }, [patientId, visible]);
 
     return (
         <div
@@ -213,10 +214,10 @@ export default function EditPatientModal({ visible, onClose, patient }) {
                 </div>
 
                 <div className="font-montserrat p-2 lg:p-4 lg:px-8">
-                    <form className="space-y-6 px-4" onSubmit={addPatient}>
+                    <form className="space-y-6 px-4" onSubmit={updatePatient}>
                         {step === 1 && (
                             <div>
-                                <div className="">
+                                <div>
                                     {/* First Name and Last Name */}
                                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 my-2">
                                         <div className="flex-1">
@@ -232,7 +233,7 @@ export default function EditPatientModal({ visible, onClose, patient }) {
                                                 id="firstName"
                                                 className="input-field"
                                                 placeholder="First Name"
-                                                value={formData.firstName}
+                                                value={formData?.firstName}
                                                 onChange={handleInputChange}
                                                 required
                                             />
@@ -250,33 +251,35 @@ export default function EditPatientModal({ visible, onClose, patient }) {
                                                 id="lastName"
                                                 className="input-field"
                                                 placeholder="Last Name"
-                                                value={formData.lastName}
+                                                value={formData?.lastName}
                                                 onChange={handleInputChange}
                                                 required
                                             />
                                         </div>
-                                        {/* Date of Birth and Gender */}
-                                        <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-8">
-                                            <div className="flex-1">
-                                                <label
-                                                    htmlFor="dob"
-                                                    className="block mb-2 text-sm font-medium text-gray-900"
-                                                >
-                                                    Date of Birth
-                                                </label>
-                                                <input
-                                                    type="date"
-                                                    name="dob"
-                                                    id="dob"
-                                                    className="input-field"
-                                                    placeholder="Date of Birth"
-                                                    value={formData.dob}
-                                                    onChange={handleInputChange}
-                                                    required
-                                                />
-                                            </div>
-                                        </div>
+                                    </div>
 
+                                    {/* Date of Birth and Gender */}
+                                    <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-8">
+                                        <div className="flex-1">
+                                            <label
+                                                htmlFor="dob"
+                                                className="block mb-2 text-sm font-medium text-gray-900"
+                                            >
+                                                Date of Birth
+                                            </label>
+                                            <input
+                                                type="date"
+                                                name="dob"
+                                                id="dob"
+                                                className="input-field"
+                                                placeholder="Date of Birth"
+                                                value={
+                                                    formData?.dob.split("T")[0]
+                                                }
+                                                onChange={handleInputChange}
+                                                required
+                                            />
+                                        </div>
 
                                         <div className="flex-1">
                                             <label
@@ -286,18 +289,20 @@ export default function EditPatientModal({ visible, onClose, patient }) {
                                                 Gender
                                             </label>
                                             <Select
+                                            id="gender"
                                                 styles={customSelectStyles}
                                                 options={genders}
-                                                value={
-                                                    { "value": formData.gender, "label": formData.gender }
-                                                }
+                                                value={{
+                                                    value: formData?.gender,
+                                                    label: formData?.gender,
+                                                }}
                                                 onChange={handleGenderChange}
                                                 className="pt-0.5"
                                             />
                                         </div>
                                     </div>
 
-                                    {/* contactNo and email */}
+                                    {/* Contact Number and Email */}
                                     <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-8 my-4">
                                         <div className="flex-1">
                                             <label
@@ -312,6 +317,7 @@ export default function EditPatientModal({ visible, onClose, patient }) {
                                                 id="contactNo"
                                                 className="input-field"
                                                 placeholder="Contact Number"
+                                                value={formData?.contactNo}
                                                 onChange={handleInputChange}
                                                 required
                                             />
@@ -329,13 +335,14 @@ export default function EditPatientModal({ visible, onClose, patient }) {
                                                 id="email"
                                                 className="input-field"
                                                 placeholder="Email"
+                                                value={formData?.email}
                                                 onChange={handleInputChange}
                                                 required
                                             />
                                         </div>
                                     </div>
 
-                                    {/* hearingAge and AVT Level */}
+                                    {/* Hearing Age and Is Implanted */}
                                     <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-8 my-4">
                                         <div className="flex-1">
                                             <label
@@ -350,6 +357,7 @@ export default function EditPatientModal({ visible, onClose, patient }) {
                                                 id="hearingAge"
                                                 className="input-field"
                                                 placeholder="Hearing Age"
+                                                value={formData?.hearingAge}
                                                 onChange={handleInputChange}
                                                 required
                                             />
@@ -362,38 +370,29 @@ export default function EditPatientModal({ visible, onClose, patient }) {
                                                 Is Implanted?
                                             </label>
                                             <Select
+                                            id="isImplanted"
                                                 styles={customSelectStyles}
                                                 options={yesno}
-                                                value={formData.isImplanted}
-                                                onChange={handleIsImplantedChange}
+                                                value={{
+                                                    value: formData?.implant
+                                                        ?.isImplanted,
+                                                    label: yesno.find(
+                                                        (item) =>
+                                                            item.value ===
+                                                            formData?.implant
+                                                                ?.isImplanted
+                                                    )?.label,
+                                                }}
+                                                onChange={
+                                                    handleIsImplantedChange
+                                                }
                                                 className="pt-0.5"
                                             />
                                         </div>
                                     </div>
 
-                                    {/* enrolledDate, surgeryDate & switchOnDate */}
-
-                                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 my-4">
-
-                                        <div className="flex-1">
-                                            <label
-                                                htmlFor="surgeryDate"
-                                                className="block mb-2 text-sm font-medium text-gray-900"
-                                            >
-                                                Enrolled Date
-                                            </label>
-                                            <input
-                                                type="date"
-                                                name="surgeryDate"
-                                                id="surgeryDate"
-                                                className="input-field"
-                                                placeholder="Surgery Date"
-                                                value={formData.enrolledDate}
-                                                onChange={handleInputChange}
-                                                required
-                                            />
-                                        </div>
-
+                                    {/* Enrolled Date, Surgery Date & Switch On Date */}
+                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 my-4">
                                         <div className="flex-1">
                                             <label
                                                 htmlFor="surgeryDate"
@@ -403,11 +402,15 @@ export default function EditPatientModal({ visible, onClose, patient }) {
                                             </label>
                                             <input
                                                 type="date"
-                                                name="surgeryDate"
+                                                name="implant.surgeryDate"
                                                 id="surgeryDate"
                                                 className="input-field"
                                                 placeholder="Surgery Date"
-                                                value={formData.surgeryDate}
+                                                value={
+                                                    formData?.implant?.surgeryDate.split(
+                                                        "T"
+                                                    )[0]
+                                                }
                                                 onChange={handleInputChange}
                                                 required
                                             />
@@ -421,19 +424,23 @@ export default function EditPatientModal({ visible, onClose, patient }) {
                                             </label>
                                             <input
                                                 type="date"
-                                                name="switchOnDate"
+                                                name="implant.switchOnDate"
                                                 id="switchOnDate"
                                                 className="input-field"
                                                 placeholder="Switch On Date"
-                                                value={formData.switchOnDate}
+                                                value={
+                                                    formData?.implant?.switchOnDate.split(
+                                                        "T"
+                                                    )[0]
+                                                }
                                                 onChange={handleInputChange}
                                                 required
                                             />
                                         </div>
                                     </div>
 
+                                    {/* Complaints Text Area */}
                                     <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-8 my-2">
-                                        {/* Complaints Text Area */}
                                         <div className="flex-1">
                                             <label
                                                 htmlFor="complaints"
@@ -442,18 +449,18 @@ export default function EditPatientModal({ visible, onClose, patient }) {
                                                 Complaints
                                             </label>
                                             <textarea
-                                                name="complaints"
+                                                name="child.complaint"
                                                 id="complaints"
                                                 className="input-field"
                                                 placeholder="Enter complaints"
-                                                rows="6"  // Adjust as needed
-                                                value={formData.complaints}
+                                                rows="6" // Adjust as needed
+                                                value={formData?.child?.complaint}
                                                 onChange={handleInputChange}
-                                                required
                                             ></textarea>
                                         </div>
                                     </div>
                                 </div>
+
                                 {/* End of First set */}
                                 {/* "Next" Button */}
                                 <div className="flex justify-end py-10">
@@ -466,8 +473,8 @@ export default function EditPatientModal({ visible, onClose, patient }) {
                                     </button>
                                 </div>
                             </div>
-
-                        )} {step === 2 && (
+                        )}{" "}
+                        {step === 2 && (
                             <div>
                                 {/* Second Set */}
                                 <h2 className="font-bold font-montserrat text-lg">
@@ -483,29 +490,34 @@ export default function EditPatientModal({ visible, onClose, patient }) {
                                         </label>
                                         <input
                                             type="text"
-                                            name="ageWhenNoticed"
+                                            name="child.onSet.ageWhenNoticed"
                                             id="ageWhenNoticed"
                                             className="input-field"
                                             placeholder="Age When Noticed"
-                                            value={formData.ageWhenNoticed}
+                                            value={
+                                                formData.child?.onSet?.ageWhenNoticed
+                                            }
                                             onChange={handleInputChange}
                                         />
                                     </div>
 
                                     <div className="flex-1">
                                         <label
-                                            htmlFor="ageWhenAttentionSought"
+                                            htmlFor="ageWhenFirstSight"
                                             className="block mb-2 text-sm font-medium text-gray-900"
                                         >
                                             Age When Attention was First Sought
                                         </label>
                                         <input
                                             type="text"
-                                            name="ageWhenAttentionSought"
-                                            id="ageWhenAttentionSought"
+                                            name="child.onSet.ageWhenFirstSight"
+                                            id="ageWhenFirstSight"
                                             className="input-field"
                                             placeholder="Age When Attention was First Sought"
-                                            value={formData.ageWhenAttentionSought}
+                                            value={
+                                                formData?.child?.onSet
+                                                    ?.ageWhenFirstSight
+                                            }
                                             onChange={handleInputChange}
                                         />
                                     </div>
@@ -519,15 +531,19 @@ export default function EditPatientModal({ visible, onClose, patient }) {
                                         </label>
                                         <input
                                             type="text"
-                                            name="earlyTreatment"
+                                            name="child.onSet.treatmentHistory"
                                             id="earlyTreatment"
                                             className="input-field"
                                             placeholder="Early Treatment"
-                                            value={formData.earlyTreatment}
+                                            value={
+                                                formData?.child?.onSet
+                                                    ?.treatmentHistory
+                                            }
                                             onChange={handleInputChange}
                                         />
                                     </div>
                                 </div>
+
                                 {/* Natal History */}
                                 <h2 className="font-bold font-montserrat text-lg pt-4">
                                     Natal History
@@ -535,96 +551,111 @@ export default function EditPatientModal({ visible, onClose, patient }) {
                                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 py-4">
                                     <div className="flex-1">
                                         <label
-                                            htmlFor="ageWhenNoticed"
+                                            htmlFor="previousPregnancies"
                                             className="block mb-2 text-sm font-medium text-gray-900"
                                         >
                                             Previous Pregnancies
                                         </label>
                                         <input
                                             type="text"
-                                            name="ageWhenNoticed"
-                                            id="ageWhenNoticed"
+                                            name="child.natalHistory.previousPregnancies"
+                                            id="previousPregnancies"
                                             className="input-field"
-                                            placeholder="Age When Noticed"
-                                            value={formData.previousPregnancies}
+                                            placeholder="Previous Pregnancies"
+                                            value={
+                                                formData?.child?.natalHistory
+                                                    ?.previousPregnancies
+                                            }
                                             onChange={handleInputChange}
                                         />
                                     </div>
 
                                     <div className="flex-1">
                                         <label
-                                            htmlFor="ageWhenAttentionSought"
+                                            htmlFor="preNatal"
                                             className="block mb-2 text-sm font-medium text-gray-900"
                                         >
                                             Prenatal
                                         </label>
                                         <input
                                             type="text"
-                                            name="ageWhenAttentionSought"
-                                            id="ageWhenAttentionSought"
+                                            name="child.natalHistory.preNatal"
+                                            id="preNatal"
                                             className="input-field"
-                                            placeholder="Age When Attention was First Sought"
-                                            value={formData.prenatal}
+                                            placeholder="Prenatal"
+                                            value={
+                                                formData?.child?.natalHistory
+                                                    ?.preNatal
+                                            }
                                             onChange={handleInputChange}
                                         />
                                     </div>
 
                                     <div className="flex-1">
                                         <label
-                                            htmlFor="earlyTreatment"
+                                            htmlFor="preNatalBirthCry"
                                             className="block mb-2 text-sm font-medium text-gray-900"
                                         >
                                             Perinatal: Birth Cry
                                         </label>
                                         <input
                                             type="text"
-                                            name="earlyTreatment"
-                                            id="earlyTreatment"
+                                            name="child.natalHistory.preNatalBirthCry"
+                                            id="birthCry"
                                             className="input-field"
-                                            placeholder="Early Treatment"
-                                            value={formData.birthCry}
+                                            placeholder="Birth Cry"
+                                            value={
+                                                formData?.child?.natalHistory
+                                                    ?.preNatalBirthCry
+                                            }
                                             onChange={handleInputChange}
                                         />
                                     </div>
+
                                     <div className="flex-1">
                                         <label
-                                            htmlFor="ageWhenAttentionSought"
+                                            htmlFor="birthWeight"
                                             className="block mb-2 text-sm font-medium text-gray-900"
                                         >
                                             Birth Weight
                                         </label>
                                         <input
                                             type="text"
-                                            name="ageWhenAttentionSought"
-                                            id="ageWhenAttentionSought"
+                                            name="child.natalHistory.birthWeight"
+                                            id="birthWeight"
                                             className="input-field"
-                                            placeholder="Age When Attention was First Sought"
-                                            value={formData.birthWeight}
+                                            placeholder="Birth Weight"
+                                            value={
+                                                formData?.child?.natalHistory
+                                                    ?.birthWeight
+                                            }
                                             onChange={handleInputChange}
                                         />
                                     </div>
 
                                     <div className="flex-1">
                                         <label
-                                            htmlFor="earlyTreatment"
+                                            htmlFor="postNatal"
                                             className="block mb-2 text-sm font-medium text-gray-900"
                                         >
-                                            Postnatal
+                                            Post Natal
                                         </label>
                                         <input
                                             type="text"
-                                            name="earlyTreatment"
-                                            id="earlyTreatment"
+                                            name="child.natalHistory.postNatal"
+                                            id="postNatal"
                                             className="input-field"
-                                            placeholder="Early Treatment"
-                                            value={formData.postNatal}
+                                            placeholder="Postnatal"
+                                            value={
+                                                formData?.child?.natalHistory
+                                                    ?.postNatal
+                                            }
                                             onChange={handleInputChange}
                                         />
                                     </div>
                                 </div>
 
-
-                                {/* "Previous" and "Submit" Buttons */}
+                                {/* "Previous" and "Next" Buttons */}
                                 <div className="flex justify-between py-10">
                                     <button
                                         type="button"
@@ -653,6 +684,7 @@ export default function EditPatientModal({ visible, onClose, patient }) {
                                     Motor Milestones
                                 </h3>
                                 <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-8 py-4">
+                                    {/* Head Held Up */}
                                     <div className="flex-1">
                                         <label
                                             htmlFor="headHeldUp"
@@ -662,32 +694,40 @@ export default function EditPatientModal({ visible, onClose, patient }) {
                                         </label>
                                         <input
                                             type="text"
-                                            name="headHeldUp"
+                                            name="child.motorMilestones.headHeldUp"
                                             id="headHeldUp"
                                             className="input-field"
                                             placeholder="Head Held Up"
-                                            value={formData.headHeldUp}
+                                            value={
+                                                formData?.child?.motorMilestones
+                                                    ?.headHeldUp
+                                            }
                                             onChange={handleInputChange}
                                         />
                                     </div>
 
+                                    {/* Turn Over */}
                                     <div className="flex-1">
                                         <label
-                                            htmlFor="turnOver"
+                                            htmlFor="turnedOver"
                                             className="block mb-2 text-sm font-medium text-gray-900"
                                         >
                                             Turn Over
                                         </label>
                                         <input
                                             type="text"
-                                            name="turnOver"
-                                            id="turnOver"
+                                            name="child.motorMilestones.turnedOver"
+                                            id="turnedOver"
                                             className="input-field"
                                             placeholder="Turn Over"
-                                            value={formData.turnOver}
+                                            value={
+                                                formData?.child?.motorMilestones
+                                                    ?.turnedOver
+                                            }
                                             onChange={handleInputChange}
                                         />
                                     </div>
+
                                     {/* Crawling */}
                                     <div className="flex-1">
                                         <label
@@ -698,11 +738,14 @@ export default function EditPatientModal({ visible, onClose, patient }) {
                                         </label>
                                         <input
                                             type="text"
-                                            name="crawling"
+                                            name="child.motorMilestones.crawling"
                                             id="crawling"
                                             className="input-field"
                                             placeholder="Crawling"
-                                            value={formData.crawling}
+                                            value={
+                                                formData?.child?.motorMilestones
+                                                    ?.crawling
+                                            }
                                             onChange={handleInputChange}
                                         />
                                     </div>
@@ -717,22 +760,25 @@ export default function EditPatientModal({ visible, onClose, patient }) {
                                         </label>
                                         <input
                                             type="text"
-                                            name="walkingIndependently"
+                                            name="child.motorMilestones.walkingIndependently"
                                             id="walkingIndependently"
                                             className="input-field"
                                             placeholder="Walking Independently"
-                                            value={formData.walkingIndependently}
+                                            value={
+                                                formData?.child?.motorMilestones
+                                                    ?.walkingIndependently
+                                            }
                                             onChange={handleInputChange}
                                         />
                                     </div>
                                 </div>
+
+                                {/* Speech and Language Milestones */}
                                 <h3 className="font-bold font-montserrat text-lg text-purple-900 mt-4">
-                                    Speech and Language Milestone
+                                    Speech and Language Milestones
                                 </h3>
-                                {/* Start of Speech and Language Milestone */}
                                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 py-4">
                                     {/* Babbling */}
-
                                     <div className="flex-1">
                                         <label
                                             htmlFor="babbling"
@@ -742,11 +788,15 @@ export default function EditPatientModal({ visible, onClose, patient }) {
                                         </label>
                                         <input
                                             type="text"
-                                            name="babbling"
+                                            name="child.speechNLangMilestones.babbling"
                                             id="babbling"
                                             className="input-field"
                                             placeholder="Babbling"
-                                            value={formData.babbling}
+                                            value={
+                                                formData?.child
+                                                    ?.speechNLangMilestones
+                                                    ?.babbling
+                                            }
                                             onChange={handleInputChange}
                                         />
                                     </div>
@@ -761,11 +811,15 @@ export default function EditPatientModal({ visible, onClose, patient }) {
                                         </label>
                                         <input
                                             type="text"
-                                            name="firstWord"
+                                            name="child.speechNLangMilestones.firstWord"
                                             id="firstWord"
                                             className="input-field"
                                             placeholder="First Word"
-                                            value={formData.firstWord}
+                                            value={
+                                                formData?.child
+                                                    ?.speechNLangMilestones
+                                                    ?.firstWord
+                                            }
                                             onChange={handleInputChange}
                                         />
                                     </div>
@@ -780,11 +834,15 @@ export default function EditPatientModal({ visible, onClose, patient }) {
                                         </label>
                                         <input
                                             type="text"
-                                            name="twoWordPhrases"
+                                            name="child.speechNLangMilestones.twoWordPhrases"
                                             id="twoWordPhrases"
                                             className="input-field"
                                             placeholder="Two-Word Phrases"
-                                            value={formData.twoWordPhrases}
+                                            value={
+                                                formData?.child
+                                                    ?.speechNLangMilestones
+                                                    ?.twoWordPhrases
+                                            }
                                             onChange={handleInputChange}
                                         />
                                     </div>
@@ -799,20 +857,27 @@ export default function EditPatientModal({ visible, onClose, patient }) {
                                         </label>
                                         <input
                                             type="text"
-                                            name="sentences"
+                                            name="child.speechNLangMilestones.sentences"
                                             id="sentences"
                                             className="input-field"
                                             placeholder="Sentences"
-                                            value={formData.sentences}
+                                            value={
+                                                formData?.child
+                                                    ?.speechNLangMilestones
+                                                    ?.sentences
+                                            }
                                             onChange={handleInputChange}
                                         />
                                     </div>
-
                                 </div>
+
+                                {/* Navigation Buttons */}
                                 <div className="flex justify-between py-10">
-                                    <button type="button"
+                                    <button
+                                        type="button"
                                         className="text-white bg-audi-purple hover:bg-purple-900 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-12 py-2.5"
-                                        onClick={() => setStep(2)}>
+                                        onClick={() => setStep(2)}
+                                    >
                                         Previous
                                     </button>
                                     <button
@@ -823,11 +888,12 @@ export default function EditPatientModal({ visible, onClose, patient }) {
                                         Next
                                     </button>
                                 </div>
-                            </div>)}
+                            </div>
+                        )}
                         {step === 4 && (
                             <div>
-                                <div className="mt-4 ">
-                                    {/* handedness */}
+                                <div className="mt-4">
+                                    {/* Handedness */}
                                     <div className="flex-1 mb-4">
                                         <label
                                             htmlFor="handedness"
@@ -842,7 +908,11 @@ export default function EditPatientModal({ visible, onClose, patient }) {
                                                     id="rightHanded"
                                                     name="handedness"
                                                     value="Right Handed"
-                                                    checked={formData.handedness === "Right Handed"}
+                                                    checked={
+                                                        formData?.child
+                                                            ?.handedness ===
+                                                        "Right Handed"
+                                                    }
                                                     onChange={handleInputChange}
                                                     className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500"
                                                 />
@@ -860,7 +930,11 @@ export default function EditPatientModal({ visible, onClose, patient }) {
                                                     id="leftHanded"
                                                     name="handedness"
                                                     value="Left Handed"
-                                                    checked={formData.handedness === "Left Handed"}
+                                                    checked={
+                                                        formData?.child
+                                                            ?.handedness ===
+                                                        "Left Handed"
+                                                    }
                                                     onChange={handleInputChange}
                                                     className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500"
                                                 />
@@ -878,7 +952,11 @@ export default function EditPatientModal({ visible, onClose, patient }) {
                                                     id="notIdentified"
                                                     name="handedness"
                                                     value="Not Identified"
-                                                    checked={formData.handedness === "Not Identified"}
+                                                    checked={
+                                                        formData?.child
+                                                            ?.handedness ===
+                                                        "Not Identified"
+                                                    }
                                                     onChange={handleInputChange}
                                                     className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500"
                                                 />
@@ -890,7 +968,6 @@ export default function EditPatientModal({ visible, onClose, patient }) {
                                                 </label>
                                             </div>
                                         </div>
-
                                     </div>
                                 </div>
                                 {/* Educational History */}
@@ -898,23 +975,25 @@ export default function EditPatientModal({ visible, onClose, patient }) {
                                     Educational History
                                 </h2>
                                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-3">
-
-
                                     {/* Type of School */}
                                     <div className="flex-1">
                                         <label
-                                            htmlFor="schoolType"
+                                            htmlFor="typeOfSchool"
                                             className="block mb-2 text-sm font-medium text-gray-900"
                                         >
                                             Type of School
                                         </label>
                                         <input
                                             type="text"
-                                            name="schoolType"
-                                            id="schoolType"
+                                            name="educationalHistory.typeOfSchool"
+                                            id="typeOfSchool"
                                             className="input-field"
                                             placeholder="Type of School"
-                                            value={formData.schoolType}
+                                            value={
+                                                formData?.child
+                                                    ?.educationalHistory
+                                                    ?.typeOfSchool
+                                            }
                                             onChange={handleInputChange}
                                         />
                                     </div>
@@ -929,11 +1008,15 @@ export default function EditPatientModal({ visible, onClose, patient }) {
                                         </label>
                                         <input
                                             type="text"
-                                            name="mediumOfInstruction"
+                                            name="educationalHistory.mediumOfInstruction"
                                             id="mediumOfInstruction"
                                             className="input-field"
                                             placeholder="Medium of Instruction"
-                                            value={formData.mediumOfInstruction}
+                                            value={
+                                                formData?.child
+                                                    ?.educationalHistory
+                                                    ?.mediumOfInstruction
+                                            }
                                             onChange={handleInputChange}
                                         />
                                     </div>
@@ -948,20 +1031,26 @@ export default function EditPatientModal({ visible, onClose, patient }) {
                                             Any Difficulties in Subjects
                                         </label>
                                         <textarea
-                                            name="difficulties"
+                                            name="child.educationalHistory.difficulties"
                                             id="difficulties"
                                             className="input-field border-gray-300 focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 text-sm rounded-lg bg-gray-50"
                                             placeholder="Enter any difficulties in subjects"
                                             rows="4" // Adjust as needed
-                                            value={formData.difficulties}
+                                            value={
+                                                formData?.child
+                                                    ?.educationalHistory
+                                                    ?.difficulties
+                                            }
                                             onChange={handleInputChange}
                                         ></textarea>
                                     </div>
                                 </div>
                                 <div className="flex justify-between py-10">
-                                    <button type="button"
+                                    <button
+                                        type="button"
                                         className="text-white bg-audi-purple hover:bg-purple-900 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-12 py-2.5"
-                                        onClick={() => setStep(3)}>
+                                        onClick={() => setStep(3)}
+                                    >
                                         Previous
                                     </button>
                                     <button
@@ -972,183 +1061,209 @@ export default function EditPatientModal({ visible, onClose, patient }) {
                                         Next
                                     </button>
                                 </div>
-                            </div>)}
+                            </div>
+                        )}
                         {step === 5 && (
                             <div>
-                                {/* Educational History */}
+                                {/* Sensory Development */}
                                 <h2 className="font-bold font-montserrat text-lg mt-5">
                                     Sensory Development
                                 </h2>
                                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-3">
-
-
-                                    {/* Type of School */}
+                                    {/* Response to Environmental Sounds */}
                                     <div className="flex-1">
                                         <label
-                                            htmlFor="schoolType"
+                                            htmlFor="responseToEnvSounds"
                                             className="block mb-2 text-sm font-medium text-gray-900"
                                         >
                                             Response to environmental sounds
                                         </label>
                                         <input
                                             type="text"
-                                            name="schoolType"
-                                            id="schoolType"
+                                            name="child.sensoryDevelopment.responseToEnvSounds"
+                                            id="responseToEnvSounds"
                                             className="input-field"
-                                            placeholder="Resposes Observed"
-                                            value={formData.schoolType}
+                                            placeholder="Responses Observed"
+                                            value={
+                                                formData?.child
+                                                    ?.sensoryDevelopment
+                                                    ?.responseToEnvSounds
+                                            }
                                             onChange={handleInputChange}
                                         />
                                     </div>
 
-                                    {/* Medium of Instructions */}
+                                    {/* Response to Name Call */}
                                     <div className="flex-1">
                                         <label
-                                            htmlFor="mediumOfInstruction"
+                                            htmlFor="responseToNameCall"
                                             className="block mb-2 text-sm font-medium text-gray-900"
                                         >
                                             Response to name call
                                         </label>
                                         <input
                                             type="text"
-                                            name="mediumOfInstruction"
-                                            id="mediumOfInstruction"
+                                            name="child.sensoryDevelopment.responseToNameCall"
+                                            id="responseToNameCall"
                                             className="input-field"
-                                            placeholder="Resposes Observed"
-                                            value={formData.mediumOfInstruction}
+                                            placeholder="Responses Observed"
+                                            value={
+                                                formData?.child
+                                                    ?.sensoryDevelopment
+                                                    ?.responseToNameCall
+                                            }
                                             onChange={handleInputChange}
                                         />
                                     </div>
                                 </div>
-                                {/* Educational History */}
+
+                                {/* Imitation */}
                                 <h2 className="font-bold font-montserrat text-lg mt-5">
                                     Imitation
                                 </h2>
                                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-3">
-
-
-                                    {/* Type of School */}
+                                    {/* Motor */}
                                     <div className="flex-1">
                                         <label
-                                            htmlFor="schoolType"
+                                            htmlFor="motorLimitations"
                                             className="block mb-2 text-sm font-medium text-gray-900"
                                         >
                                             Motor
                                         </label>
                                         <input
                                             type="text"
-                                            name="schoolType"
-                                            id="schoolType"
+                                            name="child.limitations.motor"
+                                            id="motorLimitations"
                                             className="input-field"
-                                            placeholder="Resposes Observed"
-                                            value={formData.schoolType}
+                                            placeholder="Responses Observed"
+                                            value={
+                                                formData?.child?.limitations?.motor
+                                            }
                                             onChange={handleInputChange}
                                         />
                                     </div>
 
-                                    {/* Medium of Instructions */}
+                                    {/* Speech */}
                                     <div className="flex-1">
                                         <label
-                                            htmlFor="mediumOfInstruction"
+                                            htmlFor="speechLimitations"
                                             className="block mb-2 text-sm font-medium text-gray-900"
                                         >
                                             Speech
                                         </label>
                                         <input
                                             type="text"
-                                            name="mediumOfInstruction"
-                                            id="mediumOfInstruction"
+                                            name="child.limitations.speech"
+                                            id="speechLimitations"
                                             className="input-field"
-                                            placeholder="Resposes Observed"
-                                            value={formData.mediumOfInstruction}
+                                            placeholder="Responses Observed"
+                                            value={
+                                                formData?.child?.limitations
+                                                ?.speech
+                                            }
                                             onChange={handleInputChange}
                                         />
                                     </div>
                                 </div>
-                                {/* Educational History */}
+
+                                {/* Social Skills */}
                                 <h2 className="font-bold font-montserrat text-lg mt-5">
                                     Social Skills
                                 </h2>
                                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-3">
-
-
-                                    {/* Type of School */}
+                                    {/* Social Smile */}
                                     <div className="flex-1">
                                         <label
-                                            htmlFor="schoolType"
+                                            htmlFor="socialSmile"
                                             className="block mb-2 text-sm font-medium text-gray-900"
                                         >
                                             Social Smile
                                         </label>
                                         <input
                                             type="text"
-                                            name="schoolType"
-                                            id="schoolType"
+                                            name="child.socialSkills.socialSmile"
+                                            id="socialSmile"
                                             className="input-field"
-                                            placeholder="Resposes Observed"
-                                            value={formData.schoolType}
+                                            placeholder="Responses Observed"
+                                            value={
+                                                formData?.child?.socialSkills
+                                                    ?.socialSmile
+                                            }
                                             onChange={handleInputChange}
                                         />
                                     </div>
 
-                                    {/* Medium of Instructions */}
+                                    {/* Initiates Interaction */}
                                     <div className="flex-1">
                                         <label
-                                            htmlFor="mediumOfInstruction"
+                                            htmlFor="initiatesInteractions"
                                             className="block mb-2 text-sm font-medium text-gray-900"
                                         >
                                             Initiates Interaction
                                         </label>
                                         <input
                                             type="text"
-                                            name="mediumOfInstruction"
-                                            id="mediumOfInstruction"
+                                            name="child.socialSkills.initiatesInteractions"
+                                            id="initiatesInteractions"
                                             className="input-field"
-                                            placeholder="Resposes Observed"
-                                            value={formData.mediumOfInstruction}
+                                            placeholder="Responses Observed"
+                                            value={
+                                                formData?.child?.socialSkills
+                                                    ?.initiatesInteractions
+                                            }
                                             onChange={handleInputChange}
                                         />
                                     </div>
-                                    {/* Medium of Instructions */}
+
+                                    {/* Plays with Peer Group */}
                                     <div className="flex-1">
                                         <label
-                                            htmlFor="mediumOfInstruction"
+                                            htmlFor="playsWithPeerGroup"
                                             className="block mb-2 text-sm font-medium text-gray-900"
                                         >
                                             Plays with Peer Group
                                         </label>
                                         <input
                                             type="text"
-                                            name="mediumOfInstruction"
-                                            id="mediumOfInstruction"
+                                            name="child.socialSkills.playsWithPeerGroup"
+                                            id="playsWithPeerGroup"
                                             className="input-field"
-                                            placeholder="Resposes Observed"
-                                            value={formData.mediumOfInstruction}
+                                            placeholder="Responses Observed"
+                                            value={
+                                                formData?.child?.socialSkills
+                                                    ?.playsWithPeerGroup
+                                            }
                                             onChange={handleInputChange}
                                         />
                                     </div>
                                 </div>
+
+                                {/* Unusual Behaviors */}
                                 <div>
-                                    {/* Any Difficulties in Subjects */}
                                     <h2 className="font-bold font-montserrat text-lg mt-5">
                                         Unusual Behaviors, if any
                                     </h2>
                                     <div className="flex-1 mt-4">
                                         <textarea
-                                            name="difficulties"
-                                            id="difficulties"
+                                            name="child.unsualBehaviours"
+                                            id="unusualBehaviors"
                                             className="input-field border-gray-300 focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 text-sm rounded-lg bg-gray-50"
                                             placeholder="Enter any Unusual Behaviors Observed"
                                             rows="4" // Adjust as needed
-                                            value={formData.difficulties}
+                                            value={
+                                                formData?.child?.unsualBehaviours
+                                            }
                                             onChange={handleInputChange}
                                         ></textarea>
                                     </div>
                                 </div>
+
                                 <div className="flex justify-between py-10">
-                                    <button type="button"
+                                    <button
+                                        type="button"
                                         className="text-white bg-audi-purple hover:bg-purple-900 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-12 py-2.5"
-                                        onClick={() => setStep(4)}>
+                                        onClick={() => setStep(4)}
+                                    >
                                         Previous
                                     </button>
                                     <button
@@ -1159,99 +1274,116 @@ export default function EditPatientModal({ visible, onClose, patient }) {
                                         Next
                                     </button>
                                 </div>
-                            </div>)}
+                            </div>
+                        )}
                         {step === 6 && (
                             <div>
-                                {/* Educational History */}
+                                {/* Communication Skills */}
                                 <h2 className="font-bold font-montserrat text-lg mt-5">
                                     Communication Skills
                                 </h2>
+
+                                {/* Audition Text Area */}
                                 <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-8 my-2">
-                                    {/* Complaints Text Area */}
                                     <div className="flex-1">
                                         <label
-                                            htmlFor="complaints"
+                                            htmlFor="audition"
                                             className="block mb-2 text-sm font-medium text-gray-900"
                                         >
                                             Audition
                                         </label>
                                         <textarea
-                                            name="complaints"
-                                            id="complaints"
+                                            name="child.communicationSkills.audition" // Updated name
+                                            id="audition"
                                             className="input-field"
                                             placeholder="Audition Skills"
-                                            rows="6"  // Adjust as needed
-                                            value={formData.complaints}
+                                            rows="6"
+                                            value={
+                                                formData?.child
+                                                    ?.communicationSkills
+                                                    ?.audition
+                                            }
                                             onChange={handleInputChange}
-                                            required
                                         ></textarea>
                                     </div>
                                 </div>
+
+                                {/* Language Text Area */}
                                 <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-8 my-2">
-                                    {/* Complaints Text Area */}
                                     <div className="flex-1">
                                         <label
-                                            htmlFor="complaints"
+                                            htmlFor="language"
                                             className="block mb-2 text-sm font-medium text-gray-900"
                                         >
                                             Language
                                         </label>
                                         <textarea
-                                            name="complaints"
-                                            id="complaints"
+                                            name="child.communicationSkills.language" // Updated name
+                                            id="language"
                                             className="input-field"
                                             placeholder="Language Skills"
-                                            rows="6"  // Adjust as needed
-                                            value={formData.complaints}
+                                            rows="6"
+                                            value={
+                                                formData?.child
+                                                ?.communicationSkills
+                                                ?.language
+                                            }
                                             onChange={handleInputChange}
-                                            required
                                         ></textarea>
                                     </div>
                                 </div>
+
+                                {/* Speech Text Area */}
                                 <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-8 my-2">
-                                    {/* Complaints Text Area */}
                                     <div className="flex-1">
                                         <label
-                                            htmlFor="complaints"
+                                            htmlFor="speech"
                                             className="block mb-2 text-sm font-medium text-gray-900"
                                         >
                                             Speech
                                         </label>
                                         <textarea
-                                            name="complaints"
-                                            id="complaints"
+                                            name="child.communicationSkills.speech" // Updated name
+                                            id="speech"
                                             className="input-field"
                                             placeholder="Speaking Skills"
-                                            rows="6"  // Adjust as needed
-                                            value={formData.complaints}
+                                            rows="6"
+                                            value={
+                                                formData?.child
+                                                ?.communicationSkills
+                                                ?.speech
+                                            }
                                             onChange={handleInputChange}
-                                            required
                                         ></textarea>
                                     </div>
                                 </div>
-                                {/* Educational History */}
+
+                                {/* Vegetative Skills & OPME */}
                                 <h2 className="font-bold font-montserrat text-lg mt-5">
                                     Vegetative Skills & OPME
                                 </h2>
                                 <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-8 my-2">
-                                    {/* Complaints Text Area */}
                                     <div className="flex-1">
                                         <textarea
-                                            name="complaints"
-                                            id="complaints"
+                                            name="child.vegetativeSkillsOPEM" // Updated name
+                                            id="vegetativeSkillsOPEM"
                                             className="input-field"
                                             placeholder="Vegetative Skills & OPME"
-                                            rows="6"  // Adjust as needed
-                                            value={formData.complaints}
+                                            rows="6"
+                                            value={
+                                                formData?.child
+                                                    ?.vegetativeSkillsOPEM
+                                            }
                                             onChange={handleInputChange}
-                                            required
                                         ></textarea>
                                     </div>
                                 </div>
                                 <div className="flex justify-between py-10">
-                                    <button type="button"
+                                    <button
+                                        type="button"
                                         className="text-white bg-audi-purple hover:bg-purple-900 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-12 py-2.5"
-                                        onClick={() => setStep(5)}>
+                                        onClick={() => setStep(5)}
+                                    >
                                         Previous
                                     </button>
                                     <button
@@ -1262,7 +1394,8 @@ export default function EditPatientModal({ visible, onClose, patient }) {
                                         Next
                                     </button>
                                 </div>
-                            </div>)}
+                            </div>
+                        )}
                         {step === 7 && (
                             <div>
                                 {/* Educational History */}
@@ -1273,14 +1406,14 @@ export default function EditPatientModal({ visible, onClose, patient }) {
                                     {/* Complaints Text Area */}
                                     <div className="flex-1">
                                         <textarea
-                                            name="complaints"
-                                            id="complaints"
+                                            name="child.testResults"
+                                            id="testResults"
                                             className="input-field"
                                             placeholder="Enter Test Results"
-                                            rows="6"  // Adjust as needed
-                                            value={formData.complaints}
+                                            rows="6" // Adjust as needed
+                                            value={formData?.child?.testResults}
                                             onChange={handleInputChange}
-                                            required
+                                            
                                         ></textarea>
                                     </div>
                                 </div>
@@ -1291,14 +1424,14 @@ export default function EditPatientModal({ visible, onClose, patient }) {
                                     {/* Complaints Text Area */}
                                     <div className="flex-1">
                                         <textarea
-                                            name="complaints"
-                                            id="complaints"
+                                            name="child.impression"
+                                            id="impression"
                                             className="input-field"
                                             placeholder="Enter Impressions"
-                                            rows="6"  // Adjust as needed
-                                            value={formData.complaints}
+                                            rows="6" // Adjust as needed
+                                            value={formData?.child?.impression}
                                             onChange={handleInputChange}
-                                            required
+                                            
                                         ></textarea>
                                     </div>
                                 </div>
@@ -1309,28 +1442,34 @@ export default function EditPatientModal({ visible, onClose, patient }) {
                                     {/* Complaints Text Area */}
                                     <div className="flex-1">
                                         <textarea
-                                            name="complaints"
-                                            id="complaints"
+                                            name="child.recommendation"
+                                            id="recommendation"
                                             className="input-field"
                                             placeholder="Any Recommendations"
-                                            rows="6"  // Adjust as needed
-                                            value={formData.complaints}
+                                            rows="6" // Adjust as needed
+                                            value={formData?.child?.recommendation}
                                             onChange={handleInputChange}
-                                            required
+                                            
                                         ></textarea>
                                     </div>
                                 </div>
                                 <div className="flex justify-between py-10">
-                                    <button type="button"
+                                    <button
+                                        type="button"
                                         className="text-white bg-audi-purple hover:bg-purple-900 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-12 py-2.5"
-                                        onClick={() => setStep(6)}>
+                                        onClick={() => setStep(6)}
+                                    >
                                         Previous
                                     </button>
-                                    <button type="submit"
+                                    <button
+                                        type="submit"
                                         className="text-white bg-audi-purple hover:bg-purple-900 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-12 py-2.5"
-                                    >Submit</button>
+                                    >
+                                        Submit
+                                    </button>
                                 </div>
-                            </div>)}
+                            </div>
+                        )}
                     </form>
                 </div>
             </div>
@@ -1341,5 +1480,5 @@ export default function EditPatientModal({ visible, onClose, patient }) {
 EditPatientModal.propTypes = {
     visible: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
-    patient: PropTypes.object,
+    patientId: PropTypes.string,
 };

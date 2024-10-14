@@ -18,7 +18,7 @@ const PatientDetails = () => {
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem("audi-user"));
         if (user) {
-            PatientService.getPatient(id)
+            PatientService.getPatientById(id)
                 .then((data) => {
                     setPatient(data);
                 })
@@ -694,7 +694,7 @@ const PatientDetails = () => {
             <EditPatientModal
                 visible={openEditPatient}
                 onClose={() => setOpenEditPatient(false)}
-                patient={patient}
+                patientId={id}
             />
 
             <VerifyUserModal
