@@ -417,6 +417,196 @@ const PatientDetails = () => {
                                 </span>
                             </div>
                         </div>
+                        <div className="flex-1 sm:mb-0 mb-4">
+                            {/* Natal History */}
+                            <div className="mb-4">
+                                <h2 className="text-lg font-semibold text-purple-700">
+                                    Sensory Development
+                                </h2>
+                            </div>
+                            <div className="flex flex-row flex-wrap space-x-6">
+                                {/* Hearing Age */}
+                                <div className="flex items-center">
+                                    <h3 className="text-base font-normal">Response to Enviroment sounds: </h3>
+                                    <span className="ml-2 font-semibold text-base ">
+                                        {patient?.hearingAge || "Not available"}
+                                    </span>
+                                </div>
+
+                                {/* AVT Level */}
+                                <div className="flex items-center">
+                                    <h3 className="text-base font-normal">
+                                        Response to name call:
+                                    </h3>
+                                    <span className="ml-2 font-semibold">
+                                        {patient?.avtLevel || "Not available"}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="flex-1 sm:mb-0 mb-4">
+                            {/* Natal History */}
+                            <div className="mb-4">
+                                <h2 className="text-lg font-semibold text-purple-700">
+                                    Imitation
+                                </h2>
+                            </div>
+                            <div className="flex flex-row flex-wrap space-x-6">
+                                {/* Hearing Age */}
+                                <div className="flex items-center">
+                                    <h3 className="text-base font-normal">Motor: </h3>
+                                    <span className="ml-2 font-semibold text-base ">
+                                        {patient?.hearingAge || "Not available"}
+                                    </span>
+                                </div>
+
+                                {/* AVT Level */}
+                                <div className="flex items-center">
+                                    <h3 className="text-base font-normal">
+                                        Speech:
+                                    </h3>
+                                    <span className="ml-2 font-semibold">
+                                        {patient?.avtLevel || "Not available"}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="flex-1 sm:mb-0 mb-4">
+                            {/* Natal History */}
+                            <div className="mb-4">
+                                <h2 className="text-lg font-semibold text-purple-700">
+                                    Social Skills
+                                </h2>
+                            </div>
+                            <div className="flex flex-row flex-wrap space-x-6">
+                                {/* Hearing Age */}
+                                <div className="flex items-center">
+                                    <h3 className="text-base font-normal">Social Smile: </h3>
+                                    <span className="ml-2 font-semibold text-base ">
+                                        {patient?.hearingAge || "Not available"}
+                                    </span>
+                                </div>
+
+                                {/* AVT Level */}
+                                <div className="flex items-center">
+                                    <h3 className="text-base font-normal">
+                                        Initiates Interaction:
+                                    </h3>
+                                    <span className="ml-2 font-semibold">
+                                        {patient?.avtLevel || "Not available"}
+                                    </span>
+                                </div>
+                                {/* AVT Level */}
+                                <div className="flex items-center">
+                                    <h3 className="text-base font-normal">
+                                        Plays with peer group:
+                                    </h3>
+                                    <span className="ml-2 font-semibold">
+                                        {patient?.avtLevel || "Not available"}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="flex-1 sm:mb-0 mb-4">
+                            <div className="flex flex-row flex-wrap space-x-6">
+                                {/* Hearing Age */}
+                                <div className="flex items-center">
+                                    <h2 className="text-lg font-semibold text-purple-700">
+                                        Any Unusual Behaviors
+                                    </h2>
+                                    <span className="ml-2 font-semibold text-base ">
+                                        {patient?.hearingAge || "Not available"}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="flex-1 sm:mb-0 mb-4">
+                            {/* Natal History */}
+                            <div className="mb-4">
+                                <h2 className="text-lg font-semibold text-purple-700">
+                                    Communication Skills
+                                </h2>
+                            </div>
+                            <div className="flex flex-row flex-wrap space-x-6">
+                                {/* Hearing Age */}
+                                <div className="flex items-center">
+                                    <h3 className="text-base font-normal">Audition: </h3>
+                                    <span className="ml-2 font-semibold text-base ">
+                                        {patient?.hearingAge || "Not available"}
+                                    </span>
+                                </div>
+                            </div>
+                            <div className="flex flex-row flex-wrap space-x-6">
+                                {/* Hearing Age */}
+                                <div className="flex items-center">
+                                    <h3 className="text-base font-normal">Language: </h3>
+                                    <span className="ml-2 font-semibold text-base ">
+                                        {patient?.hearingAge || "Not available"}
+                                    </span>
+                                </div>
+                            </div>
+                            <div className="flex flex-row flex-wrap space-x-6">
+                                {/* Hearing Age */}
+                                <div className="flex items-center">
+                                    <h3 className="text-base font-normal">Speech: </h3>
+                                    <span className="ml-2 font-semibold text-base ">
+                                        {patient?.hearingAge || "Not available"}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="flex-1 sm:mb-0 mb-4">
+                            <div className="flex flex-row flex-wrap space-x-6">
+                                {/* Hearing Age */}
+                                <div className="flex items-center">
+                                    <h2 className="text-lg font-semibold text-purple-700">
+                                        Vegetative Skills & OPME
+                                    </h2>
+                                    <span className="ml-2 font-semibold text-base ">
+                                        {patient?.hearingAge || "Not available"}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="flex-1 sm:mb-0 mb-4">
+                            <div className="flex flex-row flex-wrap space-x-6">
+                                {/* Hearing Age */}
+                                <div className="flex items-center">
+                                    <h2 className="text-lg font-semibold text-purple-700">
+                                        Test results
+                                    </h2>
+                                    <span className="ml-2 font-semibold text-base ">
+                                        {patient?.hearingAge || "Not available"}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="flex-1 sm:mb-0 mb-4">
+                            <div className="flex flex-row flex-wrap space-x-6">
+                                {/* Hearing Age */}
+                                <div className="flex items-center">
+                                    <h2 className="text-lg font-semibold text-purple-700">
+                                        Impression
+                                    </h2>
+                                    <span className="ml-2 font-semibold text-base ">
+                                        {patient?.hearingAge || "Not available"}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="flex-1 sm:mb-0 mb-4">
+                            <div className="flex flex-row flex-wrap space-x-6">
+                                {/* Hearing Age */}
+                                <div className="flex items-center">
+                                    <h2 className="text-lg font-semibold text-purple-700">
+                                        Recommendation
+                                    </h2>
+                                    <span className="ml-2 font-semibold text-base ">
+                                        {patient?.hearingAge || "Not available"}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 )}
             </div>

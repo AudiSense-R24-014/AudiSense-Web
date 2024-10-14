@@ -809,6 +809,23 @@ export default function EditPatientModal({ visible, onClose, patient }) {
                                     </div>
 
                                 </div>
+                                <div className="flex justify-between py-10">
+                                    <button type="button"
+                                        className="text-white bg-audi-purple hover:bg-purple-900 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-12 py-2.5"
+                                        onClick={() => setStep(2)}>
+                                        Previous
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className="text-white bg-audi-purple hover:bg-purple-900 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-12 py-2.5"
+                                        onClick={() => setStep(4)}
+                                    >
+                                        Next
+                                    </button>
+                                </div>
+                            </div>)}
+                        {step === 4 && (
+                            <div>
                                 <div className="mt-4 ">
                                     {/* handedness */}
                                     <div className="flex-1 mb-4">
@@ -940,12 +957,373 @@ export default function EditPatientModal({ visible, onClose, patient }) {
                                             onChange={handleInputChange}
                                         ></textarea>
                                     </div>
-
                                 </div>
                                 <div className="flex justify-between py-10">
                                     <button type="button"
                                         className="text-white bg-audi-purple hover:bg-purple-900 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-12 py-2.5"
-                                        onClick={() => setStep(2)}>
+                                        onClick={() => setStep(3)}>
+                                        Previous
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className="text-white bg-audi-purple hover:bg-purple-900 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-12 py-2.5"
+                                        onClick={() => setStep(5)}
+                                    >
+                                        Next
+                                    </button>
+                                </div>
+                            </div>)}
+                        {step === 5 && (
+                            <div>
+                                {/* Educational History */}
+                                <h2 className="font-bold font-montserrat text-lg mt-5">
+                                    Sensory Development
+                                </h2>
+                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-3">
+
+
+                                    {/* Type of School */}
+                                    <div className="flex-1">
+                                        <label
+                                            htmlFor="schoolType"
+                                            className="block mb-2 text-sm font-medium text-gray-900"
+                                        >
+                                            Response to environmental sounds
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="schoolType"
+                                            id="schoolType"
+                                            className="input-field"
+                                            placeholder="Resposes Observed"
+                                            value={formData.schoolType}
+                                            onChange={handleInputChange}
+                                        />
+                                    </div>
+
+                                    {/* Medium of Instructions */}
+                                    <div className="flex-1">
+                                        <label
+                                            htmlFor="mediumOfInstruction"
+                                            className="block mb-2 text-sm font-medium text-gray-900"
+                                        >
+                                            Response to name call
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="mediumOfInstruction"
+                                            id="mediumOfInstruction"
+                                            className="input-field"
+                                            placeholder="Resposes Observed"
+                                            value={formData.mediumOfInstruction}
+                                            onChange={handleInputChange}
+                                        />
+                                    </div>
+                                </div>
+                                {/* Educational History */}
+                                <h2 className="font-bold font-montserrat text-lg mt-5">
+                                    Imitation
+                                </h2>
+                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-3">
+
+
+                                    {/* Type of School */}
+                                    <div className="flex-1">
+                                        <label
+                                            htmlFor="schoolType"
+                                            className="block mb-2 text-sm font-medium text-gray-900"
+                                        >
+                                            Motor
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="schoolType"
+                                            id="schoolType"
+                                            className="input-field"
+                                            placeholder="Resposes Observed"
+                                            value={formData.schoolType}
+                                            onChange={handleInputChange}
+                                        />
+                                    </div>
+
+                                    {/* Medium of Instructions */}
+                                    <div className="flex-1">
+                                        <label
+                                            htmlFor="mediumOfInstruction"
+                                            className="block mb-2 text-sm font-medium text-gray-900"
+                                        >
+                                            Speech
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="mediumOfInstruction"
+                                            id="mediumOfInstruction"
+                                            className="input-field"
+                                            placeholder="Resposes Observed"
+                                            value={formData.mediumOfInstruction}
+                                            onChange={handleInputChange}
+                                        />
+                                    </div>
+                                </div>
+                                {/* Educational History */}
+                                <h2 className="font-bold font-montserrat text-lg mt-5">
+                                    Social Skills
+                                </h2>
+                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-3">
+
+
+                                    {/* Type of School */}
+                                    <div className="flex-1">
+                                        <label
+                                            htmlFor="schoolType"
+                                            className="block mb-2 text-sm font-medium text-gray-900"
+                                        >
+                                            Social Smile
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="schoolType"
+                                            id="schoolType"
+                                            className="input-field"
+                                            placeholder="Resposes Observed"
+                                            value={formData.schoolType}
+                                            onChange={handleInputChange}
+                                        />
+                                    </div>
+
+                                    {/* Medium of Instructions */}
+                                    <div className="flex-1">
+                                        <label
+                                            htmlFor="mediumOfInstruction"
+                                            className="block mb-2 text-sm font-medium text-gray-900"
+                                        >
+                                            Initiates Interaction
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="mediumOfInstruction"
+                                            id="mediumOfInstruction"
+                                            className="input-field"
+                                            placeholder="Resposes Observed"
+                                            value={formData.mediumOfInstruction}
+                                            onChange={handleInputChange}
+                                        />
+                                    </div>
+                                    {/* Medium of Instructions */}
+                                    <div className="flex-1">
+                                        <label
+                                            htmlFor="mediumOfInstruction"
+                                            className="block mb-2 text-sm font-medium text-gray-900"
+                                        >
+                                            Plays with Peer Group
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="mediumOfInstruction"
+                                            id="mediumOfInstruction"
+                                            className="input-field"
+                                            placeholder="Resposes Observed"
+                                            value={formData.mediumOfInstruction}
+                                            onChange={handleInputChange}
+                                        />
+                                    </div>
+                                </div>
+                                <div>
+                                    {/* Any Difficulties in Subjects */}
+                                    <h2 className="font-bold font-montserrat text-lg mt-5">
+                                        Unusual Behaviors, if any
+                                    </h2>
+                                    <div className="flex-1 mt-4">
+                                        <textarea
+                                            name="difficulties"
+                                            id="difficulties"
+                                            className="input-field border-gray-300 focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 text-sm rounded-lg bg-gray-50"
+                                            placeholder="Enter any Unusual Behaviors Observed"
+                                            rows="4" // Adjust as needed
+                                            value={formData.difficulties}
+                                            onChange={handleInputChange}
+                                        ></textarea>
+                                    </div>
+                                </div>
+                                <div className="flex justify-between py-10">
+                                    <button type="button"
+                                        className="text-white bg-audi-purple hover:bg-purple-900 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-12 py-2.5"
+                                        onClick={() => setStep(4)}>
+                                        Previous
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className="text-white bg-audi-purple hover:bg-purple-900 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-12 py-2.5"
+                                        onClick={() => setStep(6)}
+                                    >
+                                        Next
+                                    </button>
+                                </div>
+                            </div>)}
+                        {step === 6 && (
+                            <div>
+                                {/* Educational History */}
+                                <h2 className="font-bold font-montserrat text-lg mt-5">
+                                    Communication Skills
+                                </h2>
+                                <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-8 my-2">
+                                    {/* Complaints Text Area */}
+                                    <div className="flex-1">
+                                        <label
+                                            htmlFor="complaints"
+                                            className="block mb-2 text-sm font-medium text-gray-900"
+                                        >
+                                            Audition
+                                        </label>
+                                        <textarea
+                                            name="complaints"
+                                            id="complaints"
+                                            className="input-field"
+                                            placeholder="Audition Skills"
+                                            rows="6"  // Adjust as needed
+                                            value={formData.complaints}
+                                            onChange={handleInputChange}
+                                            required
+                                        ></textarea>
+                                    </div>
+                                </div>
+                                <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-8 my-2">
+                                    {/* Complaints Text Area */}
+                                    <div className="flex-1">
+                                        <label
+                                            htmlFor="complaints"
+                                            className="block mb-2 text-sm font-medium text-gray-900"
+                                        >
+                                            Language
+                                        </label>
+                                        <textarea
+                                            name="complaints"
+                                            id="complaints"
+                                            className="input-field"
+                                            placeholder="Language Skills"
+                                            rows="6"  // Adjust as needed
+                                            value={formData.complaints}
+                                            onChange={handleInputChange}
+                                            required
+                                        ></textarea>
+                                    </div>
+                                </div>
+                                <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-8 my-2">
+                                    {/* Complaints Text Area */}
+                                    <div className="flex-1">
+                                        <label
+                                            htmlFor="complaints"
+                                            className="block mb-2 text-sm font-medium text-gray-900"
+                                        >
+                                            Speech
+                                        </label>
+                                        <textarea
+                                            name="complaints"
+                                            id="complaints"
+                                            className="input-field"
+                                            placeholder="Speaking Skills"
+                                            rows="6"  // Adjust as needed
+                                            value={formData.complaints}
+                                            onChange={handleInputChange}
+                                            required
+                                        ></textarea>
+                                    </div>
+                                </div>
+                                {/* Educational History */}
+                                <h2 className="font-bold font-montserrat text-lg mt-5">
+                                    Vegetative Skills & OPME
+                                </h2>
+                                <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-8 my-2">
+                                    {/* Complaints Text Area */}
+                                    <div className="flex-1">
+                                        <textarea
+                                            name="complaints"
+                                            id="complaints"
+                                            className="input-field"
+                                            placeholder="Vegetative Skills & OPME"
+                                            rows="6"  // Adjust as needed
+                                            value={formData.complaints}
+                                            onChange={handleInputChange}
+                                            required
+                                        ></textarea>
+                                    </div>
+                                </div>
+                                <div className="flex justify-between py-10">
+                                    <button type="button"
+                                        className="text-white bg-audi-purple hover:bg-purple-900 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-12 py-2.5"
+                                        onClick={() => setStep(5)}>
+                                        Previous
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className="text-white bg-audi-purple hover:bg-purple-900 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-12 py-2.5"
+                                        onClick={() => setStep(7)}
+                                    >
+                                        Next
+                                    </button>
+                                </div>
+                            </div>)}
+                        {step === 7 && (
+                            <div>
+                                {/* Educational History */}
+                                <h2 className="font-bold font-montserrat text-lg mt-5">
+                                    Test Results
+                                </h2>
+                                <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-8 my-2">
+                                    {/* Complaints Text Area */}
+                                    <div className="flex-1">
+                                        <textarea
+                                            name="complaints"
+                                            id="complaints"
+                                            className="input-field"
+                                            placeholder="Enter Test Results"
+                                            rows="6"  // Adjust as needed
+                                            value={formData.complaints}
+                                            onChange={handleInputChange}
+                                            required
+                                        ></textarea>
+                                    </div>
+                                </div>
+                                <h2 className="font-bold font-montserrat text-lg mt-5">
+                                    Impression
+                                </h2>
+                                <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-8 my-2">
+                                    {/* Complaints Text Area */}
+                                    <div className="flex-1">
+                                        <textarea
+                                            name="complaints"
+                                            id="complaints"
+                                            className="input-field"
+                                            placeholder="Enter Impressions"
+                                            rows="6"  // Adjust as needed
+                                            value={formData.complaints}
+                                            onChange={handleInputChange}
+                                            required
+                                        ></textarea>
+                                    </div>
+                                </div>
+                                <h2 className="font-bold font-montserrat text-lg mt-5">
+                                    Recommendations
+                                </h2>
+                                <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-8 my-2">
+                                    {/* Complaints Text Area */}
+                                    <div className="flex-1">
+                                        <textarea
+                                            name="complaints"
+                                            id="complaints"
+                                            className="input-field"
+                                            placeholder="Any Recommendations"
+                                            rows="6"  // Adjust as needed
+                                            value={formData.complaints}
+                                            onChange={handleInputChange}
+                                            required
+                                        ></textarea>
+                                    </div>
+                                </div>
+                                <div className="flex justify-between py-10">
+                                    <button type="button"
+                                        className="text-white bg-audi-purple hover:bg-purple-900 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-12 py-2.5"
+                                        onClick={() => setStep(6)}>
                                         Previous
                                     </button>
                                     <button type="submit"
