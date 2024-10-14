@@ -198,6 +198,103 @@ export default function AddNewCLFModal({ visible, onClose }) {
                         {step === 1 && (
                             <>
                                 {/* First Name and Last Name */}
+                                <h1 className="font-bold font-montserrat text-base text-purple-700">Primary Details</h1>
+                                <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-8">
+                                    <div className="flex-1">
+                                        <label
+                                            htmlFor="firstName"
+                                            className="block mb-2 text-sm font-medium text-gray-900"
+                                        >
+                                            Device
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="detect"
+                                            id="detect"
+                                            className="input-field"
+                                            placeholder="Device"
+                                            // value={formData.firstName}
+                                            onChange={handleInputChange}
+                                            required
+                                        />
+                                    </div>
+                                    <div className="flex-1">
+                                        <label
+                                            htmlFor="lastName"
+                                            className="block mb-2 text-sm font-medium text-gray-900"
+                                        >
+                                            Aided Age
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="distance"
+                                            id="distance"
+                                            className="input-field"
+                                            placeholder="Aided Age"
+                                            // value={formData.lastName}
+                                            onChange={handleInputChange}
+                                            required
+                                        />
+                                    </div>
+                                </div>
+                                <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-8">
+                                    <div className="flex-1">
+                                        <label
+                                            htmlFor="firstName"
+                                            className="block mb-2 text-sm font-medium text-gray-900"
+                                        >
+                                            Implant Age
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="detect"
+                                            id="detect"
+                                            className="input-field"
+                                            placeholder="Implant Age"
+                                            // value={formData.firstName}
+                                            onChange={handleInputChange}
+                                            required
+                                        />
+                                    </div>
+                                    <div className="flex-1">
+                                        <label
+                                            htmlFor="lastName"
+                                            className="block mb-2 text-sm font-medium text-gray-900"
+                                        >
+                                            Listening Age
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="distance"
+                                            id="distance"
+                                            className="input-field"
+                                            placeholder="Listening Age"
+                                            // value={formData.lastName}
+                                            onChange={handleInputChange}
+                                            required
+                                        />
+                                    </div>
+                                </div>
+                                <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-8">
+                                    <div className="flex-1">
+                                        <label
+                                            htmlFor="firstName"
+                                            className="block mb-2 text-sm font-medium text-gray-900"
+                                        >
+                                            AV/Other
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="detect"
+                                            id="detect"
+                                            className="input-field"
+                                            placeholder="AV/Other"
+                                            // value={formData.firstName}
+                                            onChange={handleInputChange}
+                                            required
+                                        />
+                                    </div>
+                                </div>
                                 <h1 className="font-bold font-montserrat text-base text-purple-700">Ling Sounds</h1>
                                 <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-8">
                                     <div className="flex-1">
