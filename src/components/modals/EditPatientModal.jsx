@@ -44,9 +44,6 @@ const customSelectStyles = {
 };
 
 export default function EditPatientModal({ visible, onClose, patientId }) {
-    if (!visible) {
-        return null;
-    }
 
     const [formData, setFormData] = useState({
         firstName: "",
@@ -218,6 +215,10 @@ export default function EditPatientModal({ visible, onClose, patientId }) {
     useEffect(() => {
         setupFormData();
     }, [patientId, visible]);
+
+    if (!visible) {
+        return null;
+    }
 
     return (
         <div
