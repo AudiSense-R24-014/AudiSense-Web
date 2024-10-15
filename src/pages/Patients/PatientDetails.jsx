@@ -6,7 +6,12 @@ import { useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import AddNewCLFModal from "../../components/modals/AddNewCLFModal";
 import PatientProfileDetails from "../../components/PatientProfileDetails";
-import { ArrowBigDown, ArrowBigDownDashIcon, ArrowBigUpDashIcon } from "lucide-react";
+import {
+    ArrowBigDown,
+    ArrowBigDownDashIcon,
+    ArrowBigUpDashIcon,
+    PlusCircle,
+} from "lucide-react";
 
 const PatientDetails = () => {
     const { id } = useParams();
@@ -72,7 +77,7 @@ const PatientDetails = () => {
         <div className="p-4 px-10">
             <div className="flex flex-col font-montserrat bg-white p-5 rounded-lg shadow-md mt-5">
                 {/* Upper Section: Patient Details */}
-                <div className="flex flex-col sm:flex-row items-center justify-between">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between">
                     <div className="flex-1 sm:mb-0 mb-4">
                         {/* Patient Name */}
                         <div className="mb-2">
@@ -124,7 +129,7 @@ const PatientDetails = () => {
                     </div>
 
                     {/* Surgery and Switched On Dates */}
-                    <div className="sm:text-right text-left mt-6 sm:mt-32">
+                    <div className="text-left sm:text-right mt-6 sm:mt-32">
                         <div className="mb-2">
                             <h2 className="text-sm font-montserrat font-normal">
                                 Surgery Date:{" "}
@@ -160,22 +165,24 @@ const PatientDetails = () => {
 
                         {/* Expand Button */}
                         <div className="mb-2 flex sm:justify-end sm:flex-row-reverse items-center sm:float-right">
-                        {!isExpanded && (
-                            <button
-                                onClick={() => setIsExpanded(true)}
-                                className="text-xs flex flex-row bg-purple-500 p-1 px-2 rounded-lg text-white hover:bg-purple-800"
-                            >
-                                Expand
-                                <ArrowBigDownDashIcon size={16} />
-                            </button>)}
+                            {!isExpanded && (
+                                <button
+                                    onClick={() => setIsExpanded(true)}
+                                    className="text-xs flex flex-row bg-purple-500 p-1 px-2 rounded-lg text-white hover:bg-purple-800"
+                                >
+                                    Expand
+                                    <ArrowBigDownDashIcon size={16} />
+                                </button>
+                            )}
                             {isExpanded && (
-                            <button
-                                onClick={() => setIsExpanded(false)}
-                                className="text-xs flex flex-row bg-purple-500 p-1 px-2 rounded-lg text-white hover:bg-purple-800"
-                            >
-                                Show Less
-                                <ArrowBigUpDashIcon size={16} />
-                            </button>)}
+                                <button
+                                    onClick={() => setIsExpanded(false)}
+                                    className="text-xs flex flex-row bg-purple-500 p-1 px-2 rounded-lg text-white hover:bg-purple-800"
+                                >
+                                    Show Less
+                                    <ArrowBigUpDashIcon size={16} />
+                                </button>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -188,15 +195,14 @@ const PatientDetails = () => {
                     <div>
                         <PatientProfileDetails patient={patient} />
                         <button
-                                onClick={() => setIsExpanded(false)}
-                                className="text-xs flex flex-row bg-purple-500 p-1 px-2 rounded-lg text-white hover:bg-purple-800 mt-3 float-right"
-                            >
-                                Show Less
-                                <ArrowBigUpDashIcon size={16} />
-                            </button>
+                            onClick={() => setIsExpanded(false)}
+                            className="text-xs flex flex-row bg-purple-500 p-1 px-2 rounded-lg text-white hover:bg-purple-800 mt-3 float-right"
+                        >
+                            Show Less
+                            <ArrowBigUpDashIcon size={16} />
+                        </button>
                     </div>
                 )}
-
             </div>
             <div className="flex flex-col sm:flex-row items-center justify-between font-montserrat bg-white p-5 rounded-lg shadow-md mt-5">
                 <div className="flex-1 sm:mb-0 mb-4">
@@ -205,10 +211,10 @@ const PatientDetails = () => {
                     </div>
                     <div className="mt-4 flex justify-end">
                         <button
-                            className="bg-purple-500 mb-2 hover:bg-audi-purple text-white font-semibold py-2 px-6 rounded sm:mr-2"
+                            className="flex flex-row bg-purple-500 mb-2 hover:bg-audi-purple text-white font-semibold py-2 px-6 rounded sm:mr-2"
                             onClick={() => setOpenAddNewCLF(true)}
                         >
-                            <span className="mr-2">+</span>
+                            <PlusCircle size={22} className="mr-2" />
                             Add New CLF Record
                         </button>
                     </div>
@@ -221,58 +227,26 @@ const PatientDetails = () => {
                                     <th className="px-4 py-2">CLF Age</th>
                                 </tr>
                             </thead>
-                            {/* <tbody>
-                                {patients
-                                    .slice()
-                                    .reverse()
-                                    .map((patient, index) => (
-                                        <tr
-                                            key={index}
-                                            className={
-                                                index % 2 === 0
-                                                    ? "bg-gray-200 font-montserrat"
-                                                    : "bg-gray-300 font-montserrat"
-                                            }
-                                            onClick={() => handleRowClick(patient._id)}
-                                            style={{ cursor: "pointer" }}
-                                        >
-                                            <td className="border px-4 py-2">
-                                                {patient.firstName}
-                                            </td>
-                                            <td className="border px-4 py-2">{patient.lastName}</td>
-                                            <td className="border px-4 py-2">{patient.gender}</td>
-                                            <td className="border px-4 py-2">
-                                                {patient.dob ? patient.dob.slice(0, 10) : "N/A"}
-                                            </td>
-                                            <td className="border px-4 py-2">
-                                                {patient.contactNo}
-                                            </td>
-                                            <td className="border px-4 py-2">{patient.email}</td>
-                                            <td className="border px-4 py-2">{patient.AVTLevel}</td>
-                                            <td className="border px-4 py-2">
-                                                {patient.implant.isImplanted ? (
-                                                    <span className="bg-green-500 text-white font-bold py-1 px-2 rounded-full">
-                                                        Yes
-                                                    </span>
-                                                ) : (
-                                                    <span className="bg-red-500 text-white font-bold py-1 px-2 rounded-full">
-                                                        No
-                                                    </span>
-                                                )}
-                                            </td>
-                                            <td className="border px-4 py-2">
-                                                {patient.implant.surgeryDate
-                                                    ? patient.implant.surgeryDate.slice(0, 10)
-                                                    : "N/A"}
-                                            </td>
-                                            <td className="border px-4 py-2">
-                                                {patient.implant.switchOnDate
-                                                    ? patient.implant.switchOnDate.slice(0, 10)
-                                                    : "N/A"}
-                                            </td>
-                                        </tr>
-                                    ))}
-                            </tbody> */}
+                            <tbody className="bg-white divide-y divide-gray-200">
+                                {patient?.clfs?.map((clf) => (
+                                    <tr
+                                        key={clf._id}
+                                        className="text-sm text-gray-700"
+                                    >
+                                        <td className="px-4 py-2">
+                                            {new Date(
+                                                clf.date
+                                            ).toLocaleDateString("en-US")}
+                                        </td>
+                                        <td className="px-4 py-2">
+                                            {clf.implantAge || "N/A"}
+                                        </td>
+                                        <td className="px-4 py-2">
+                                            {clf.clfAge || "N/A"}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
                         </table>
                     </div>
                 </div>
