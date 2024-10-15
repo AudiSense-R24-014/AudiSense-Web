@@ -44,7 +44,6 @@ const customSelectStyles = {
 };
 
 export default function EditPatientModal({ visible, onClose, patientId }) {
-
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
@@ -196,9 +195,7 @@ export default function EditPatientModal({ visible, onClose, patientId }) {
                             title: "Success!",
                             text: "Patient details updated successfully!",
                             icon: "success",
-                        }).then(() => {
-                            window.location.reload();
-                        });
+                        }).then(window.location.reload());
                     })
                     .catch((err) => {
                         Swal.fire({
@@ -935,7 +932,7 @@ export default function EditPatientModal({ visible, onClose, patientId }) {
                                                 <input
                                                     type="radio"
                                                     id="rightHanded"
-                                                    name="handedness"
+                                                    name="child.handedness"
                                                     value="Right Handed"
                                                     checked={
                                                         formData?.child
@@ -957,7 +954,7 @@ export default function EditPatientModal({ visible, onClose, patientId }) {
                                                 <input
                                                     type="radio"
                                                     id="leftHanded"
-                                                    name="handedness"
+                                                    name="child.handedness"
                                                     value="Left Handed"
                                                     checked={
                                                         formData?.child
@@ -979,7 +976,7 @@ export default function EditPatientModal({ visible, onClose, patientId }) {
                                                 <input
                                                     type="radio"
                                                     id="notIdentified"
-                                                    name="handedness"
+                                                    name="child.handedness"
                                                     value="Not Identified"
                                                     checked={
                                                         formData?.child
