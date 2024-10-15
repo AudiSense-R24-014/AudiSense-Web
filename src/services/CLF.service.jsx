@@ -35,6 +35,7 @@ const createCLF = async (clf) => {
         body: JSON.stringify(clf),
     });
     const data = await response.json();
+    console.log(data);
     return data;
 };
 
