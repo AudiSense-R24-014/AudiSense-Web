@@ -6,89 +6,271 @@ const PatientProfileDetails = ({ patient }) => {
 
     return (
         <div className="font-montserrat space-y-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
                 {/* Onset History */}
                 <div>
                     <h3 className="font-bold text-lg">Onset History</h3>
-                    <p>Age When Noticed: {childDetails?.onSet?.ageWhenNoticed || "N/A"}</p>
-                    <p>Age When First Sight: {childDetails?.onSet?.ageWhenFirstSight || "N/A"}</p>
-                    <p>Treatment History: {childDetails?.onSet?.treatmentHistory || "N/A"}</p>
+                    <p>
+                        <span className="font-bold text-audi-purple">
+                            Age When Noticed:
+                        </span>{" "}
+                        {childDetails?.onSet?.ageWhenNoticed || "N/A"}
+                    </p>
+                    <p>
+                        <span className="font-bold text-audi-purple">
+                            Age When First Sight:
+                        </span>{" "}
+                        {childDetails?.onSet?.ageWhenFirstSight || "N/A"}
+                    </p>
+                    <p>
+                        <span className="font-bold text-audi-purple">
+                            Treatment History:
+                        </span>{" "}
+                        {childDetails?.onSet?.treatmentHistory || "N/A"}
+                    </p>
                 </div>
 
                 {/* Natal History */}
                 <div>
                     <h3 className="font-bold text-lg">Natal History</h3>
-                    <p>Previous Pregnancies: {childDetails?.natalHistory?.previousPregnancies || "N/A"}</p>
-                    <p>Pre-Natal: {childDetails?.natalHistory?.preNatal || "N/A"}</p>
-                    <p>Pre-Natal Birth Cry: {childDetails?.natalHistory?.preNatalBirthCry || "N/A"}</p>
-                    <p>Birth Weight: {childDetails?.natalHistory?.birthWeight || "N/A"}</p>
-                    <p>Post-Natal: {childDetails?.natalHistory?.postNatal || "N/A"}</p>
+                    <p>
+                        <span className="font-bold text-audi-purple">
+                            Previous Pregnancies:
+                        </span>{" "}
+                        {childDetails?.natalHistory?.previousPregnancies ||
+                            "N/A"}
+                    </p>
+                    <p>
+                        <span className="font-bold text-audi-purple">
+                            Pre-Natal:
+                        </span>{" "}
+                        {childDetails?.natalHistory?.preNatal || "N/A"}
+                    </p>
+                    <p>
+                        <span className="font-bold text-audi-purple">
+                            Pre-Natal Birth Cry:
+                        </span>{" "}
+                        {childDetails?.natalHistory?.preNatalBirthCry || "N/A"}
+                    </p>
+                    <p>
+                        <span className="font-bold text-audi-purple">
+                            Birth Weight:
+                        </span>{" "}
+                        {childDetails?.natalHistory?.birthWeight || "N/A"}
+                    </p>
+                    <p>
+                        <span className="font-bold text-audi-purple">
+                            Post-Natal:
+                        </span>{" "}
+                        {childDetails?.natalHistory?.postNatal || "N/A"}
+                    </p>
                 </div>
 
                 {/* Motor Milestones */}
                 <div>
                     <h3 className="font-bold text-lg">Motor Milestones</h3>
-                    <p>Head Held Up: {childDetails?.motorMilestones?.headHeldUp || "N/A"}</p>
-                    <p>Turned Over: {childDetails?.motorMilestones?.turnedOver || "N/A"}</p>
-                    <p>Crawling: {childDetails?.motorMilestones?.crawling || "N/A"}</p>
-                    <p>Walking Independently: {childDetails?.motorMilestones?.walkingIndependently || "N/A"}</p>
+                    <p>
+                        <span className="font-bold text-audi-purple">
+                            Head Held Up:
+                        </span>{" "}
+                        {childDetails?.motorMilestones?.headHeldUp || "N/A"}
+                    </p>
+                    <p>
+                        <span className="font-bold text-audi-purple">
+                            Turned Over:
+                        </span>{" "}
+                        {childDetails?.motorMilestones?.turnedOver || "N/A"}
+                    </p>
+                    <p>
+                        <span className="font-bold text-audi-purple">
+                            Crawling:
+                        </span>{" "}
+                        {childDetails?.motorMilestones?.crawling || "N/A"}
+                    </p>
+                    <p>
+                        <span className="font-bold text-audi-purple">
+                            Walking Independently:
+                        </span>{" "}
+                        {childDetails?.motorMilestones?.walkingIndependently ||
+                            "N/A"}
+                    </p>
                 </div>
 
                 {/* Speech & Language Milestones */}
                 <div>
-                    <h3 className="font-bold text-lg">Speech & Language Milestones</h3>
-                    <p>Babbling: {childDetails?.speechNLangMilestones?.babbling || "N/A"}</p>
-                    <p>First Word: {childDetails?.speechNLangMilestones?.firstWord || "N/A"}</p>
-                    <p>Two-Word Phrases: {childDetails?.speechNLangMilestones?.twoWordPhrases || "N/A"}</p>
-                    <p>Sentences: {childDetails?.speechNLangMilestones?.sentences || "N/A"}</p>
+                    <h3 className="font-bold text-lg">
+                        Speech & Language Milestones
+                    </h3>
+                    <p>
+                        <span className="font-bold text-audi-purple">
+                            Babbling:
+                        </span>{" "}
+                        {childDetails?.speechNLangMilestones?.babbling || "N/A"}
+                    </p>
+                    <p>
+                        <span className="font-bold text-audi-purple">
+                            First Word:
+                        </span>{" "}
+                        {childDetails?.speechNLangMilestones?.firstWord ||
+                            "N/A"}
+                    </p>
+                    <p>
+                        <span className="font-bold text-audi-purple">
+                            Two-Word Phrases:
+                        </span>{" "}
+                        {childDetails?.speechNLangMilestones?.twoWordPhrases ||
+                            "N/A"}
+                    </p>
+                    <p>
+                        <span className="font-bold text-audi-purple">
+                            Sentences:
+                        </span>{" "}
+                        {childDetails?.speechNLangMilestones?.sentences ||
+                            "N/A"}
+                    </p>
                 </div>
 
                 {/* Educational History */}
                 <div>
                     <h3 className="font-bold text-lg">Educational History</h3>
-                    <p>Difficulties: {childDetails?.educationalHistory?.difficulties || "N/A"}</p>
+                    <p>
+                        <span className="font-bold text-audi-purple">
+                            Difficulties:
+                        </span>{" "}
+                        {childDetails?.educationalHistory?.difficulties ||
+                            "N/A"}
+                    </p>
                 </div>
 
                 {/* Sensory Development */}
                 <div>
                     <h3 className="font-bold text-lg">Sensory Development</h3>
-                    <p>Response to Environmental Sounds: {childDetails?.sensoryDevelopment?.responseToEnvSounds || "N/A"}</p>
-                    <p>Response to Name Call: {childDetails?.sensoryDevelopment?.responseToNameCall || "N/A"}</p>
+                    <p>
+                        <span className="font-bold text-audi-purple">
+                            Response to Environmental Sounds:
+                        </span>{" "}
+                        {childDetails?.sensoryDevelopment
+                            ?.responseToEnvSounds || "N/A"}
+                    </p>
+                    <p>
+                        <span className="font-bold text-audi-purple">
+                            Response to Name Call:
+                        </span>{" "}
+                        {childDetails?.sensoryDevelopment?.responseToNameCall ||
+                            "N/A"}
+                    </p>
                 </div>
 
                 {/* Limitations */}
                 <div>
                     <h3 className="font-bold text-lg">Limitations</h3>
-                    <p>Motor: {childDetails?.limitations?.motor || "N/A"}</p>
-                    <p>Speech: {childDetails?.limitations?.speech || "N/A"}</p>
+                    <p>
+                        <span className="font-bold text-audi-purple">
+                            Motor:
+                        </span>{" "}
+                        {childDetails?.limitations?.motor || "N/A"}
+                    </p>
+                    <p>
+                        <span className="font-bold text-audi-purple">
+                            Speech:
+                        </span>{" "}
+                        {childDetails?.limitations?.speech || "N/A"}
+                    </p>
                 </div>
 
                 {/* Social Skills */}
                 <div>
                     <h3 className="font-bold text-lg">Social Skills</h3>
-                    <p>Social Smile: {childDetails?.socialSkills?.socialSmile || "N/A"}</p>
-                    <p>Initiates Interactions: {childDetails?.socialSkills?.initiatesInteractions || "N/A"}</p>
-                    <p>Plays with Peer Group: {childDetails?.socialSkills?.playsWithPeerGroup || "N/A"}</p>
+                    <p>
+                        <span className="font-bold text-audi-purple">
+                            Social Smile:
+                        </span>{" "}
+                        {childDetails?.socialSkills?.socialSmile || "N/A"}
+                    </p>
+                    <p>
+                        <span className="font-bold text-audi-purple">
+                            Initiates Interactions:
+                        </span>{" "}
+                        {childDetails?.socialSkills?.initiatesInteractions ||
+                            "N/A"}
+                    </p>
+                    <p>
+                        <span className="font-bold text-audi-purple">
+                            Plays with Peer Group:
+                        </span>{" "}
+                        {childDetails?.socialSkills?.playsWithPeerGroup ||
+                            "N/A"}
+                    </p>
                 </div>
 
                 {/* Communication Skills */}
                 <div>
                     <h3 className="font-bold text-lg">Communication Skills</h3>
-                    <p>Audition: {childDetails?.communicationSkills?.audition || "N/A"}</p>
-                    <p>Language: {childDetails?.communicationSkills?.language || "N/A"}</p>
-                    <p>Speech: {childDetails?.communicationSkills?.speech || "N/A"}</p>
+                    <p>
+                        <span className="font-bold text-audi-purple">
+                            Audition:
+                        </span>{" "}
+                        {childDetails?.communicationSkills?.audition || "N/A"}
+                    </p>
+                    <p>
+                        <span className="font-bold text-audi-purple">
+                            Language:
+                        </span>{" "}
+                        {childDetails?.communicationSkills?.language || "N/A"}
+                    </p>
+                    <p>
+                        <span className="font-bold text-audi-purple">
+                            Speech:
+                        </span>{" "}
+                        {childDetails?.communicationSkills?.speech || "N/A"}
+                    </p>
                 </div>
 
                 {/* Other Details */}
                 <div>
                     <h3 className="font-bold text-lg">Other Details</h3>
-                    <p>Test Results: {childDetails?.testResults || "N/A"}</p>
-                    <p>Complaint: {childDetails?.complaint || "N/A"}</p>
-                    <p>Impression: {childDetails?.impression || "N/A"}</p>
-                    <p>Recommendation: {childDetails?.recommendation || "N/A"}</p>
-                    <p>Unusual Behaviours: {childDetails?.unsualBehaviours || "N/A"}</p>
-                    <p>Vegetative Skills & OPEM: {childDetails?.vegetativeSkillsOPEM || "N/A"}</p>
-                    <p>Handedness: {childDetails?.handedness || "N/A"}</p>
+                    <p>
+                        <span className="font-bold text-audi-purple">
+                            Test Results:
+                        </span>{" "}
+                        {childDetails?.testResults || "N/A"}
+                    </p>
+                    <p>
+                        <span className="font-bold text-audi-purple">
+                            Complaint:
+                        </span>{" "}
+                        {childDetails?.complaint || "N/A"}
+                    </p>
+                    <p>
+                        <span className="font-bold text-audi-purple">
+                            Impression:
+                        </span>{" "}
+                        {childDetails?.impression || "N/A"}
+                    </p>
+                    <p>
+                        <span className="font-bold text-audi-purple">
+                            Recommendation:
+                        </span>{" "}
+                        {childDetails?.recommendation || "N/A"}
+                    </p>
+                    <p>
+                        <span className="font-bold text-audi-purple">
+                            Unusual Behaviours:
+                        </span>{" "}
+                        {childDetails?.unsualBehaviours || "N/A"}
+                    </p>
+                    <p>
+                        <span className="font-bold text-audi-purple">
+                            Vegetative Skills & OPEM:
+                        </span>{" "}
+                        {childDetails?.vegetativeSkillsOPEM || "N/A"}
+                    </p>
+                    <p>
+                        <span className="font-bold text-audi-purple">
+                            Handedness:
+                        </span>{" "}
+                        {childDetails?.handedness || "N/A"}
+                    </p>
                 </div>
             </div>
         </div>
