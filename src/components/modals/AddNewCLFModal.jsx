@@ -190,8 +190,29 @@ export default function AddNewCLFModal({ visible, onClose }) {
                         <X />
                     </button>
                     <h1 className="font-bold font-montserrat text-lg">Add New CLF Record</h1>
+                    {/* Navigation Buttons */}
+                    <div className="flex space-x-1 mt-2">
+                        {["Basic Information & Hearing Profile", "Communication Skills", "Development & Assessment"].map(
+                            (label, index) => (
+                                <div className="flex flex-row">
+                                    <button
+                                        key={index}
+                                        onClick={() => setStep(index + 1)}
+                                        className={`${step === index + 1
+                                            ? 'bg-purple-700 text-white'
+                                            : 'bg-gray-200 text-gray-600'
+                                            } px-2 py-1 rounded text-xs`}
+                                    >
+                                        {label}
+                                    </button>
+                                    <div >
+                                        {" > "}
+                                    </div>
+                                </div>
+                            )
+                        )}
+                    </div>
                 </div>
-
                 <div className="font-montserrat p-2 lg:p-4 lg:px-8">
                     <form className="space-y-6 px-4" onSubmit={addPatient}>
                         {/* Step 1 */}
