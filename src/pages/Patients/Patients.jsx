@@ -270,7 +270,7 @@ function Patients() {
 
       {/* Add New Patient Modal */}
       <AddNewPatientModal
-        isOpen={openAddNewPatientModal}
+        visible={openAddNewPatientModal}
         onClose={() => setOpenAddNewPatientModal(false)}
       />
     </div>
