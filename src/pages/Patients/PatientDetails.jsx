@@ -7,11 +7,14 @@ import Swal from "sweetalert2";
 import AddNewCLFModal from "../../components/modals/AddNewCLFModal";
 import PatientProfileDetails from "../../components/PatientProfileDetails";
 import {
-    ArrowBigDown,
     ArrowBigDownDashIcon,
     ArrowBigUpDashIcon,
     PlusCircle,
+    View,
 } from "lucide-react";
+import CLFService from "../../services/CLF.service";
+import EditCLFModal from "../../components/modals/EditCLFModal";
+import ViewCLFModal from "../../components/modals/ViewCLFModal";
 
 const PatientDetails = () => {
     const { id } = useParams();
@@ -21,6 +24,11 @@ const PatientDetails = () => {
     const [isExpanded, setIsExpanded] = useState(false);
     const [patient, setPatient] = useState({});
     const [openAddNewCLF, setOpenAddNewCLF] = useState(false);
+    const [openVerifyUserToRemoveCLF, setOpenVerifyUserToRemoveCLF] =
+        useState(false);
+    const [handlingCLF, setHandlingCLF] = useState({});
+    const [openEditCLF, setOpenEditCLF] = useState(false);
+    const [openViewCLF, setOpenViewCLF] = useState(false);
 
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem("audi-user"));
@@ -37,6 +45,40 @@ const PatientDetails = () => {
 
     const verifyUserToRemovePatient = () => {
         setOpenVerifyUserToRemovePatient(true);
+    };
+    
+    const removeCLFFromPatient = (clf) => {
+        setHandlingCLF(clf);
+        setOpenVerifyUserToRemoveCLF(true);
+    };
+
+    const editCLFModal = (clf) => {
+        setHandlingCLF(clf);
+        setOpenEditCLF(true);
+    };
+
+    const viewCLFModal = (clf) => {
+        setHandlingCLF(clf);
+        setOpenViewCLF(true);
+    };
+
+    const removeCLF = (clf) => {
+        CLFService.deleteCLF(clf._id)
+            .then(() => {
+                Swal.fire({
+                    title: "CLF Removed!",
+                    text: "The CLF has been removed successfully",
+                    icon: "success",
+                }).finally(window.location.reload());
+            })
+            .catch((error) => {
+                console.error(error);
+                Swal.fire({
+                    title: "Error!",
+                    text: "There was an error removing the CLF",
+                    icon: "error",
+                });
+            });
     };
 
     const removePatient = (patient) => {
@@ -75,7 +117,7 @@ const PatientDetails = () => {
 
     return (
         <div className="p-4 px-10">
-            <div className="flex flex-col font-montserrat bg-white p-5 rounded-lg shadow-md mt-5">
+            <div className="flex flex-col text-sm font-montserrat bg-white p-5 rounded-lg shadow-md mt-5">
                 {/* Upper Section: Patient Details */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between">
                     <div className="flex-1 sm:mb-0 mb-4">
@@ -129,7 +171,13 @@ const PatientDetails = () => {
                     </div>
 
                     {/* Surgery and Switched On Dates */}
-                    <div className="text-left sm:text-right mt-6 sm:mt-32">
+                    <div className="text-left sm:text-right mt-6 sm:mt-24">
+                        <div className="mb-2">
+                            <h2 className="text-sm font-montserrat font-normal">
+                                Hearing Age:{" "}
+                                <strong>{patient?.hearingAge || "N/A"} </strong>
+                            </h2>
+                        </div>
                         <div className="mb-2">
                             <h2 className="text-sm font-montserrat font-normal">
                                 Surgery Date:{" "}
@@ -204,48 +252,66 @@ const PatientDetails = () => {
                     </div>
                 )}
             </div>
-            <div className="flex flex-col sm:flex-row items-center justify-between font-montserrat bg-white p-5 rounded-lg shadow-md mt-5">
-                <div className="flex-1 sm:mb-0 mb-4">
-                    <div className="mb-4">
-                        <h2 className="text-lg font-semibold">CLF History</h2>
-                    </div>
-                    <div className="mt-4 flex justify-end">
-                        <button
-                            className="flex flex-row bg-purple-500 mb-2 hover:bg-audi-purple text-white font-semibold py-2 px-6 rounded sm:mr-2"
-                            onClick={() => setOpenAddNewCLF(true)}
-                        >
-                            <PlusCircle size={22} className="mr-2" />
-                            Add New CLF Record
-                        </button>
-                    </div>
-                    <div className="overflow-y-auto h-96">
+            <div className="flex flex-col justify-between font-montserrat bg-white p-5 rounded-lg shadow-md mt-5">
+                <div className="flex flex-col sm:flex-row justify-between mb-4">
+                    <h2 className="text-lg font-semibold">CLF History</h2>
+                    <button
+                        className="flex flex-row bg-purple-500 text-sm mb-2 hover:bg-audi-purple text-white font-semibold py-2 px-6 rounded sm:mr-2"
+                        onClick={() => setOpenAddNewCLF(true)}
+                    >
+                        <PlusCircle size={22} className="mr-2" />
+                        Add New CLF Record
+                    </button>
+                </div>
+                <div className="border border-gray-300 rounded-md font-nunito">
+                    <div className="overflow-x-auto">
                         <table className="min-w-full divide-y divide-gray-200">
                             <thead className="bg-gray-50">
                                 <tr className="text-xs text-gray-700 text-left font-bold uppercase tracking-wider">
                                     <th className="px-4 py-2">Date</th>
                                     <th className="px-4 py-2">Implant Age</th>
                                     <th className="px-4 py-2">CLF Age</th>
+                                    <th className="px-4 py-2">Device</th>
+                                    <th className="px-4 py-2"></th>
                                 </tr>
                             </thead>
                             <tbody className="bg-white divide-y divide-gray-200">
-                                {patient?.clfs?.map((clf) => (
-                                    <tr
-                                        key={clf._id}
-                                        className="text-sm text-gray-700"
-                                    >
-                                        <td className="px-4 py-2">
-                                            {new Date(
-                                                clf.date
-                                            ).toLocaleDateString("en-US")}
-                                        </td>
-                                        <td className="px-4 py-2">
-                                            {clf.implantAge || "N/A"}
-                                        </td>
-                                        <td className="px-4 py-2">
-                                            {clf.clfAge || "N/A"}
-                                        </td>
-                                    </tr>
-                                ))}
+                                {patient?.clfs
+                                    ?.slice()
+                                    .reverse()
+                                    .map((clf) => (
+                                        <tr
+                                            key={clf._id}
+                                            className="text-sm text-gray-700 border-b border-gray-200"
+                                        >
+                                            <td className="px-4 py-2">
+                                            {new Date(clf.date).toISOString().split('T')[0]}
+                                            </td>
+                                            <td className="px-4 py-2">
+                                                {clf?.basic?.implantAge || "N/A"}
+                                            </td>
+                                            <td className="px-4 py-2">
+                                                {clf?.CLFAge || "N/A"}
+                                            </td>
+                                            <td className="px-4 py-2">
+                                                {clf?.basic?.device || "N/A"}
+                                            </td>
+                                            <td className="flex px-4 py-2 justify-end">
+                                                <button className="bg-red-500 hover:bg-red-800 text-white font-bold py-2 px-4 mr-2 rounded"
+                                                onClick={()=>{removeCLFFromPatient(clf)}}>
+                                                    Remove
+                                                </button>
+                                                <button className="bg-amber-500 hover:bg-amber-800 text-white font-bold py-2 px-7 mr-2 rounded"
+                                                onClick={()=>{editCLFModal(clf)}}>
+                                                    Edit
+                                                </button>
+                                                <button className="bg-green-500 hover:bg-green-800 text-white font-bold py-2 px-7 rounded"
+                                                onClick={()=>{viewCLFModal(clf)}}>
+                                                    View
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
                             </tbody>
                         </table>
                     </div>
@@ -270,6 +336,23 @@ const PatientDetails = () => {
                 visible={openAddNewCLF}
                 onClose={() => setOpenAddNewCLF(false)}
                 patient={patient}
+            />
+            <VerifyUserModal
+                visible={openVerifyUserToRemoveCLF}
+                onClose={() => setOpenVerifyUserToRemoveCLF(false)}
+                titleText="Do you really wish to remove the CLF?"
+                optionalText="The CLF will be removed from the patient's history. Please verify your password to proceed."
+                onConfirm={() => removeCLF(handlingCLF)}
+            />
+            <EditCLFModal
+                visible={openEditCLF}
+                onClose={() => setOpenEditCLF(false)}
+                clfId={handlingCLF?._id}
+            />
+            <ViewCLFModal
+                visible={openViewCLF}
+                onClose={() => setOpenViewCLF(false)}
+                clf={handlingCLF}
             />
         </div>
     );

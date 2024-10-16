@@ -382,7 +382,7 @@ const OrganizationManagement = () => {
       {/* Table Section */}
       <div className="flex flex-col justify-between font-montserrat bg-white p-5 rounded-lg shadow-md mt-5">
         <div className="mt-5">
-          <h3>Therapists</h3>
+          <h3 className="font-semibold text-lg">Therapists</h3>
         </div>
         <div className="border border-gray-300 rounded-md font-nunito mt-5">
           <div className="overflow-x-auto">
