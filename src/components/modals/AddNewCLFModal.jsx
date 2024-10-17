@@ -205,7 +205,7 @@ export default function AddNewCLFModal({ visible, onClose }) {
                                     >
                                         {label}
                                     </button>
-                                    <div >
+                                    <div className="mt-2">
                                         {" > "}
                                     </div>
                                 </div>

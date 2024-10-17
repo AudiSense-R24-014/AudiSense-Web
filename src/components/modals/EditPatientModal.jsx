@@ -44,6 +44,7 @@ const customSelectStyles = {
 };
 
 export default function EditPatientModal({ visible, onClose, patientId }) {
+    const [errors, setErrors] = useState({});
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
@@ -68,7 +69,7 @@ export default function EditPatientModal({ visible, onClose, patientId }) {
             natalHistory: {
                 previousPregnancies: "",
                 preNatal: "",
-                preNatalBirthCry: "",
+                periNatalBirthCry: "",
                 postNatal: "",
                 birthWeight: "",
             },
@@ -169,6 +170,14 @@ export default function EditPatientModal({ visible, onClose, patientId }) {
     };
 
     const handleIsImplantedChange = (selectedOption) => {
+        if(selectedOption.value === false){
+            setFormData((prevState) => ({
+                ...prevState,
+                implant: {
+                    surgeryDate: "",
+                    switchOnDate: "",
+                },
+            }));}
         setFormData((prevState) => ({
             ...prevState,
             implant: {
@@ -180,6 +189,70 @@ export default function EditPatientModal({ visible, onClose, patientId }) {
 
     const updatePatient = (e) => {
         e.preventDefault();
+
+        const newErrors = {}; // Object to hold new error messages
+
+        // First name validation
+        if (!formData.firstName) {
+            newErrors.firstName = "First name is required.";
+        }
+        // Last name validation
+        if (!formData?.lastName) {
+            newErrors.lastName = "Last name is required.";
+        }
+        // Date of Birth validation
+        if (!formData?.dob) {
+            newErrors.dob = "Date of Birth is required.";
+        }
+        //Gender validation
+        if (!formData.gender) {
+            newErrors.gender = "Gender Required";
+        }
+        // Email validation
+        if (!formData.email) {
+            newErrors.email = "Email is required.";
+            valid = false;
+        } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email)) {
+            newErrors.email = "Please enter a valid email address.";
+        }
+        // Hearing Age validation
+        if (!formData.hearingAge) {
+            newErrors.hearingAge = "Hearing Age is required.";
+        }
+        // Is Implanted validation
+        if (formData?.implant?.isImplanted!==true && formData?.implant?.isImplanted!==false) {
+            newErrors.isImplanted = "Please select an option.";
+        }
+        // Contact number validation (optional)
+        if (!formData?.contactNo || !/^[0-9]{10}$/.test(formData.contactNo)) {
+            newErrors.contactNo = "Please enter a valid 10-digit contact number.";
+        }
+
+        
+        if(formData?.implant?.isImplanted === true){
+            if (!formData?.implant?.surgeryDate) {
+                newErrors.surgeryDate = "Surgery Date is required.";
+            }
+            if (!formData?.implant?.switchOnDate) {
+                newErrors.switchOnDate = "Switch On Date is required.";
+            }
+        }
+        
+
+        // Check if there are any errors
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+            Swal.fire({
+                title: "Error!",
+                text: "An error occurred while updating patient details!",
+                icon: "error",
+            });
+            return;
+        }
+
+        // Clear errors if validation passes
+        setErrors({});
+
         Swal.fire({
             title: "Are you sure?",
             text: "You are about to update patient details!",
@@ -234,6 +307,29 @@ export default function EditPatientModal({ visible, onClose, patientId }) {
                     <h1 className="font-bold font-montserrat text-lg">
                         Update Patient Details
                     </h1>
+                    {/* Navigation Buttons */}
+                    <div className="flex space-x-1 mt-2">
+                        {["General Details", "Medical History", "Development History", "Personal & Educational Background", "Behavioral & Sensory Profile", "Oral & Communication Abilities", "Assessment Summary & Recommendations"].map(
+                            (label, index) => (
+                                <div className="flex flex-row">
+                                    <button
+                                        key={index}
+                                        onClick={() => setStep(index + 1)}
+                                        className={`${step === index + 1
+                                            ? 'bg-purple-700 text-white'
+                                            : 'bg-gray-200 text-gray-600'
+                                            } px-2 py-1 rounded text-xs`}
+                                    >
+                                        {label}
+                                    </button>
+                                    {index < 6 && (
+                                        <div className="mt-2">
+                                            {" > "}
+                                        </div>)}
+                                </div>
+                            )
+                        )}
+                    </div>
                 </div>
 
                 <div className="font-montserrat p-2 lg:p-4 lg:px-8">
@@ -254,12 +350,14 @@ export default function EditPatientModal({ visible, onClose, patientId }) {
                                                 type="text"
                                                 name="firstName"
                                                 id="firstName"
-                                                className="input-field"
+                                                className={`input-field ${errors?.firstName ? "border-red-500" : ""}`}
                                                 placeholder="First Name"
                                                 value={formData?.firstName}
                                                 onChange={handleInputChange}
-                                                required
-                                            />
+
+                                            />{errors?.firstName && (
+                                                <p className="text-red-500 text-sm mt-1">{errors?.firstName}</p>
+                                            )}
                                         </div>
                                         <div className="flex-1">
                                             <label
@@ -272,12 +370,14 @@ export default function EditPatientModal({ visible, onClose, patientId }) {
                                                 type="text"
                                                 name="lastName"
                                                 id="lastName"
-                                                className="input-field"
+                                                className={`input-field ${errors?.lastName ? "border-red-500" : ""}`}
                                                 placeholder="Last Name"
                                                 value={formData?.lastName}
                                                 onChange={handleInputChange}
-                                                required
                                             />
+                                            {errors?.lastName && (
+                                                <p className="text-red-500 text-sm mt-1">{errors?.lastName}</p>
+                                            )}
                                         </div>
                                     </div>
 
@@ -294,14 +394,16 @@ export default function EditPatientModal({ visible, onClose, patientId }) {
                                                 type="date"
                                                 name="dob"
                                                 id="dob"
-                                                className="input-field"
+                                                className={`input-field ${errors?.dob ? "border-red-500" : ""}`}
                                                 placeholder="Date of Birth"
                                                 value={
                                                     formData?.dob.split("T")[0]
                                                 }
                                                 onChange={handleInputChange}
-                                                required
                                             />
+                                            {errors?.dob && (
+                                                <p className="text-red-500 text-sm mt-1">{errors?.dob}</p>
+                                            )}
                                         </div>
 
                                         <div className="flex-1">
@@ -320,8 +422,13 @@ export default function EditPatientModal({ visible, onClose, patientId }) {
                                                     label: formData?.gender,
                                                 }}
                                                 onChange={handleGenderChange}
-                                                className="pt-0.5"
+                                                className={`pt-0.5 ${
+                                                    errors.gender ? "border-red-500" : ""
+                                                }`}
                                             />
+                                            {errors?.gender && (
+                                                <p className="text-red-500 text-sm mt-1">{errors?.gender}</p>
+                                            )}
                                         </div>
                                     </div>
 
@@ -338,12 +445,16 @@ export default function EditPatientModal({ visible, onClose, patientId }) {
                                                 type="text"
                                                 name="contactNo"
                                                 id="contactNo"
-                                                className="input-field"
+                                                className={`input-field ${
+                                                    errors?.contactNo ? "border-red-500" : ""
+                                                }`}
                                                 placeholder="Contact Number"
                                                 value={formData?.contactNo}
                                                 onChange={handleInputChange}
-                                                required
                                             />
+                                            {errors?.contactNo && (
+                                                <p className="text-red-500 text-sm mt-1">{errors?.contactNo}</p>
+                                            )}
                                         </div>
                                         <div className="flex-1">
                                             <label
@@ -356,12 +467,16 @@ export default function EditPatientModal({ visible, onClose, patientId }) {
                                                 type="email"
                                                 name="email"
                                                 id="email"
-                                                className="input-field"
+                                                className={`input-field ${
+                                                    errors?.email ? "border-red-500" : ""
+                                                }`}
                                                 placeholder="Email"
                                                 value={formData?.email}
                                                 onChange={handleInputChange}
-                                                required
                                             />
+                                            {errors?.email && (
+                                                <p className="text-red-500 text-sm mt-1">{errors?.email}</p>
+                                            )}
                                         </div>
                                     </div>
 
@@ -378,12 +493,16 @@ export default function EditPatientModal({ visible, onClose, patientId }) {
                                                 type="text"
                                                 name="hearingAge"
                                                 id="hearingAge"
-                                                className="input-field"
+                                                className={`input-field ${
+                                                    errors?.hearingAge ? "border-red-500" : ""
+                                                }`}
                                                 placeholder="Hearing Age"
                                                 value={formData?.hearingAge}
                                                 onChange={handleInputChange}
-                                                required
                                             />
+                                            {errors?.hearingAge && (
+                                                <p className="text-red-500 text-sm mt-1">{errors?.hearingAge}</p>
+                                            )}
                                         </div>
                                         <div className="flex-1">
                                             <label
@@ -409,59 +528,84 @@ export default function EditPatientModal({ visible, onClose, patientId }) {
                                                 onChange={
                                                     handleIsImplantedChange
                                                 }
-                                                className="pt-0.5"
+                                                className={`pt-0.5 ${
+                                                    errors?.isImplanted
+                                                        ? "border-red-500"
+                                                        : ""
+                                                }`}
                                             />
+                                            {errors?.isImplanted && (
+                                                <p className="text-red-500 text-sm mt-1">
+                                                    {errors?.isImplanted}
+                                                </p>
+                                            )}
                                         </div>
                                     </div>
-
-                                    {/* Enrolled Date, Surgery Date & Switch On Date */}
-                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 my-4">
-                                        <div className="flex-1">
-                                            <label
-                                                htmlFor="surgeryDate"
-                                                className="block mb-2 text-sm font-medium text-gray-900"
-                                            >
-                                                Surgery Date
-                                            </label>
-                                            <input
-                                                type="date"
-                                                name="implant.surgeryDate"
-                                                id="surgeryDate"
-                                                className="input-field"
-                                                placeholder="Surgery Date"
-                                                value={
-                                                    formData?.implant?.surgeryDate.split(
-                                                        "T"
-                                                    )[0]
-                                                }
-                                                onChange={handleInputChange}
-                                                required
-                                            />
+                                    {formData?.implant?.isImplanted === true && (
+                                        // Enrolled Date, Surgery Date & Switch On Date */
+                                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 my-4">
+                                            <div className="flex-1">
+                                                <label
+                                                    htmlFor="surgeryDate"
+                                                    className="block mb-2 text-sm font-medium text-gray-900"
+                                                >
+                                                    Surgery Date
+                                                </label>
+                                                <input
+                                                    type="date"
+                                                    name="implant.surgeryDate"
+                                                    id="surgeryDate"
+                                                    className={`input-field ${
+                                                        errors?.surgeryDate
+                                                            ? "border-red-500"
+                                                            : ""
+                                                    }`}
+                                                    placeholder="Surgery Date"
+                                                    value={
+                                                        formData?.implant?.surgeryDate?.split(
+                                                            "T"
+                                                        )[0]
+                                                    }
+                                                    onChange={handleInputChange}
+                                                />
+                                                {errors?.surgeryDate && (
+                                                    <p className="text-red-500 text-sm mt-1">
+                                                        {errors?.surgeryDate}
+                                                    </p>
+                                                )}
+                                            </div>
+                                            <div className="flex-1">
+                                                <label
+                                                    htmlFor="switchOnDate"
+                                                    className="block mb-2 text-sm font-medium text-gray-900"
+                                                >
+                                                    Switch On Date
+                                                </label>
+                                                <input
+                                                    type="date"
+                                                    name="implant.switchOnDate"
+                                                    id="switchOnDate"
+                                                    className={`input-field ${
+                                                        errors?.switchOnDate
+                                                            ? "border-red-500"
+                                                            : ""
+                                                    }`}
+                                                    placeholder="Switch On Date"
+                                                    value={
+                                                        formData?.implant?.switchOnDate?.split(
+                                                            "T"
+                                                        )[0]
+                                                    }
+                                                    onChange={handleInputChange}
+                                                />
+                                                {errors?.switchOnDate && (
+                                                    <p className="text-red-500 text-sm mt-1">
+                                                        {errors?.switchOnDate}
+                                                    </p>
+                                                )}
+                                            </div>
                                         </div>
-                                        <div className="flex-1">
-                                            <label
-                                                htmlFor="switchOnDate"
-                                                className="block mb-2 text-sm font-medium text-gray-900"
-                                            >
-                                                Switch On Date
-                                            </label>
-                                            <input
-                                                type="date"
-                                                name="implant.switchOnDate"
-                                                id="switchOnDate"
-                                                className="input-field"
-                                                placeholder="Switch On Date"
-                                                value={
-                                                    formData?.implant?.switchOnDate.split(
-                                                        "T"
-                                                    )[0]
-                                                }
-                                                onChange={handleInputChange}
-                                                required
-                                            />
-                                        </div>
-                                    </div>
-
+                                    )}
                                     {/* Complaints Text Area */}
                                     <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-8 my-2">
                                         <div className="flex-1">
@@ -632,7 +776,7 @@ export default function EditPatientModal({ visible, onClose, patientId }) {
                                             placeholder="Birth Cry"
                                             value={
                                                 formData?.child?.natalHistory
-                                                    ?.preNatalBirthCry
+                                                    ?.periNatalBirthCry
                                             }
                                             onChange={handleInputChange}
                                         />

@@ -48,9 +48,9 @@ const PatientProfileDetails = ({ patient }) => {
                     </p>
                     <p>
                         <span className="font-bold text-audi-purple">
-                            Pre-Natal Birth Cry:
+                            PeriNatal Birth Cry:
                         </span>{" "}
-                        {childDetails?.natalHistory?.preNatalBirthCry || "N/A"}
+                        {childDetails?.natalHistory?.periNatalBirthCry || "N/A"}
                     </p>
                     <p>
                         <span className="font-bold text-audi-purple">
