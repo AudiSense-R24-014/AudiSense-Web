@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import CLFService from "../../services/CLF.service";
 import Swal from "sweetalert2";
 
-export default function AddNewCLFModal({ visible, onClose, patient }) {
+export default function EditCLFModal({ visible, onClose, clfId }) {
     const [formData, setFormData] = useState({
         patient: "",
         date: "",
@@ -59,11 +59,12 @@ export default function AddNewCLFModal({ visible, onClose, patient }) {
     });
 
     useEffect(() => {
-        setFormData((prevState) => ({
-            ...prevState,
-            patient: patient._id,
-        }));
-    }, [patient]);
+        CLFService.getCLFById(clfId).then((data) => {
+            setFormData(data);
+        }).catch((err) => {
+            console.error("Error getting CLF by ID: ", err);
+        });
+    }, [clfId]);
 
     const [step, setStep] = useState(1); // Step control state
 
@@ -96,7 +97,7 @@ export default function AddNewCLFModal({ visible, onClose, patient }) {
             return updatedFormData;
         });
     };
-    const addCLF = (e) => {
+    const updateCLF = (e) => {
         e.preventDefault();
 
         Swal.fire({
@@ -109,7 +110,7 @@ export default function AddNewCLFModal({ visible, onClose, patient }) {
             confirmButtonText: "Yes, add it!",
         }).then((result) => {
             if (result.isConfirmed) {
-                CLFService.createCLF(formData)
+                CLFService.updateCLF(formData)
                     .then(() => {
                         Swal.fire({
                             title: "Success!",
@@ -174,7 +175,7 @@ export default function AddNewCLFModal({ visible, onClose, patient }) {
                     </div>
                 </div>
                 <div className="font-montserrat p-2 lg:p-4 lg:px-8">
-                    <form className="space-y-6 px-4" onSubmit={addCLF}>
+                    <form className="space-y-6 px-4" onSubmit={updateCLF}>
                         {/* Step 1 */}
                         {step === 1 && (
                             <>
@@ -194,7 +195,7 @@ export default function AddNewCLFModal({ visible, onClose, patient }) {
                                             name="date"
                                             id="date"
                                             className="input-field"
-                                            value={formData?.date}
+                                            value={formData?.date?.split("T")[0]}
                                             onChange={handleInputChange}
                                             required
                                         />
@@ -956,7 +957,7 @@ export default function AddNewCLFModal({ visible, onClose, patient }) {
                                         type="submit"
                                         className="text-white bg-audi-purple hover:bg-purple-900 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-8 py-2.5"
                                     >
-                                        Create CLF Record
+                                        Update CLF Record
                                     </button>
                                 </div>
                             </div>
@@ -968,8 +969,8 @@ export default function AddNewCLFModal({ visible, onClose, patient }) {
     );
 }
 
-AddNewCLFModal.propTypes = {
+EditCLFModal.propTypes = {
     visible: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
-    patient: PropTypes.object.isRequired,
+    clfId: PropTypes.string.isRequired,
 };

@@ -35,7 +35,33 @@ const createCLF = async (clf) => {
         body: JSON.stringify(clf),
     });
     const data = await response.json();
+    console.log(data);
     return data;
 };
 
-export default { getCLFs, getCLFById, createCLF };
+const deleteCLF = async (id) => {
+    const response = await fetch(URL.CLF_BY_ID(id), {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+        },
+    });
+    const data = await response.json();
+    return data;
+};
+
+const updateCLF = async (clf) => {
+    const response = await fetch(URL.CLF_BY_ID(clf._id), {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(clf),
+    });
+    const data = await response.json();
+    return data;
+};
+
+export default { getCLFs, getCLFById, createCLF, deleteCLF, updateCLF };
