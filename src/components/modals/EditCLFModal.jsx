@@ -102,19 +102,19 @@ export default function EditCLFModal({ visible, onClose, clfId }) {
 
         Swal.fire({
             title: "Are you sure?",
-            text: "Do you want to add this CLF Record?",
+            text: "Do you want to update this CLF Record?",
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, add it!",
+            confirmButtonText: "Update!",
         }).then((result) => {
             if (result.isConfirmed) {
                 CLFService.updateCLF(formData)
                     .then(() => {
                         Swal.fire({
                             title: "Success!",
-                            text: "CLF Record added successfully",
+                            text: "CLF Record updated successfully",
                             icon: "success",
                         }).finally(window.location.reload());
                     })
@@ -149,7 +149,7 @@ export default function EditCLFModal({ visible, onClose, clfId }) {
                         <X />
                     </button>
                     <h1 className="font-bold font-montserrat text-lg">
-                        Add New CLF Record
+                        Edit CLF Record : {formData?.date?.split("T")[0]}
                     </h1>
                     {/* Navigation Buttons */}
                     <div className="flex space-x-1 mt-2">
