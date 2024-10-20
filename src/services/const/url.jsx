@@ -24,6 +24,7 @@ export const ORGANIZATION_REMOVE_THERAPIST = `${BASE_URL}/organizations/therapis
 export const ORGANIZATION_MAKE_ADMIN = `${BASE_URL}/organizations/admin/`;
 export const ORGANIZATION_REMOVE_ADMIN = `${BASE_URL}/organizations/admin/remove/`;
 export const ORGANIZATION_IS_ADMIN = `${BASE_URL}/organizations/isTherapistAdmin/`;
+export const ORGANIZATION_DASHBOARD = (id) => `${BASE_URL}/organizations/dashboard/${id}/`;
 
 export const ORG_REQUESTS = `${BASE_URL}/orgRequests/`;
 export const ORG_REQUESTS_BY_ID = (id) => `${BASE_URL}/orgRequests/${id}/`;

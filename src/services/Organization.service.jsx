@@ -103,6 +103,18 @@ const removeAdminPrivileges = async (organizationId, therapistId) => {
   return data;
 };
 
+const getOrganizationDashboard = async (id) => {
+  const response = await fetch(URL.ORGANIZATION_DASHBOARD(id), {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  const data = await response.json();
+  return data;
+}
+
 export default {
   createOrganization,
   getOrganizationById,
@@ -112,4 +124,5 @@ export default {
   getOrganizationByJoinCode,
   isTherapistAdmin,
   removeAdminPrivileges,
+  getOrganizationDashboard,
 };
