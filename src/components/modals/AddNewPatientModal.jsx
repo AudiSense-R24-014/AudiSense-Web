@@ -102,11 +102,9 @@ export default function AddNewPatientModal({ visible, onClose }) {
 
   const addPatient = (e) => {
     e.preventDefault();
-    // console.log(formData);
-
 
     const newErrors = {}; // Object to hold new error messages
-
+    let valid = true; // Variable to check if form is valid
     // First name validation
     if (!formData.firstName) {
       newErrors.firstName = "First name is required.";
