@@ -26,8 +26,8 @@ ChartJS.register(
 
 const Dashboard = () => {
     const orgId = JSON.parse(localStorage.getItem("audi-user"))?.organization;
-    console.log(orgId);
-    const [data, setData] = useState(null); // Set initial state to null to handle loading
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         if (orgId) {
@@ -37,14 +37,15 @@ const Dashboard = () => {
                 })
                 .catch((error) => {
                     console.error("Error fetching dashboard data:", error);
+                })
+                .finally(() => {
+                    setLoading(false);
                 });
         }
     }, [orgId]);
 
-    if (!data) {
-        return (
-            <Loading/>
-        );
+    if (loading) {
+        return <Loading />;
     }
 
     // Data for charts
