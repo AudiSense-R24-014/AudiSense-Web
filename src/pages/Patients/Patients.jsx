@@ -3,6 +3,7 @@ import AddNewPatientModal from "../../components/modals/AddNewPatientModal";
 import PatientService from "../../services/Patient.service";
 import { useNavigate } from "react-router-dom";
 import { PlusCircle } from "lucide-react";
+import Loading from "../../components/Loading";
 
 function Patients() {
     const therapistUser = JSON.parse(localStorage.getItem("audi-user"));
@@ -157,10 +158,7 @@ function Patients() {
             {(() => {
                 if (loading) {
                     return (
-                        <div className="flex justify-center items-center h-96">
-                            <div className="loader"></div>
-                            <p>Loading patients...</p>
-                        </div>
+                        <Loading />
                     );
                 } else if (currentPatients?.length === 0) {
                     return (
