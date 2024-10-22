@@ -59,7 +59,9 @@ export const IDENTIFICATION_LEVEL2 = `${BASE_URL}/identification-level2/`;
 
 export const COMPREHENSIVE_DOC_GEN = `${BASE_URL}/comprehension-generate/`;
 export const COMPREHENSIVE_TASK_PERSIST = `${BASE_URL}/comprehension-task/`;
+export const COMPREHENSIVE_TASK_BY_ID = (id) => `${BASE_URL}/comprehension-task/${id}/`;
 export const COMPREHENSIVE_FEEDBACK = `${BASE_URL}/comprehension-feedback/`;
 export const COMPREHENSIVE_FEEDBACK_BY_ID = (id) => `${BASE_URL}/comprehension-feedback/${id}/`;
 export const COMPREHENSIVE_ACTIVITY = `${BASE_URL}/comprehension-activity/`;
 export const COMPREHENSIVE_ACTIVITY_BY_ID =(id) => `${BASE_URL}/comprehension-activity/${id}/`;
+export const COMPREHENSIVE_ACTIVITY_BY_ORGANIZATION = (id) => `${BASE_URL}/comprehension-activity/organization/${id}/`;
