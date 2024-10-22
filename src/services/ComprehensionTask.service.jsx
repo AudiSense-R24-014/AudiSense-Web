@@ -103,7 +103,16 @@ const updateActivityById = async (id, activity) => {
     const data = await response.json();
     return data;
 }
-
+const getComprehensionTaskById = async (id) => {
+    const response = await fetch(URL.COMPREHENSIVE_TASK_BY_ID(id), {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    const data = await response.json();
+    return data;
+}
 export default {
     generate,
     persist,
@@ -113,5 +122,6 @@ export default {
     createActivity,
     getAllActivity,
     getActivityById,
-    updateActivityById
+    updateActivityById,
+    getComprehensionTaskById
 };
