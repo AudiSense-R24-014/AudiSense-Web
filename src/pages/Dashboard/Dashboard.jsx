@@ -117,7 +117,7 @@ const Dashboard = () => {
             </h1>
 
             {/* Organization Container */}
-            <div className="mt-8 bg-white p-6 rounded-lg shadow-md grid grid-cols-1 xl:grid-cols-2 gap-4">
+            <div className="mt-8 bg-white p-6 rounded-lg shadow-md grid grid-cols-1 xl:grid-cols-[1fr_2fr] gap-4">
                 {/* Left column: Org image and name */}
                 <div className="flex flex-col items-center xl:items-start">
                     <h2 className="text-2xl lg:text-4xl font-medium mb-4 font-montserrat">
