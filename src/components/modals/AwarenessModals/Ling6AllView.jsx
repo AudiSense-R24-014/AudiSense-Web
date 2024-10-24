@@ -3,16 +3,18 @@ import { X } from "lucide-react";
 import PropTypes from "prop-types";
 import moment from "moment";
 import Ling6AllService from "../../../services/AwarenessSerivce/Ling6All.service";
+import AwarenessBasicService from "../../../services/AwarenessSerivce/AwarenessBasic.service";
 import PatientService from '../../../services/Patient.service'
 
 export default function Ling6AllView({ visible, onClose, getData, data, patients }) {
 
     const [selectedPatient, setSelectedPatient] = useState(null);
     const [patientData, setPatientData] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         if (data?.patientID) {
-            PatientService.getPatient(data.patientID)
+            PatientService.getPatientById(data.patientID)
                 .then((response) => {
                     setPatientData(response);
                 })
@@ -27,6 +29,33 @@ export default function Ling6AllView({ visible, onClose, getData, data, patients
 
     if (!visible) {
         return null;
+    }
+
+    const analyzeSoundData = async () => {
+        setIsLoading(true);
+        await AwarenessBasicService.analyzeGaze({ videoUrl: data.responseVideo })
+            .then((response) => {
+                alert("Sound data analyzed successfully.");
+                console.log(response);
+                const updatedData = {
+                    soundUrl: data.soundUrl,
+                    responseArray: response.isLookingCenter,
+                }
+                Ling6AllService.analyzeLing6All(data._id, updatedData)
+                    .then((response) => {
+                        alert("Ling 6 Sound data analyzed successfully.");
+                        console.log(response);
+                        setIsLoading(false);
+                        getData();
+                        onClose();
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                        alert("Error analyzing sound data.");
+                    }).finally(() => {
+
+                    });
+            })
     }
 
     const handlePatientAssign = () => {
@@ -103,7 +132,7 @@ export default function Ling6AllView({ visible, onClose, getData, data, patients
                     {patientData ? (
                         <div className="p-4 bg-green-50 rounded-lg shadow-inner">
                             <h3 className="text-lg font-semibold text-gray-800">Assigned Patient:</h3>
-                            <p className="text-md text-gray-700">Name: {patientData.fName} {patientData.lName}</p>
+                            <p className="text-md text-gray-700">Name: {patientData.firstName} {patientData.lastName}</p>
                             <p className="text-sm text-gray-500">Email: {patientData.email}</p>
 
                             {data.isResponded ? (
@@ -120,15 +149,54 @@ export default function Ling6AllView({ visible, onClose, getData, data, patients
                                             </span>
                                         )}
                                     </p>
-                                    <p className="text-md text-gray-700">Response: {data.response ? (
-                                        <span className="bg-green-500 text-white font-bold py-1 px-2 rounded-full">
-                                            Yes
-                                        </span>
+                                    {data.isAnalyzed ? (
+                                        <p className="text-md text-gray-700">Response:
+                                            {/* {data.response ? (
+                                            <span className="bg-green-500 text-white font-bold py-1 px-2 rounded-full">
+                                                Yes
+                                            </span>
+                                        ) : (
+                                            <span className="bg-red-500 text-white font-bold py-1 px-2 rounded-full">
+                                                No
+                                            </span>
+                                        )} */}
+                                            <div className="grid grid-cols-2 gap-4">
+                                                {data.responses.map((response, index) => (
+                                                    <div key={index} className="mt-4">
+                                                        <p className="text-md text-gray-700">
+                                                            {response.name} - {response.response ? (
+                                                                <span className="bg-green-500 text-white font-bold py-1 px-2 rounded-full">
+                                                                    Yes
+                                                                </span>
+                                                            ) : (
+                                                                <span className="bg-red-500 text-white font-bold py-1 px-2 rounded-full">
+                                                                    No
+                                                                </span>
+                                                            )}
+                                                        </p>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </p>
                                     ) : (
-                                        <span className="bg-red-500 text-white font-bold py-1 px-2 rounded-full">
-                                            No
-                                        </span>
-                                    )}</p>
+                                        <>
+                                            {
+                                                isLoading ? (
+                                                    <p className="text-sm text-gray-500">Analyzing...</p>
+                                                ) : (
+                                                    <button
+                                                        onClick={() => {
+
+                                                            analyzeSoundData()
+                                                        }}
+                                                        className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+                                                    >
+                                                        Analyze Sound Data
+                                                    </button>
+                                                )
+                                            }
+                                        </>
+                                    )}
                                 </div>
                             ) : (
                                 <p className="text-sm text-red-500">Patient has not responded.</p>
@@ -146,7 +214,7 @@ export default function Ling6AllView({ visible, onClose, getData, data, patients
                                 {patients.length > 0 &&
                                     patients.map((patient) => (
                                         <option key={patient._id} value={patient._id}>
-                                            {patient.fName} {patient.lName}
+                                            {patient.firstName} {patient.lastName}
                                         </option>
                                     ))}
                             </select>
