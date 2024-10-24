@@ -9,8 +9,7 @@ import PatientProfileDetails from "../../components/PatientProfileDetails";
 import {
     ArrowBigDownDashIcon,
     ArrowBigUpDashIcon,
-    PlusCircle,
-    View,
+    PlusCircle
 } from "lucide-react";
 import CLFService from "../../services/CLF.service";
 import EditCLFModal from "../../components/modals/EditCLFModal";

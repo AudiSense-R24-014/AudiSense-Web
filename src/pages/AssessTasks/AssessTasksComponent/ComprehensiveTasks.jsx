@@ -3,6 +3,7 @@ import ComprehensiveTasksService from "../../../services/ComprehensionTask.servi
 import AssessComprehensiveActivityModal from "../../../components/modals/AssessComprehensiveActivityModal.jsx";
 import ViewComprehensiveActivityModal from "../../../components/modals/ViewComprehensiveActivityModal.jsx";
 import Swal from "sweetalert2";
+import Loading from "../../../components/Loading.jsx";
 
 const ComprehensiveTasks = () => {
     const orgId = JSON.parse(localStorage.getItem("audi-user"))?.organization;
@@ -19,6 +20,7 @@ const ComprehensiveTasks = () => {
     const loadActivities = () => {
         ComprehensiveTasksService.getAcitivitiesByOrganization(orgId)
             .then((data) => {
+                console.log(data);
                 setActivities(data);
             })
             .catch((error) => {
@@ -112,6 +114,12 @@ const ComprehensiveTasks = () => {
             );
         }
     };
+
+    if(activities.length === 0) {
+        return (
+            <Loading />
+        );
+    }
 
     return (
         <div className="flex-1">
