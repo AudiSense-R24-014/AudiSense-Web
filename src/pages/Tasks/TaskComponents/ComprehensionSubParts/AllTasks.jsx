@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import ComprehensionTaskService from "../../../../services/ComprehensionTask.service";
 import AssignComprehensiveTaskModal from "../../../../components/modals/AssignComprehensiveTaskModal";
 import ViewComprehensiveTaskModal from "../../../../components/modals/ViewComprehensiveTaskModal";
+import Loading from "../../../../components/Loading";
 
 const AllTasks = () => {
     const [allFeedback, setAllFeedback] = useState([]);
@@ -15,7 +16,6 @@ const AllTasks = () => {
         ComprehensionTaskService.getFeedback()
             .then((response) => {
                 setAllFeedback(response);
-                console.log(response);
             })
             .catch((error) => {
                 console.error(error);
@@ -31,6 +31,12 @@ const AllTasks = () => {
         setFeedbackId(feedback._id);
         setOpenViewModal(true);
     };
+
+    if(allFeedback.length === 0) {
+        return (
+            <Loading />
+        );
+    }
 
     return (
         <div className="flex-1">
