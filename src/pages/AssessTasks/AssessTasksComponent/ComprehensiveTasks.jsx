@@ -19,6 +19,7 @@ const ComprehensiveTasks = () => {
     const loadActivities = () => {
         ComprehensiveTasksService.getAcitivitiesByOrganization(orgId)
             .then((data) => {
+                console.log(data);
                 setActivities(data);
             })
             .catch((error) => {
