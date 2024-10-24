@@ -44,17 +44,19 @@ const customSelectStyles = {
 };
 
 export default function AddNewPatientModal({ visible, onClose }) {
+
+  const [errors, setErrors] = useState({});
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     dob: "",
-    gender: null,
+    gender: undefined,
     contactNo: "",
     email: "",
     password: "",
     repeatPassword: "",
     hearingAge: "",
-    isImplanted: null,
+    isImplanted: undefined,
     organization: "",
     surgeryDate: "",
     switchOnDate: "",
@@ -100,23 +102,89 @@ export default function AddNewPatientModal({ visible, onClose }) {
 
   const addPatient = (e) => {
     e.preventDefault();
-    // console.log(formData);
+
+    const newErrors = {}; // Object to hold new error messages
+    let valid = true; // Variable to check if form is valid
+    // First name validation
+    if (!formData.firstName) {
+      newErrors.firstName = "First name is required.";
+    }
+    // Last name validation
+    if (!formData?.lastName) {
+      newErrors.lastName = "Last name is required.";
+    }
+    // Date of Birth validation
+    if (!formData?.dob) {
+      newErrors.dob = "Date of Birth is required.";
+    }
+    //Gender validation
+    if (!formData.gender) {
+      newErrors.gender = "Gender Required";
+    }
+    // Email validation
+    if (!formData.email) {
+      newErrors.email = "Email is required.";
+      valid = false;
+    } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email)) {
+      newErrors.email = "Please enter a valid email address.";
+    }
+    // Password validation
+    if (!formData.password) {
+      newErrors.password = "Password is required.";
+    }
+    // Repeat Password validation
+    if (!formData.repeatPassword) {
+      newErrors.repeatPassword = "Please repeat your password.";
+    } else if (formData.password !== formData.repeatPassword) {
+      newErrors.repeatPassword = "Passwords do not match.";
+    }
+    // Hearing Age validation
+    if (!formData.hearingAge) {
+      newErrors.hearingAge = "Hearing Age is required.";
+    }
+    // Is Implanted validation
+    if (!(formData?.isImplanted?.value==true ||  formData?.isImplanted?.value==false)) {
+      newErrors.isImplanted = "Please select an option.";
+    }
+    // Contact number validation (optional)
+    if (!formData?.contactNo || !/^[0-9]{10}$/.test(formData.contactNo)) {
+      newErrors.contactNo = "Please enter a valid 10-digit contact number.";
+    }
+
+    
+    if(formData.isImplanted?.value){
+      if (!formData?.surgeryDate) {
+        newErrors.surgeryDate = "Surgery Data is required.";
+      }
+      if (!formData?.switchOnDate) {
+        newErrors.switchOnDate = "Switch On Date is required.";
+      }
+    }
+
+    // Check if there are any errors
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    // Clear errors if validation passes
+    setErrors({});
 
     //create custom object
     const patient = {
-      firstName: formData.firstName,
-      lastName: formData.lastName,
-      dob: formData.dob,
-      gender: formData.gender.value,
-      email: formData.email,
-      contactNo: formData.contactNo,
-      password: formData.password,
-      hearingAge: formData.hearingAge,
+      firstName: formData?.firstName,
+      lastName: formData?.lastName,
+      dob: formData?.dob,
+      gender: formData?.gender?.value,
+      email: formData?.email,
+      contactNo: formData?.contactNo,
+      password: formData?.password,
+      hearingAge: formData?.hearingAge,
       organization: therapistWithOrg?.organization,
       implant: {
-        isImplanted: formData.isImplanted.value,
-        surgeryDate: formData.surgeryDate,
-        switchOnDate: formData.switchOnDate,
+        isImplanted: formData?.isImplanted?.value,
+        surgeryDate: formData?.surgeryDate,
+        switchOnDate: formData?.switchOnDate,
       },
     };
 
@@ -179,12 +247,14 @@ export default function AddNewPatientModal({ visible, onClose }) {
                   type="text"
                   name="firstName"
                   id="firstName"
-                  className="input-field"
+                  className={`input-field ${errors.firstName ? "border-red-500" : ""}`}
                   placeholder="First Name"
                   value={formData.firstName}
                   onChange={handleInputChange}
-                  required
-                />
+
+                />{errors.firstName && (
+                  <p className="text-red-500 text-sm mt-1">{errors.firstName}</p>
+                )}
               </div>
               <div className="flex-1">
                 <label
@@ -197,12 +267,15 @@ export default function AddNewPatientModal({ visible, onClose }) {
                   type="text"
                   name="lastName"
                   id="lastName"
-                  className="input-field"
+                  className={`input-field ${errors.lastName ? "border-red-500" : ""}`}
                   placeholder="Last Name"
                   value={formData.lastName}
                   onChange={handleInputChange}
-                  required
+
                 />
+                {errors.lastName && (
+                  <p className="text-red-500 text-sm mt-1">{errors.lastName}</p>
+                )}
               </div>
             </div>
 
@@ -219,12 +292,15 @@ export default function AddNewPatientModal({ visible, onClose }) {
                   type="date"
                   name="dob"
                   id="dob"
-                  className="input-field"
+                  className={`input-field ${errors.dob ? "border-red-500" : ""
+                    }`}
                   placeholder="Date of Birth"
                   value={formData.dob}
                   onChange={handleInputChange}
-                  required
+
                 />
+                {errors.dob && (
+                  <p className="text-red-500 text-sm mt-1">{errors.dob}</p>)}
               </div>
               <div className="flex-1">
                 <label
@@ -238,8 +314,12 @@ export default function AddNewPatientModal({ visible, onClose }) {
                   options={genders}
                   value={formData.gender}
                   onChange={handleGenderChange}
-                  className="pt-0.5"
+                  className={`pt-0.5 ${errors.gender ? "border-red-500" : ""
+                    }`}
                 />
+                {errors.gender && (
+                  <p className="text-red-500 text-sm mt-1">{errors.gender}</p>
+                )}
               </div>
             </div>
 
@@ -256,11 +336,15 @@ export default function AddNewPatientModal({ visible, onClose }) {
                   type="text"
                   name="contactNo"
                   id="contactNo"
-                  className="input-field"
+                  className={`input-field ${errors.contactNo ? "border-red-500" : ""
+                    }`}
                   placeholder="Contact Number"
                   onChange={handleInputChange}
-                  required
+
                 />
+                {errors.contactNo && (
+                  <p className="text-red-500 text-sm mt-1">{errors.contactNo}</p>
+                )}
               </div>
               <div className="flex-1">
                 <label
@@ -273,11 +357,15 @@ export default function AddNewPatientModal({ visible, onClose }) {
                   type="email"
                   name="email"
                   id="email"
-                  className="input-field"
+                  className={`input-field ${errors.email ? "border-red-500" : ""
+                    }`}
                   placeholder="Email"
                   onChange={handleInputChange}
-                  required
+
                 />
+                {errors.email && (
+                  <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+                )}
               </div>
             </div>
 
@@ -294,11 +382,15 @@ export default function AddNewPatientModal({ visible, onClose }) {
                   type="password"
                   name="password"
                   id="password"
-                  className="input-field"
+                  className={`input-field ${errors.password ? "border-red-500" : ""
+                    } `}
                   placeholder="Password"
                   onChange={handleInputChange}
-                  required
+
                 />
+                {errors.password && (
+                  <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+                )}
               </div>
               <div className="flex-1">
                 <label
@@ -311,11 +403,14 @@ export default function AddNewPatientModal({ visible, onClose }) {
                   type="password"
                   name="repeatPassword"
                   id="repeatPassword"
-                  className="input-field"
+                  className={`input-field ${errors.repeatPassword ? "border-red-500" : ""
+                    }`}
                   placeholder="Repeat Password"
                   onChange={handleInputChange}
-                  required
-                />
+
+                />{errors.repeatPassword && (
+                  <p className="text-red-500 text-sm mt-1">{errors.repeatPassword}</p>
+                )}
               </div>
             </div>
 
@@ -332,11 +427,15 @@ export default function AddNewPatientModal({ visible, onClose }) {
                   type="text"
                   name="hearingAge"
                   id="hearingAge"
-                  className="input-field"
+                  className={`input-field ${errors.hearingAge ? "border-red-500" : ""
+                    } `}
                   placeholder="Hearing Age"
                   onChange={handleInputChange}
-                  required
+
                 />
+                {errors.hearingAge && (
+                  <p className="text-red-500 text-sm mt-1">{errors.hearingAge}</p>
+                )}
               </div>
               <div className="flex-1">
                 <label
@@ -350,50 +449,63 @@ export default function AddNewPatientModal({ visible, onClose }) {
                   options={yesno}
                   value={formData.isImplanted}
                   onChange={handleIsImplantedChange}
-                  className="pt-0.5"
+                  className={`pt-0.5 ${errors.isImplanted ? "border-red-500" : ""
+                    }`}
                 />
+                {errors.isImplanted && (
+                  <p className="text-red-500 text-sm mt-1">{errors.isImplanted}</p>
+                )}
               </div>
             </div>
+            {formData.isImplanted && formData.isImplanted.value === true && (
+              //isImplanted, surgeryDate & switchOnDate
+              <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-8">
+                <div className="flex-1">
+                  <label
+                    htmlFor="surgeryDate"
+                    className="block mb-2 text-sm font-medium text-gray-900"
+                  >
+                    Surgery Date
+                  </label>
+                  <input
+                    type="date"
+                    name="surgeryDate"
+                    id="surgeryDate"
+                    className={`input-field ${errors.surgeryDate ? "border-red-500" : ""
+                      }`}
+                    placeholder="Surgery Date"
+                    value={formData.surgeryDate}
+                    onChange={handleInputChange}
 
-            {/* isImplanted, surgeryDate & switchOnDate */}
-            <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-8">
-              <div className="flex-1">
-                <label
-                  htmlFor="surgeryDate"
-                  className="block mb-2 text-sm font-medium text-gray-900"
-                >
-                  Surgery Date
-                </label>
-                <input
-                  type="date"
-                  name="surgeryDate"
-                  id="surgeryDate"
-                  className="input-field"
-                  placeholder="Surgery Date"
-                  value={formData.surgeryDate}
-                  onChange={handleInputChange}
-                  required
-                />
+                  />
+                  {errors.surgeryDate && (
+                    <p className="text-red-500 text-sm mt-1">{errors.surgeryDate}</p>
+                  )}
+                </div>
+                <div className="flex-1">
+                  <label
+                    htmlFor="switchOnDate"
+                    className="block mb-2 text-sm font-medium text-gray-900"
+                  >
+                    Switch On Date
+                  </label>
+                  <input
+                    type="date"
+                    name="switchOnDate"
+                    id="switchOnDate"
+                    className={`input-field ${errors.switchOnDate ? "border-red-500" : "" 
+                      }`}
+                    placeholder="Switch On Date"
+                    value={formData.switchOnDate}
+                    onChange={handleInputChange}
+
+                  />
+                  {errors.switchOnDate && (
+                    <p className="text-red-500 text-sm mt-1">{errors.switchOnDate}</p>
+                  )}
+                </div>
               </div>
-              <div className="flex-1">
-                <label
-                  htmlFor="switchOnDate"
-                  className="block mb-2 text-sm font-medium text-gray-900"
-                >
-                  Switch On Date
-                </label>
-                <input
-                  type="date"
-                  name="switchOnDate"
-                  id="switchOnDate"
-                  className="input-field"
-                  placeholder="Switch On Date"
-                  value={formData.switchOnDate}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-            </div>
+            )}
 
             {/* Submit Button */}
             <div className="flex justify-center py-10">

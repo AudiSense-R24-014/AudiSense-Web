@@ -79,6 +79,18 @@ const getLing6AllByPatientID = async (id) => {
     return responseData;
 }
 
+const analyzeLing6All = async (id, data) => {
+    const response = await fetch(URL.LING6_ALL_ANALYZE(id), {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    });
+    const responseData = await response.json();
+    return responseData;
+}
+
 export default {
     generateLing6All,
     getLing6All,
@@ -86,5 +98,6 @@ export default {
     updateLing6All,
     deleteLing6All,
     getLing6AllNotAssigned,
-    getLing6AllByPatientID
+    getLing6AllByPatientID,
+    analyzeLing6All,
 };

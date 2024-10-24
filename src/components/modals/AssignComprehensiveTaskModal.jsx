@@ -11,6 +11,7 @@ export default function AssignComprehensiveTaskModal({
   visible,
   onClose,
 }) {
+  const [organizationId, setOrganizationId] = useState("");
   const [patients, setPatients] = useState([]);
   const [selectedPatientId, setSelectedPatientId] = useState("");
   const [selectedLevel, setSelectedLevel] = useState(null);
@@ -19,11 +20,11 @@ export default function AssignComprehensiveTaskModal({
   const levels = [
     { value: "1", label: "Level 1 - Listening" },
     { value: "2", label: "Level 2 - Speech" },
-    // Add more levels here if necessary
   ];
 
   useEffect(() => {
     setComprehensionId(comprehensionTaskId);
+    setOrganizationId(JSON.parse(localStorage.getItem("audi-user"))?.organization);
   }, [comprehensionTaskId]);
 
   useEffect(() => {
@@ -47,6 +48,7 @@ export default function AssignComprehensiveTaskModal({
     if (selectedPatientId && selectedLevel) {
       ComprehensionTaskService.createActivity({
         patient: selectedPatientId,
+        organization: organizationId,
         level: selectedLevel,
         comprehensionTask: comprehensionId,
         totalQuestionCount: totalQuestions,
@@ -129,7 +131,7 @@ export default function AssignComprehensiveTaskModal({
                   .reverse()
                   .map((patient) => (
                     <option key={patient._id} value={patient._id}>
-                      {`${patient.fName} ${patient.lName}, DOB: ${formatDate(
+                      {`${patient.firstName} ${patient.lastName}, DOB: ${formatDate(
                         patient.dob
                       )}`}
                     </option>

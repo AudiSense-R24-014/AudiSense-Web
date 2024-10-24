@@ -15,8 +15,10 @@ function Tasks() {
   const [taskTab, setTaskTab] = useState("awareness");
   const [patients, setPatients] = useState([]);
 
+  const audiUser = JSON.parse(localStorage.getItem("audi-user"));
+
   useEffect(() => {
-    PatientService.getPatients().then((response) => {
+    PatientService.getPatientsForOrganization(audiUser.organization).then((response) => {
       setPatients(response);
     });
   }, []);
