@@ -44,7 +44,7 @@ const Dashboard = () => {
         }
     }, [orgId]);
 
-    if (loading) {
+    if (loading || !data) {
         return <Loading />;
     }
 
@@ -54,7 +54,7 @@ const Dashboard = () => {
         datasets: [
             {
                 label: "Age Distribution",
-                data: Object.values(data.ageWiseCountOfPatients || {}),
+                data: Object.values(data?.ageWiseCountOfPatients || {}),
                 backgroundColor: [
                     "#f87171",
                     "#fb923c",
@@ -76,7 +76,7 @@ const Dashboard = () => {
         datasets: [
             {
                 label: "Implant Status",
-                data: [data.isImplanted?.Yes || 0, data.isImplanted?.No || 0],
+                data: [data?.isImplanted?.Yes || 0, data?.isImplanted?.No || 0],
                 backgroundColor: ["#34d399", "#f87171"],
                 borderColor: "#fff",
                 borderWidth: 1,
@@ -90,8 +90,8 @@ const Dashboard = () => {
             {
                 label: "Gender Distribution",
                 data: [
-                    data.genderWiseCountOfPatients?.Male || 0,
-                    data.genderWiseCountOfPatients?.Female || 0,
+                    data?.genderWiseCountOfPatients?.Male || 0,
+                    data?.genderWiseCountOfPatients?.Female || 0,
                 ],
                 backgroundColor: ["#60a5fa", "#f472b6"],
                 borderColor: "#fff",
@@ -121,11 +121,11 @@ const Dashboard = () => {
                 {/* Left column: Org image and name */}
                 <div className="flex flex-col items-center xl:items-start">
                     <h2 className="text-2xl lg:text-4xl font-medium mb-4 font-montserrat">
-                        {data.orgName || "N/A"}
+                        {data?.orgName || "N/A"}
                     </h2>
-                    {data.orgImage && (
+                    {data?.orgImage && (
                         <img
-                            src={data.orgImage}
+                            src={data?.orgImage}
                             alt="Organization Logo"
                             className="fluid max-h-56 max-w-56"
                         />
@@ -147,7 +147,7 @@ const Dashboard = () => {
                                 Total Patients
                             </h3>
                             <h1 className="text-2xl lg:text-4xl font-bold mt-2">
-                                {data.patients || 0}
+                                {data?.patients || 0}
                             </h1>
                         </div>
                         <button
@@ -171,7 +171,7 @@ const Dashboard = () => {
                                 Total Therapists
                             </h3>
                             <h1 className="text-2xl lg:text-4xl font-bold mt-2">
-                                {data.therapists || 0}
+                                {data?.therapists || 0}
                             </h1>
                         </div>
                         <button
@@ -195,7 +195,7 @@ const Dashboard = () => {
                                 Total Admins
                             </h3>
                             <h1 className="text-2xl lg:text-4xl font-bold mt-2">
-                                {data.admins || 0}
+                                {data?.admins || 0}
                             </h1>
                         </div>
                         <button
