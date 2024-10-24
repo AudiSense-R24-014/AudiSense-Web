@@ -33,10 +33,12 @@ export const ORG_REQUESTS_ADD_THERAPIST = `${BASE_URL}/orgRequests/addTherapist/
 export const ORG_REQUESTS_APPROVE_ADMIN = `${BASE_URL}/orgRequests/makeAdmin/`;
 
 export const DISCRIMINATION_AUTO_GEN = `${BASE_URL}/discrimination/`;
-export const DISCRIMINATION_CORRECTIVE = `${BASE_URL}/discriminationOpt/`;
-export const DISCRIMINATION_MANUAL = `${BASE_URL}/discrimination_manual/`;
-export const DISCRIMINATION_TASK_PERSIST = `${BASE_URL}/discrimination-task/`;
-export const DISCRIMINATION_QUESTION = `${BASE_URL}/discriminationQuestion/`;
+export const DISCRIMINATION_CORRECTIVE=`${BASE_URL}/discriminationOpt/`;
+export const DISCRIMINATION_MANUAL=`${BASE_URL}/discrimination_manual/`;
+export const DISCRIMINATION_TASK_PERSIST=`${BASE_URL}/discrimination-task/`;
+export const DISCRIMINATION_QUESTION=`${BASE_URL}/discriminationQuestion/`;
+export const DISCRIMINATION_ACTIVITY=`${BASE_URL}/activityDiscrimination/`;
+export const DISCRIMINATION_ACTIVITY_BY_ORGANIZATION = (id) => `${BASE_URL}/activityDiscrimination/organization/${id}/`;
 
 export const AWARENESS_BASIC = `${BASE_URL}/awareness-sound/`;
 export const AWARENESS_BASIC_ID = (id) => `${BASE_URL}/awareness-sound/${id}/`;
