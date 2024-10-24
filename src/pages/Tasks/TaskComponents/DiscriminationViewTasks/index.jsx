@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import DiscriminationTaskService from '../../../../services/DiscriminationTask.service';
+import AssignDiscriminationTaskModal from '../../../../components/modals/AssignDiscriminationTaskModal';
 
 export default function DiscriminationViewTasks() {
 
-  const [allFeedback, setAllFeedback] = useState([]);
+  const [allDiscriminationTask, setAllDiscriminationTask] = useState([]);
+  const [discriminationTaskId, setDiscriminationTaskId] = useState(null);
+  const [openSaveModal, setOpenSaveModal] = useState(false);
 
   useEffect(() => {
     DiscriminationTaskService.getDiscriminationTasks()
       .then((response) => {
-        setAllFeedback(response); // Ensure response is in the correct format
+        setAllDiscriminationTask(response); // Ensure response is in the correct format
         console.log("response");
         console.log(response);
       })
@@ -16,6 +19,11 @@ export default function DiscriminationViewTasks() {
         console.error(error);
       });
   }, []);
+
+  const handleView = (discriminationTask) => {
+    setDiscriminationTaskId(discriminationTask._id);
+    setOpenSaveModal(true);
+  };
 
 
   return (
@@ -28,7 +36,7 @@ export default function DiscriminationViewTasks() {
                 <th className="px-6 py-3">Word1</th>
                 <th className="px-6 py-3">Word2</th>
                 <th className="px-6 py-3">Level</th>
-                <th className="px-6 py-3">Status</th>
+                {/* <th className="px-6 py-3">Status</th> */}
                 <th className="px-6 py-3">Action</th>
               </tr>
             </thead>
@@ -36,15 +44,17 @@ export default function DiscriminationViewTasks() {
               className="bg-white divide-y divide-gray-200"
               style={{ maxHeight: "400px", overflowY: "auto" }} // Setting max-height and making it scrollable
             >
-              {allFeedback.length > 0 ? (
-                allFeedback.map((feedback, index) => (
+              {allDiscriminationTask.length > 0 ? (
+                allDiscriminationTask.map((discriminationTask, index) => (
                   <tr key={index}>
-                    <td className="px-6 py-4 whitespace-nowrap">{feedback.word1}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">{feedback.word2}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">{feedback.level}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">{feedback.status}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">{discriminationTask.word1}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">{discriminationTask.word2}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">{discriminationTask.level}</td>
+                    {/* <td className="px-6 py-4 whitespace-nowrap">{discriminationTask.status}</td> */}
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">Assign</button>
+                      <button onClick={() =>
+                        handleView(discriminationTask)
+                      } className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">Assign</button>
                     </td>
                   </tr>
                 ))
@@ -59,6 +69,13 @@ export default function DiscriminationViewTasks() {
           </table>
         </div>
       </div>
+      <AssignDiscriminationTaskModal
+        visible={openSaveModal}
+        discriminationTaskId={discriminationTaskId}
+        onClose={() => {
+          setOpenSaveModal(false);
+        }}
+      />
     </div>
   )
 }
