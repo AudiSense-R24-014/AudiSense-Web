@@ -131,7 +131,7 @@ const ComprehensiveTasks = () => {
                                 <th className="px-6 py-3">Name</th>
                                 <th className="px-6 py-3">Level</th>
                                 <th className="px-6 py-3">Total Questions</th>
-                                <th className="px-6 py-3">Correct Responses</th>
+                                <th className="px-6 py-3">Correct Responses | Score</th>
                                 <th className="px-6 py-3">Status</th>
                                 <th className="px-6 py-3">Action</th>
                             </tr>
