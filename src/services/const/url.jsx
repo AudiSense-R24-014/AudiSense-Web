@@ -1,4 +1,6 @@
-const BASE_URL = 'http://localhost:3000';
+// const BASE_URL = 'http://localhost:3000';
+const BASE_URL = 'https://apigateway-pv2f.onrender.com';
+
 
 export const THERAPISTS = `${BASE_URL}/therapists/`;
 export const THERAPIST_BY_ID = (id) => `${BASE_URL}/therapists/${id}/`;
