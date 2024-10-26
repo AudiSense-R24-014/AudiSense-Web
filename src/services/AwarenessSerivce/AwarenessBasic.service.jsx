@@ -79,6 +79,31 @@ const getAwarenessSoundsByPatientID = async (id) => {
     return responseData;
 }
 
+const analyzeGaze = async (data) => {
+    const response = await fetch(URL.AWARENESS_GAZE_ANALYZE, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    });
+    const responseData = await response.json();
+    return responseData;
+}
+
+const analyzeAwarenessSound = async (id, data) => {
+    const response = await fetch(URL.AWARNESS_SOUND_ANALYZE(id), {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    });
+    const responseData = await response.json();
+    return responseData;
+}
+
+
 export default {
     generateAwarenessSounds,
     getAwarenessSounds,
@@ -87,4 +112,6 @@ export default {
     deleteAwarenessSound,
     getNotAssignedAwarenessSounds,
     getAwarenessSoundsByPatientID,
+    analyzeGaze,
+    analyzeAwarenessSound
 };

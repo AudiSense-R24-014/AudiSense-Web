@@ -141,6 +141,7 @@ export default function AwarenessBasicGenerate({ patients }) {
                                                 <th className="px-4 py-2">Created Date</th>
                                                 <th className="px-4 py-2">Assigned</th>
                                                 <th className="px-4 py-2">Responded</th>
+                                                <th className="px-4 py-2">Analyzed</th>
                                                 <th className="px-4 py-2">View</th>
                                                 <th className="px-4 py-2">Delete</th>
                                             </tr>
@@ -180,6 +181,17 @@ export default function AwarenessBasicGenerate({ patients }) {
                                                     </td>
                                                     <td className="border px-4 py-2">
                                                         {data.isResponded ? (
+                                                            <span className="bg-green-500 text-white font-bold py-1 px-2 rounded-full">
+                                                                Yes
+                                                            </span>
+                                                        ) : (
+                                                            <span className="bg-red-500 text-white font-bold py-1 px-2 rounded-full">
+                                                                No
+                                                            </span>
+                                                        )}
+                                                    </td>
+                                                    <td className="border px-4 py-2">
+                                                        {data.isAnalyzed ? (
                                                             <span className="bg-green-500 text-white font-bold py-1 px-2 rounded-full">
                                                                 Yes
                                                             </span>

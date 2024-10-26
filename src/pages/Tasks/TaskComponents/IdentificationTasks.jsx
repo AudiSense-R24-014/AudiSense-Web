@@ -16,7 +16,7 @@ function IdentificationTasks({ patients }) {
         <IdentificationTabs taskList={taskTab} toggleTaskStatus={setTaskTab} />
       </div>
       {taskTab === "generate" && <IdentificationTaskGenerate patients={patients} />}
-      {taskTab === "all" && <IdentificationViewAll />}
+      {taskTab === "all" && <IdentificationViewAll patients={patients} />}
     </>
   )
 }

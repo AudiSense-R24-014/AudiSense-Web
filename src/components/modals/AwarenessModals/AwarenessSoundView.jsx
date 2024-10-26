@@ -8,11 +8,11 @@ import PatientService from '../../../services/Patient.service'
 export default function AwarenessSoundView({ visible, onClose, getData, data, patients }) {
     const [selectedPatient, setSelectedPatient] = useState(null);
     const [patientData, setPatientData] = useState(null);
-
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         if (data?.patientID) {
-            PatientService.getPatient(data.patientID)
+            PatientService.getPatientById(data.patientID)
                 .then((response) => {
                     setPatientData(response);
                 })
@@ -53,6 +53,33 @@ export default function AwarenessSoundView({ visible, onClose, getData, data, pa
 
         }
     };
+
+    const analyzeSoundData = async () => {
+        setIsLoading(true);
+        await AwarenessBasicService.analyzeGaze({ videoUrl: data.responseVideo })
+            .then((response) => {
+                alert("Sound data analyzed successfully.");
+                console.log(response);
+                const updatedData = {
+                    sounds: data.sounds,
+                    responseArray: response.isLookingCenter,
+                }
+                AwarenessBasicService.analyzeAwarenessSound(data._id, updatedData)
+                    .then((response) => {
+                        alert("Sound data analyzed successfully.");
+                        console.log(response);
+                        setIsLoading(false);
+                        getData();
+                        onClose();
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                        alert("Error analyzing sound data.");
+                    }).finally(() => {
+
+                    });
+            })
+    }
 
     return (
         <div
@@ -102,7 +129,7 @@ export default function AwarenessSoundView({ visible, onClose, getData, data, pa
                     {patientData ? (
                         <div className="p-4 bg-green-50 rounded-lg shadow-inner">
                             <h3 className="text-lg font-semibold text-gray-800">Assigned Patient:</h3>
-                            <p className="text-md text-gray-700">Name: {patientData.fName} {patientData.lName}</p>
+                            <p className="text-md text-gray-700">Name: {patientData.firstName} {patientData.lastName}</p>
                             <p className="text-sm text-gray-500">Email: {patientData.email}</p>
 
                             {data.isResponded ? (
@@ -119,32 +146,54 @@ export default function AwarenessSoundView({ visible, onClose, getData, data, pa
                                             </span>
                                         )}
                                     </p>
-                                    <table className="min-w-full bg-white">
-                                        <thead>
-                                            <tr>
-                                                <th className="py-2 px-4 border-b text-left text-gray-600">Sound Name</th>
-                                                <th className="py-2 px-4 border-b text-left text-gray-600">Response</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {data.responses.map((response, index) => (
-                                                <tr key={index}>
-                                                    <td className="py-2 px-4 border-b text-gray-700">{response.name}</td>
-                                                    <td className="py-2 px-4 border-b">
-                                                        {response.response ? (
-                                                            <span className="bg-green-500 text-white font-bold py-1 px-2 rounded-full">
-                                                                Yes
-                                                            </span>
-                                                        ) : (
-                                                            <span className="bg-red-500 text-white font-bold py-1 px-2 rounded-full">
-                                                                No
-                                                            </span>
-                                                        )}
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
+                                    {
+                                        data.isAnalyzed ? (
+                                            <><table className="min-w-full bg-white">
+                                                <thead>
+                                                    <tr>
+                                                        <th className="py-2 px-4 border-b text-left text-gray-600">Sound Name</th>
+                                                        <th className="py-2 px-4 border-b text-left text-gray-600">Response</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {data.responses.map((response, index) => (
+                                                        <tr key={index}>
+                                                            <td className="py-2 px-4 border-b text-gray-700">{response.name}</td>
+                                                            <td className="py-2 px-4 border-b">
+                                                                {response.response ? (
+                                                                    <span className="bg-green-500 text-white font-bold py-1 px-2 rounded-full">
+                                                                        Yes
+                                                                    </span>
+                                                                ) : (
+                                                                    <span className="bg-red-500 text-white font-bold py-1 px-2 rounded-full">
+                                                                        No
+                                                                    </span>
+                                                                )}
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table></>
+                                        ) : (
+                                            <>
+                                                {
+                                                    isLoading ? (
+                                                        <p className="text-sm text-gray-500">Analyzing...</p>
+                                                    ) : (
+                                                        <button
+                                                            onClick={() => {
+
+                                                                analyzeSoundData()
+                                                            }}
+                                                            className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+                                                        >
+                                                            Analyze Sound Data
+                                                        </button>
+                                                    )
+                                                }
+                                            </>
+                                        )
+                                    }
                                 </div>
                             ) : (
                                 <p className="text-sm text-red-500">Patient has not responded.</p>
@@ -162,7 +211,7 @@ export default function AwarenessSoundView({ visible, onClose, getData, data, pa
                                 {patients.length > 0 &&
                                     patients.map((patient) => (
                                         <option key={patient._id} value={patient._id}>
-                                            {patient.fName} {patient.lName}
+                                            {patient.firstName} {patient.lastName}
                                         </option>
                                     ))}
                             </select>
