@@ -1,4 +1,5 @@
 import * as URL from './const/url';
+const token = localStorage.getItem("audi-token");
 
 const auto_generate = async (age, stage, level) => {
     const response = await fetch(URL.DISCRIMINATION_AUTO_GEN, {
@@ -71,11 +72,38 @@ const getDiscriminationTasks = async () => {
     return data;
 };
 
+const createActivity = async (activity) => {
+    const response = await fetch(URL.DISCRIMINATION_ACTIVITY, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(activity),
+    });
+    const data = await response.json();
+    return data;
+};
+
+const getAcitivitiesByOrganization = async (organizationId) => {
+    const response = await fetch(URL.DISCRIMINATION_ACTIVITY_BY_ORGANIZATION(organizationId), 
+    {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+        },
+    });
+    const data = await response.json();
+    return data;
+};
+
 export default {
     auto_generate,
     corrective_generate,
     manual_generate,
     persist,
     createDiscriminationQuestion,
-    getDiscriminationTasks
+    getDiscriminationTasks,
+    createActivity,
+    getAcitivitiesByOrganization
 };

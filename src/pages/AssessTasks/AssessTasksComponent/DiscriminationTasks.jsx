@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import ComprehensiveTasksService from "../../../services/ComprehensionTask.service.jsx";
+import DiscriminationTaskService from "../../../services/DiscriminationTask.service.jsx";
 import AssessComprehensiveActivityModal from "../../../components/modals/AssessComprehensiveActivityModal.jsx";
 import ViewComprehensiveActivityModal from "../../../components/modals/ViewComprehensiveActivityModal.jsx";
 import Swal from "sweetalert2";
-import Loading from "../../../components/Loading.jsx";
 
-const ComprehensiveTasks = () => {
+const DiscriminationTasks = () => {
     const orgId = JSON.parse(localStorage.getItem("audi-user"))?.organization;
     const [activities, setActivities] = useState([]);
     const [assessActivity, setAssessActivity] = useState(null);
@@ -18,7 +18,7 @@ const ComprehensiveTasks = () => {
     }, [orgId]);
 
     const loadActivities = () => {
-        ComprehensiveTasksService.getAcitivitiesByOrganization(orgId)
+        DiscriminationTaskService.getAcitivitiesByOrganization(orgId)
             .then((data) => {
                 console.log(data);
                 setActivities(data);
@@ -28,62 +28,62 @@ const ComprehensiveTasks = () => {
             });
     };
 
-    const handleAssess = (task) => {
-        ComprehensiveTasksService.getActivityById(task._id)
-            .then((data) => {
-                setAssessActivity(data);
-                setAssessModal(true);
-            })
-            .catch((error) => {
-                console.error("Error loading activity details:", error);
-            });
-    };
+    // const handleAssess = (task) => {
+    //     ComprehensiveTasksService.getActivityById(task._id)
+    //         .then((data) => {
+    //             setAssessActivity(data);
+    //             setAssessModal(true);
+    //         })
+    //         .catch((error) => {
+    //             console.error("Error loading activity details:", error);
+    //         });
+    // };
 
-    const handleView = (task) => {
-        ComprehensiveTasksService.getActivityById(task._id)
-            .then((data) => {
-                setViewActivity(data);
-                setViewModal(true);
-            })
-            .catch((error) => {
-                console.error("Error loading activity details:", error);
-            });
-    };
+    // const handleView = (task) => {
+    //     ComprehensiveTasksService.getActivityById(task._id)
+    //         .then((data) => {
+    //             setViewActivity(data);
+    //             setViewModal(true);
+    //         })
+    //         .catch((error) => {
+    //             console.error("Error loading activity details:", error);
+    //         });
+    // };
 
-    const handleDelete = (task) => {
-        Swal.fire({
-            title: "Are you sure?",
-            text: `Do you really want to delete the activity for ${task?.patient?.firstName} ${task?.patient?.lastName}?`,
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#d33",
-            cancelButtonColor: "#3085d6",
-            confirmButtonText: "Yes, delete it!",
-            cancelButtonText: "Cancel",
-        }).then((result) => {
-            if (result.isConfirmed) {
-                ComprehensiveTasksService.deleteActivityById(task._id)
-                    .then(() => {
-                        setActivities((prev) =>
-                            prev.filter((activity) => activity._id !== task._id)
-                        );
-                        Swal.fire(
-                            "Deleted!",
-                            "The activity has been deleted.",
-                            "success"
-                        );
-                    })
-                    .catch((error) => {
-                        console.error("Error deleting activity:", error);
-                        Swal.fire(
-                            "Error",
-                            "Failed to delete activity. Please try again.",
-                            "error"
-                        );
-                    });
-            }
-        });
-    };
+    // const handleDelete = (task) => {
+    //     Swal.fire({
+    //         title: "Are you sure?",
+    //         text: `Do you really want to delete the activity for ${task?.patient?.firstName} ${task?.patient?.lastName}?`,
+    //         icon: "warning",
+    //         showCancelButton: true,
+    //         confirmButtonColor: "#d33",
+    //         cancelButtonColor: "#3085d6",
+    //         confirmButtonText: "Yes, delete it!",
+    //         cancelButtonText: "Cancel",
+    //     }).then((result) => {
+    //         if (result.isConfirmed) {
+    //             ComprehensiveTasksService.deleteActivityById(task._id)
+    //                 .then(() => {
+    //                     setActivities((prev) =>
+    //                         prev.filter((activity) => activity._id !== task._id)
+    //                     );
+    //                     Swal.fire(
+    //                         "Deleted!",
+    //                         "The activity has been deleted.",
+    //                         "success"
+    //                     );
+    //                 })
+    //                 .catch((error) => {
+    //                     console.error("Error deleting activity:", error);
+    //                     Swal.fire(
+    //                         "Error",
+    //                         "Failed to delete activity. Please try again.",
+    //                         "error"
+    //                     );
+    //                 });
+    //         }
+    //     });
+    // };
     const renderTaskActionButton = (task) => {
         if (task.status === "Need Assessment") {
             return (
@@ -115,12 +115,6 @@ const ComprehensiveTasks = () => {
         }
     };
 
-    if(activities.length === 0) {
-        return (
-            <Loading />
-        );
-    }
-
     return (
         <div className="flex-1">
             <div className="border border-gray-300 rounded-md font-nunito">
@@ -130,8 +124,8 @@ const ComprehensiveTasks = () => {
                             <tr className="text-xs text-gray-700 text-center font-bold uppercase tracking-wider">
                                 <th className="px-6 py-3">Name</th>
                                 <th className="px-6 py-3">Level</th>
-                                <th className="px-6 py-3">Total Questions</th>
-                                <th className="px-6 py-3">Correct Responses | Score</th>
+                                <th className="px-6 py-3">Word 1</th>
+                                <th className="px-6 py-3">Word 2</th>
                                 <th className="px-6 py-3">Status</th>
                                 <th className="px-6 py-3">Action</th>
                             </tr>
@@ -150,14 +144,13 @@ const ComprehensiveTasks = () => {
                                             {task?.patient?.lastName}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
-                                            {task.level}
+                                            {task.discriminationTask.level}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
-                                            {task.totalQuestionCount}
+                                            {task.discriminationTask.word1}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
-                                            {task.correctResponsesCount ||
-                                                "N/A"}
+                                            {task.discriminationTask.word2 }
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             {task.status}
@@ -189,4 +182,4 @@ const ComprehensiveTasks = () => {
     );
 };
 
-export default ComprehensiveTasks;
+export default DiscriminationTasks;
