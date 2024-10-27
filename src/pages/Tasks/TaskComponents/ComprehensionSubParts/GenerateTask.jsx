@@ -186,7 +186,7 @@ function GenerateTask() {
             <h1 className="text-xl font-nunito font-bold">Questions</h1>
           </div>
           {generatedComprehension.questions.map((question, index) => (
-            <div className="mb-4 flex items-center" key={index}>
+            <div className="mb-4 flex items-center" key={index + 1}>
               <div className="border rounded-md p-4 w-full">
                 <div className="flex items-center">
                   <div className="flex-grow w-72 mr-4">
