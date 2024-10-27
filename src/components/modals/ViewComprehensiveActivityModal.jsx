@@ -43,7 +43,7 @@ export default function ViewComprehensiveActivityModal({
           <p className="mb-4">{activity.comprehensionTask.passage}</p>
           <div className="space-y-4">
             {activity.comprehensionTask.questions.map((question, index) => {
-              const providedAnswerLetter = activity.providedAnswers && activity.providedAnswers[index];
+              const providedAnswerLetter = activity?.providedAnswers[index];
               const providedAnswerText = providedAnswerLetter
                 ? getFullAnswer(question, providedAnswerLetter)
                 : "No answer provided";
