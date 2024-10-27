@@ -8,7 +8,6 @@ IdentificationTaskGenerate.propTypes = {
 };
 
 function IdentificationTaskGenerate({ patients }) {
-  console.log("Patients:", patients);
   const [instructions, setInstructions] = useState("");
   const [level, setLevel] = useState("1");
   const [difficulty, setDifficulty] = useState("Easy");
@@ -25,9 +24,9 @@ function IdentificationTaskGenerate({ patients }) {
     const newLevel = event.target.value;
     setLevel(newLevel);
     if (newLevel === "3") {
-      setDifficulty(""); // Clear difficulty if Level 3 is selected
+      setDifficulty("");
     } else {
-      setDifficulty("Easy"); // Default difficulty for Level 1 or 2
+      setDifficulty("Easy");
     }
   };
 

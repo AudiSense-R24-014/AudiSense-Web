@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import IdentificationLevelOneService from '../../../../services/IdentificationService/Level1.service.jsx';
-import IdentificationLevelTwoService from '../../../../services/IdentificationService/Level2.service.jsx';
+import IdentificationLevelOneService from '../../../services/IdentificationService/Level1.service.jsx';
+import IdentificationLevelTwoService from '../../../services/IdentificationService/Level2.service.jsx';
 
 const fetchAllTasksLevel1 = async () => {
     try {
@@ -23,7 +23,7 @@ const fetchAllTasksLevel2 = async () => {
     }
 };
 
-export default function IdentificationViewAll({ patients }) {
+export default function IdentificationViewAll() {
     const [tasks, setTasks] = useState([]);
     const [selectedTask, setSelectedTask] = useState(null);
 
@@ -32,15 +32,12 @@ export default function IdentificationViewAll({ patients }) {
             const allTasksLevel1 = await fetchAllTasksLevel1();
             const allTasksLevel2 = await fetchAllTasksLevel2();
             const allTasks = [...allTasksLevel1, ...allTasksLevel2];
-
-            const filteredTasks = allTasks.filter(task =>
-                patients.some(patient => patient._id === task.patientID)
-            );
-
+            const filteredTasks = allTasks.filter(task => task.response == true);
             setTasks(filteredTasks);
+
         };
         loadTasks();
-    }, [patients]);
+    }, []);
 
     const handleViewTask = (task) => {
         setSelectedTask(task);
@@ -52,8 +49,7 @@ export default function IdentificationViewAll({ patients }) {
 
     return (
         <div className="container mx-auto p-4 border border-black rounded-md">
-            <h1 className="text-2xl font-bold mb-4">All Identification Tasks</h1>
-
+           
             <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-purple-50">
