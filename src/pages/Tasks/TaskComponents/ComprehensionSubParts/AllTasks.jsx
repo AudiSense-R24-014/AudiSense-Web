@@ -3,24 +3,57 @@ import ComprehensionTaskService from "../../../../services/ComprehensionTask.ser
 import AssignComprehensiveTaskModal from "../../../../components/modals/AssignComprehensiveTaskModal";
 import ViewComprehensiveTaskModal from "../../../../components/modals/ViewComprehensiveTaskModal";
 import Loading from "../../../../components/Loading";
+import SearchBar from "../../../../components/pagination/searchBar";
+import PaginationButtons from "../../../../components/pagination/paginationButtons";
 
 const AllTasks = () => {
     const [allFeedback, setAllFeedback] = useState([]);
+    const [filteredFeedback, setFilteredFeedback] = useState([]);
     const [openSaveModal, setOpenSaveModal] = useState(false);
     const [openViewModal, setOpenViewModal] = useState(false);
     const [comprehensiveTaskId, setComprehensiveTaskId] = useState(null);
     const [feedbackId, setFeedbackId] = useState(null);
     const [totalQuestions, setTotalQuestions] = useState(5);
 
+    // Pagination and Search
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 5;
+    const [searchAgeQuery, setSearchAgeQuery] = useState("");
+    const [searchQuestionCountQuery, setSearchQuestionCountQuery] =
+        useState("");
+
     useEffect(() => {
         ComprehensionTaskService.getFeedback()
             .then((response) => {
                 setAllFeedback(response);
+                setFilteredFeedback(response); // Set initial filtered feedback
             })
             .catch((error) => {
                 console.error(error);
             });
     }, []);
+
+    const totalPages = Math.ceil(filteredFeedback.length / itemsPerPage);
+
+    const filterFeedback = () => {
+        const filteredFeedback = allFeedback.filter((feedback) => {
+            const matchesAge = feedback?.Input_Age?.toString()
+                .toLowerCase()
+                .includes(searchAgeQuery.toLowerCase());
+
+            const matchesQuestionCount =
+                feedback?.Question_Count?.toString().includes(
+                    searchQuestionCountQuery
+                );
+
+            return matchesAge && matchesQuestionCount; // Both queries must match
+        });
+        setFilteredFeedback(filteredFeedback);
+    };
+
+    useEffect(() => {
+        filterFeedback(); // Filter feedback whenever search queries change
+    }, [searchAgeQuery, searchQuestionCountQuery, allFeedback]);
 
     const handleAssign = (feedback) => {
         setComprehensiveTaskId(feedback.Comprehensive_Task);
@@ -32,14 +65,49 @@ const AllTasks = () => {
         setOpenViewModal(true);
     };
 
-    if(allFeedback.length === 0) {
-        return (
-            <Loading />
-        );
+    const handlePageChange = (page) => {
+        if (page === "first") {
+            setCurrentPage(1);
+        } else if (page === "last") {
+            setCurrentPage(totalPages);
+        } else if (typeof page === "number") {
+            setCurrentPage(page);
+        } else if (page === "next" && currentPage < totalPages) {
+            setCurrentPage(currentPage + 1);
+        } else if (page === "previous" && currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
+
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = filteredFeedback.slice(
+        indexOfFirstItem,
+        indexOfLastItem
+    );
+
+    if (allFeedback.length === 0) {
+        return <Loading />;
     }
 
     return (
         <div className="flex-1">
+            <div className="flex flex-row w-full">
+                <div className="flex-1">
+                    <SearchBar
+                        searchQuery={searchAgeQuery}
+                        setSearchQuery={setSearchAgeQuery}
+                        placeholder="Search By Age"
+                    />
+                </div>
+                <div className="flex-1 ml-2">
+                    <SearchBar
+                        searchQuery={searchQuestionCountQuery}
+                        setSearchQuery={setSearchQuestionCountQuery}
+                        placeholder="Search By Question Count"
+                    />
+                </div>
+            </div>
             <div className="border border-gray-300 rounded-md font-nunito">
                 <div className="overflow-x-auto">
                     <table className="min-w-full divide-y divide-gray-200">
@@ -59,7 +127,7 @@ const AllTasks = () => {
                             className="bg-white divide-y divide-gray-200"
                             style={{ maxHeight: "400px", overflowY: "auto" }} // Setting max-height and making it scrollable
                         >
-                            {allFeedback
+                            {currentItems
                                 .slice()
                                 .reverse()
                                 .map((feedback) => (
@@ -117,6 +185,11 @@ const AllTasks = () => {
                     </table>
                 </div>
             </div>
+            <PaginationButtons
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+            />
             <AssignComprehensiveTaskModal
                 comprehensionTaskId={comprehensiveTaskId}
                 totalQuestions={totalQuestions}

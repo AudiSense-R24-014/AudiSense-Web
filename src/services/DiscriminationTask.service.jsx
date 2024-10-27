@@ -97,6 +97,17 @@ const getAcitivitiesByOrganization = async (organizationId) => {
     return data;
 };
 
+const getActivityById = async (id) => {
+    const response = await fetch(URL.DISCRIMINATION_ACTIVITY_BY_ID(id), {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    const data = await response.json();
+    return data;
+};
+
 export default {
     auto_generate,
     corrective_generate,
@@ -105,5 +116,6 @@ export default {
     createDiscriminationQuestion,
     getDiscriminationTasks,
     createActivity,
-    getAcitivitiesByOrganization
+    getAcitivitiesByOrganization,
+    getActivityById
 };

@@ -166,7 +166,7 @@ const GenCorrectiveTask = () => {
           <button className="bg-purple-400 font-nunito text-white py-2 px-4 rounded-md hover:bg-purple-600 transition-colors duration-300 ">Generate Task</button>
         </div>
         <div className="mt-5">
-          {isGenerated && generatedWords.rhymes.length > 0 ? (
+          {isGenerated && generatedWords.rhymes?.length > 0 ? (
             <div className="flex flex-col space-y-2">
               <h3 className="p-4">Words:</h3>
               {generatedWords.rhymes.map((word, index) => (

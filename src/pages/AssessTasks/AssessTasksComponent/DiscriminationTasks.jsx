@@ -2,12 +2,18 @@ import React, { useEffect, useState } from "react";
 import ComprehensiveTasksService from "../../../services/ComprehensionTask.service.jsx";
 import DiscriminationTaskService from "../../../services/DiscriminationTask.service.jsx";
 import AssessComprehensiveActivityModal from "../../../components/modals/AssessComprehensiveActivityModal.jsx";
-import ViewComprehensiveActivityModal from "../../../components/modals/ViewComprehensiveActivityModal.jsx";
+import ViewDiscriminationActivityModal from "../../../components/modals/ViewDiscriminationActivityModal.jsx";
+import SearchBar from "../../../components/pagination/searchBar";
 import Swal from "sweetalert2";
+import PaginationButtons from "../../../components/pagination/paginationButtons.jsx";
 
 const DiscriminationTasks = () => {
     const orgId = JSON.parse(localStorage.getItem("audi-user"))?.organization;
     const [activities, setActivities] = useState([]);
+    const [filteredActivities, setFilteredActivities] = useState([]);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
+    const activitiesPerPage = 8;
     const [assessActivity, setAssessActivity] = useState(null);
     const [assessModal, setAssessModal] = useState(false);
     const [viewActivity, setViewActivity] = useState(null);
@@ -20,70 +26,55 @@ const DiscriminationTasks = () => {
     const loadActivities = () => {
         DiscriminationTaskService.getAcitivitiesByOrganization(orgId)
             .then((data) => {
-                console.log(data);
                 setActivities(data);
+                setFilteredActivities(data);
             })
             .catch((error) => {
                 console.error("Error loading activities:", error);
             });
     };
 
-    // const handleAssess = (task) => {
-    //     ComprehensiveTasksService.getActivityById(task._id)
-    //         .then((data) => {
-    //             setAssessActivity(data);
-    //             setAssessModal(true);
-    //         })
-    //         .catch((error) => {
-    //             console.error("Error loading activity details:", error);
-    //         });
-    // };
+    // Search filter
+    useEffect(() => {
+        const filtered = activities.filter((activity) => {
+            const { firstName, lastName } = activity?.patient || {};
+            return (
+                (firstName &&
+                    firstName
+                        .toLowerCase()
+                        .includes(searchQuery.toLowerCase())) ||
+                (lastName &&
+                    lastName.toLowerCase().includes(searchQuery.toLowerCase()))
+            );
+        });
+        setFilteredActivities(filtered);
+        setCurrentPage(1); // Reset to first page when search query changes
+    }, [searchQuery, activities]);
 
-    // const handleView = (task) => {
-    //     ComprehensiveTasksService.getActivityById(task._id)
-    //         .then((data) => {
-    //             setViewActivity(data);
-    //             setViewModal(true);
-    //         })
-    //         .catch((error) => {
-    //             console.error("Error loading activity details:", error);
-    //         });
-    // };
+    // Pagination calculations
+    const indexOfLastActivity = currentPage * activitiesPerPage;
+    const indexOfFirstActivity = indexOfLastActivity - activitiesPerPage;
+    const currentActivities = filteredActivities.slice(
+        indexOfFirstActivity,
+        indexOfLastActivity
+    );
+    const totalPages = Math.ceil(filteredActivities.length / activitiesPerPage);
+    // Handle page change
+    const handlePageChange = (page) => {
+        if (page === "first") {
+            setCurrentPage(1);
+        } else if (page === "last") {
+            setCurrentPage(totalPages);
+        } else if (typeof page === "number") {
+            setCurrentPage(page);
+        } else if (page === "next" && currentPage < totalPages) {
+            console.log("next");
+            setCurrentPage(currentPage + 1);
+        } else if (page === "previous" && currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
 
-    // const handleDelete = (task) => {
-    //     Swal.fire({
-    //         title: "Are you sure?",
-    //         text: `Do you really want to delete the activity for ${task?.patient?.firstName} ${task?.patient?.lastName}?`,
-    //         icon: "warning",
-    //         showCancelButton: true,
-    //         confirmButtonColor: "#d33",
-    //         cancelButtonColor: "#3085d6",
-    //         confirmButtonText: "Yes, delete it!",
-    //         cancelButtonText: "Cancel",
-    //     }).then((result) => {
-    //         if (result.isConfirmed) {
-    //             ComprehensiveTasksService.deleteActivityById(task._id)
-    //                 .then(() => {
-    //                     setActivities((prev) =>
-    //                         prev.filter((activity) => activity._id !== task._id)
-    //                     );
-    //                     Swal.fire(
-    //                         "Deleted!",
-    //                         "The activity has been deleted.",
-    //                         "success"
-    //                     );
-    //                 })
-    //                 .catch((error) => {
-    //                     console.error("Error deleting activity:", error);
-    //                     Swal.fire(
-    //                         "Error",
-    //                         "Failed to delete activity. Please try again.",
-    //                         "error"
-    //                     );
-    //                 });
-    //         }
-    //     });
-    // };
     const renderTaskActionButton = (task) => {
         if (task.status === "Need Assessment") {
             return (
@@ -117,6 +108,12 @@ const DiscriminationTasks = () => {
 
     return (
         <div className="flex-1">
+            <SearchBar
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
+                placeholder="Search by Name"
+            />
+
             <div className="border border-gray-300 rounded-md font-nunito">
                 <div className="overflow-x-auto">
                     <table className="min-w-full divide-y divide-gray-200">
@@ -127,14 +124,13 @@ const DiscriminationTasks = () => {
                                 <th className="px-6 py-3">Word 1</th>
                                 <th className="px-6 py-3">Word 2</th>
                                 <th className="px-6 py-3">Status</th>
+                                <th className="px-6 py-3">Score</th>
                                 <th className="px-6 py-3">Action</th>
                             </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200 text-center">
-                            {activities
-                                .slice()
-                                .reverse()
-                                .map((task) => (
+                            {currentActivities.length > 0 ? (
+                                currentActivities.map((task) => (
                                     <tr
                                         key={task._id}
                                         className="text-sm text-gray-600"
@@ -150,20 +146,43 @@ const DiscriminationTasks = () => {
                                             {task.discriminationTask.word1}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
-                                            {task.discriminationTask.word2 }
+                                            {task.discriminationTask.word2}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             {task.status}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
+                                            {task.score === undefined
+                                                ? "N/A"
+                                                : task.score}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap">
                                             {renderTaskActionButton(task)}
                                         </td>
                                     </tr>
-                                ))}
+                                ))
+                            ) : (
+                                <tr>
+                                    <td
+                                        colSpan="7"
+                                        className="px-6 py-4 text-center"
+                                    >
+                                        No activities found
+                                    </td>
+                                </tr>
+                            )}
                         </tbody>
                     </table>
                 </div>
             </div>
+
+            {/* Pagination */}
+            <PaginationButtons
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+            />
+
             {assessModal && (
                 <AssessComprehensiveActivityModal
                     assessActivity={assessActivity}
@@ -172,7 +191,7 @@ const DiscriminationTasks = () => {
                 />
             )}
             {viewModal && (
-                <ViewComprehensiveActivityModal
+                <ViewDiscriminationActivityModal
                     activity={viewActivity}
                     visible={viewModal}
                     onClose={() => setViewModal(false)}

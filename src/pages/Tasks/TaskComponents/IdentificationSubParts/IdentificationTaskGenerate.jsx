@@ -8,7 +8,6 @@ IdentificationTaskGenerate.propTypes = {
 };
 
 function IdentificationTaskGenerate({ patients }) {
-  console.log("Patients:", patients);
   const [instructions, setInstructions] = useState("");
   const [level, setLevel] = useState("1");
   const [difficulty, setDifficulty] = useState("Easy");
@@ -25,9 +24,9 @@ function IdentificationTaskGenerate({ patients }) {
     const newLevel = event.target.value;
     setLevel(newLevel);
     if (newLevel === "3") {
-      setDifficulty(""); // Clear difficulty if Level 3 is selected
+      setDifficulty("");
     } else {
-      setDifficulty("Easy"); // Default difficulty for Level 1 or 2
+      setDifficulty("Easy");
     }
   };
 
@@ -106,7 +105,7 @@ function IdentificationTaskGenerate({ patients }) {
             {patients.length > 0 &&
               patients.map((patient) => (
                 <option key={patient._id} value={patient._id}>
-                  {patient.fName} {patient.lName}
+                  {patient.firstName} {patient.lastName}
                 </option>
               ))}
           </select>
@@ -240,15 +239,15 @@ function IdentificationTaskGenerate({ patients }) {
       </form>
 
       {/* Display generated tasks below the form */}
-      {generatedTasks.length > 0 && (
+      {generatedTasks?.length > 0 && (
         <div className="mt-8">
           <h2 className="text-xl font-bold mb-4">
-            Generated Tasks: {generatedTasks.length}
+            Generated Tasks: {generatedTasks?.length}
           </h2>
 
           <div>
             <div className="grid grid-cols-2 sm:grid-cols-2 gap-4">
-              {generatedTasks.map((task, index) => (
+              {generatedTasks?.map((task, index) => (
                 <div key={index} className="border border-gray-300 p-4 rounded flex flex-col">
                   <h3 className="font-bold mb-2">Task {index + 1}</h3>
                   <p><strong>Level:</strong> {task.level}</p>
