@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import ComprehensiveTasksService from "../../../services/ComprehensionTask.service.jsx";
 import DiscriminationTaskService from "../../../services/DiscriminationTask.service.jsx";
 import AssessComprehensiveActivityModal from "../../../components/modals/AssessComprehensiveActivityModal.jsx";
-import ViewComprehensiveActivityModal from "../../../components/modals/ViewComprehensiveActivityModal.jsx";
+import ViewDiscriminationActivityModal from "../../../components/modals/ViewDiscriminationActivityModal.jsx";
 import Swal from "sweetalert2";
 
 const DiscriminationTasks = () => {
@@ -39,16 +39,16 @@ const DiscriminationTasks = () => {
     //         });
     // };
 
-    // const handleView = (task) => {
-    //     ComprehensiveTasksService.getActivityById(task._id)
-    //         .then((data) => {
-    //             setViewActivity(data);
-    //             setViewModal(true);
-    //         })
-    //         .catch((error) => {
-    //             console.error("Error loading activity details:", error);
-    //         });
-    // };
+    const handleView = (task) => {
+        DiscriminationTaskService.getActivityById(task._id)
+            .then((data) => {
+                setViewActivity(data);
+                setViewModal(true);
+            })
+            .catch((error) => {
+                console.error("Error loading activity details:", error);
+            });
+    };
 
     // const handleDelete = (task) => {
     //     Swal.fire({
@@ -127,6 +127,7 @@ const DiscriminationTasks = () => {
                                 <th className="px-6 py-3">Word 1</th>
                                 <th className="px-6 py-3">Word 2</th>
                                 <th className="px-6 py-3">Status</th>
+                                <th className="px-6 py-3">Score</th>
                                 <th className="px-6 py-3">Action</th>
                             </tr>
                         </thead>
@@ -150,10 +151,16 @@ const DiscriminationTasks = () => {
                                             {task.discriminationTask.word1}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
-                                            {task.discriminationTask.word2 }
+                                            {task.discriminationTask.word2}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             {task.status}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap">
+                                            {task.score ===
+                                                undefined
+                                                ? "N/A"
+                                                : task.score}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             {renderTaskActionButton(task)}
@@ -172,7 +179,7 @@ const DiscriminationTasks = () => {
                 />
             )}
             {viewModal && (
-                <ViewComprehensiveActivityModal
+                <ViewDiscriminationActivityModal
                     activity={viewActivity}
                     visible={viewModal}
                     onClose={() => setViewModal(false)}
