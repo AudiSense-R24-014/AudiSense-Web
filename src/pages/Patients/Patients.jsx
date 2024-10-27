@@ -4,8 +4,8 @@ import PatientService from "../../services/Patient.service";
 import { useNavigate } from "react-router-dom";
 import { PlusCircle } from "lucide-react";
 import Loading from "../../components/Loading";
-import SearchBar from "../../components/pagination/searchBar";
-import PaginationButtons from "../../components/pagination/paginationButtons";
+import SearchBar from "../../components/pagination/SearchBar.jsx";
+import PaginationButtons from "../../components/pagination/PaginationButtons.jsx";
 
 function Patients() {
     const therapistUser = JSON.parse(localStorage.getItem("audi-user"));

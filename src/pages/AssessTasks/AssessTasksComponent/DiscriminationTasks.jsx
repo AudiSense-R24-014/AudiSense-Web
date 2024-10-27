@@ -3,9 +3,9 @@ import ComprehensiveTasksService from "../../../services/ComprehensionTask.servi
 import DiscriminationTaskService from "../../../services/DiscriminationTask.service.jsx";
 import AssessComprehensiveActivityModal from "../../../components/modals/AssessComprehensiveActivityModal.jsx";
 import ViewDiscriminationActivityModal from "../../../components/modals/ViewDiscriminationActivityModal.jsx";
-import SearchBar from "../../../components/pagination/searchBar";
+import SearchBar from "../../../components/pagination/SearchBar.jsx";
 import Swal from "sweetalert2";
-import PaginationButtons from "../../../components/pagination/paginationButtons.jsx";
+import PaginationButtons from "../../../components/pagination/PaginationButtons.jsx";
 
 const DiscriminationTasks = () => {
     const orgId = JSON.parse(localStorage.getItem("audi-user"))?.organization;
