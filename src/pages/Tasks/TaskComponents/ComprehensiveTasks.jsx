@@ -4,7 +4,7 @@ import AllTasks from "./ComprehensionSubParts/AllTasks";
 import ComprehensionTabs from "../../../components/tabs/ComprehensionTabs";
 
 function ComprehensiveTasks() {
-  const [taskTab, setTaskTab] = useState("generateTasks");
+  const [taskTab, setTaskTab] = useState("allTasks");
   return (
     <>
       <div className="flex justify-between items-center">
