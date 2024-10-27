@@ -115,10 +115,8 @@ const ComprehensiveTasks = () => {
         }
     };
 
-    if(activities.length === 0) {
-        return (
-            <Loading />
-        );
+    if (activities.length === 0) {
+        return <Loading />;
     }
 
     return (
@@ -131,7 +129,9 @@ const ComprehensiveTasks = () => {
                                 <th className="px-6 py-3">Name</th>
                                 <th className="px-6 py-3">Level</th>
                                 <th className="px-6 py-3">Total Questions</th>
-                                <th className="px-6 py-3">Correct Responses | Score</th>
+                                <th className="px-6 py-3">
+                                    Correct Responses | Score
+                                </th>
                                 <th className="px-6 py-3">Status</th>
                                 <th className="px-6 py-3">Action</th>
                             </tr>
@@ -156,8 +156,10 @@ const ComprehensiveTasks = () => {
                                             {task.totalQuestionCount}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
-                                            {task.correctResponsesCount ||
-                                                "N/A"}
+                                            {task.correctResponsesCount ===
+                                            undefined
+                                                ? "N/A"
+                                                : task.correctResponsesCount}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             {task.status}
