@@ -26,7 +26,7 @@ const AllTasks = () => {
         ComprehensionTaskService.getFeedback()
             .then((response) => {
                 setAllFeedback(response);
-                setFilteredFeedback(response); // Set initial filtered feedback
+                setFilteredFeedback(response);
             })
             .catch((error) => {
                 console.error(error);

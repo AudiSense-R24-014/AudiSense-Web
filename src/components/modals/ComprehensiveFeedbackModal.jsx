@@ -22,10 +22,18 @@ export default function ComprehensiveFeedbackModal({
 
     const handleRatingChange = (e) => {
         const { name, value } = e.target;
-        setRatings({
-            ...ratings,
-            [name]: isNaN(value) ? value : parseInt(value),
-        });
+        let updatedValue;
+
+        if (name === "feedback_considering_provided_length") {
+            updatedValue = value;
+        } else {
+            updatedValue = isNaN(value) ? "" : parseInt(value);
+        }
+
+        setRatings((prevRatings) => ({
+            ...prevRatings,
+            [name]: updatedValue,
+        }));
     };
 
     const handleSubmit = (e) => {
