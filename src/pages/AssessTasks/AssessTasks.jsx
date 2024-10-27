@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import TasksTopbar from "../../components/TasksTopbar.jsx";
 import { ComprehensiveTasks } from "./AssessTasksComponent/index.jsx";
 import { DiscriminationTasks } from "./AssessTasksComponent/index.jsx";
+import { IdentificationTasks } from "./AssessTasksComponent/index.jsx";
 
 function AssessTasks() {
   const [taskTab, setTaskTab] = useState("comprehension");
@@ -12,6 +13,7 @@ function AssessTasks() {
       <TasksTopbar taskList={taskTab} toggleTaskStatus={setTaskTab} />
       {taskTab === "comprehension" && <ComprehensiveTasks />}
       {taskTab === "discrimination" && <DiscriminationTasks />}
+      {taskTab === "identification" && <IdentificationTasks />}
     </div>
   );
 }

@@ -1,4 +1,4 @@
-const BASE_URL = import.meta.env.VITE_API_GATEWAY_URL; // https://apigateway-pv2f.onrender.com http://localhost:3000
+const BASE_URL = import.meta.env.VITE_API_GATEWAY_URL; 
 
 export const THERAPISTS = `${BASE_URL}/therapists/`;
 export const THERAPIST_BY_ID = (id) => `${BASE_URL}/therapists/${id}/`;
@@ -61,6 +61,7 @@ export const LING_6_SEPARATE_BY_PATIENT_ID = (id) => `${BASE_URL}/ling6-separate
 export const IDENTIFICATION_LEVEL1 = `${BASE_URL}/identification-level1/`;
 export const IDENTIFICATION_LEVEL1_ID = (id) => `${BASE_URL}/identification-level1/${id}/`;
 export const IDENTIFICATION_LEVEL2 = `${BASE_URL}/identification-level2/`;
+export const IDENTIFICATION_LEVEL2_ID = (id) => `${BASE_URL}/identification-level2/${id}/`;
 
 export const COMPREHENSIVE_DOC_GEN = `${BASE_URL}/comprehension-generate/`;
 export const COMPREHENSIVE_TASK_PERSIST = `${BASE_URL}/comprehension-task/`;

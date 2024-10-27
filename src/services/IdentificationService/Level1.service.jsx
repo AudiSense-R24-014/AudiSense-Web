@@ -34,8 +34,20 @@ const getAllTaskLevel1 = async () => {
     return responseData;
 }
 
+const deleteIdentificationLevel1 = async (id) => {
+    const response = await fetch(URL.IDENTIFICATION_LEVEL1_ID(id), {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    const responseData = await response.json();
+    return responseData;
+}
+
 export default {
     generateIdentificationLevel1,
     getIdentificationLevel1,
-    getAllTaskLevel1
+    getAllTaskLevel1,
+    deleteIdentificationLevel1
 }
