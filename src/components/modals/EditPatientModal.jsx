@@ -189,7 +189,6 @@ export default function EditPatientModal({ visible, onClose, patientId }) {
 
     const updatePatient = (e) => {
         e.preventDefault();
-
         const newErrors = {}; // Object to hold new error messages
 
         // First name validation
@@ -211,7 +210,6 @@ export default function EditPatientModal({ visible, onClose, patientId }) {
         // Email validation
         if (!formData.email) {
             newErrors.email = "Email is required.";
-            valid = false;
         } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email)) {
             newErrors.email = "Please enter a valid email address.";
         }
@@ -224,7 +222,7 @@ export default function EditPatientModal({ visible, onClose, patientId }) {
             newErrors.isImplanted = "Please select an option.";
         }
         // Contact number validation (optional)
-        if (!formData?.contactNo || !/^[0-9]{10}$/.test(formData.contactNo)) {
+        if (!formData?.contactNo || !/^\d{10}$/.test(formData.contactNo)) {
             newErrors.contactNo = "Please enter a valid 10-digit contact number.";
         }
 
@@ -311,9 +309,8 @@ export default function EditPatientModal({ visible, onClose, patientId }) {
                     <div className="flex space-x-1 mt-2">
                         {["General Details", "Medical History", "Development History", "Personal & Educational Background", "Behavioral & Sensory Profile", "Oral & Communication Abilities", "Assessment Summary & Recommendations"].map(
                             (label, index) => (
-                                <div className="flex flex-row">
+                                <div className="flex flex-row" key={index + 1}>
                                     <button
-                                        key={index}
                                         onClick={() => setStep(index + 1)}
                                         className={`${step === index + 1
                                             ? 'bg-purple-700 text-white'

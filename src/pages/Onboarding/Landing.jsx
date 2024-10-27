@@ -31,7 +31,7 @@ const Landing = () => {
                     <LandingCards
                         icon={faListCheck}
                         title="Task Suggestion"
-                        description="Create and assign customizable tasks with just few clicks within seconds."
+                        description="Leverage our AI-powered, customizable platform to design AVT tasks effortlessly. Create tasks in just a few clicks."
                     />
                 </div>
             </div>
