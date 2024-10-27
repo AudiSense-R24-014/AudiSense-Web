@@ -33,6 +33,8 @@ const AllTasks = () => {
             });
     }, []);
 
+    const totalPages = Math.ceil(filteredFeedback.length / itemsPerPage);
+
     const filterFeedback = () => {
         const filteredFeedback = allFeedback.filter((feedback) => {
             const matchesAge = feedback?.Input_Age?.toString()
@@ -63,8 +65,18 @@ const AllTasks = () => {
         setOpenViewModal(true);
     };
 
-    const handlePaginationChange = (page) => {
-        setCurrentPage(page);
+    const handlePageChange = (page) => {
+        if (page === "first") {
+            setCurrentPage(1);
+        } else if (page === "last") {
+            setCurrentPage(totalPages);
+        } else if (typeof page === "number") {
+            setCurrentPage(page);
+        } else if (page === "next" && currentPage < totalPages) {
+            setCurrentPage(currentPage + 1);
+        } else if (page === "previous" && currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
     };
 
     const indexOfLastItem = currentPage * itemsPerPage;
@@ -175,8 +187,8 @@ const AllTasks = () => {
             </div>
             <PaginationButtons
                 currentPage={currentPage}
-                totalPages={Math.ceil(filteredFeedback.length / itemsPerPage)}
-                onPageChange={handlePaginationChange}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
             />
             <AssignComprehensiveTaskModal
                 comprehensionTaskId={comprehensiveTaskId}
