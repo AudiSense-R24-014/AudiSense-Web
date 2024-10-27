@@ -36,17 +36,18 @@ const DiscriminationTasks = () => {
 
     // Search filter
     useEffect(() => {
-        const filtered = activities.filter((activity) => {
-            const { firstName, lastName } = activity?.patient || {};
-            return (
-                (firstName &&
+        const filtered = activities
+            .slice()
+            .reverse()
+            .filter((activity) => {
+                const { firstName, lastName } = activity?.patient || {};
+                return (
                     firstName
-                        .toLowerCase()
-                        .includes(searchQuery.toLowerCase())) ||
-                (lastName &&
-                    lastName.toLowerCase().includes(searchQuery.toLowerCase()))
-            );
-        });
+                        ?.toLowerCase()
+                        .includes(searchQuery.toLowerCase()) ||
+                    lastName?.toLowerCase().includes(searchQuery.toLowerCase())
+                );
+            });
         setFilteredActivities(filtered);
         setCurrentPage(1); // Reset to first page when search query changes
     }, [searchQuery, activities]);

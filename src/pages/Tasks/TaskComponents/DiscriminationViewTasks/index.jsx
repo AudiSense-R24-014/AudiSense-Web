@@ -5,7 +5,8 @@ import SearchBar from "../../../../components/pagination/SearchBar.jsx";
 
 export default function DiscriminationViewTasks() {
     const [allDiscriminationTask, setAllDiscriminationTask] = useState([]);
-    const [filteredDiscriminationTask, setFilteredDiscriminationTask] = useState([]);
+    const [filteredDiscriminationTask, setFilteredDiscriminationTask] =
+        useState([]);
     const [discriminationTaskId, setDiscriminationTaskId] = useState(null);
     const [openSaveModal, setOpenSaveModal] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
@@ -26,15 +27,18 @@ export default function DiscriminationViewTasks() {
     }, [searchQuery, allDiscriminationTask]);
 
     const filterDiscriminationTask = () => {
-        const filtered = allDiscriminationTask.filter((discriminationTask) => {
-            const matchesWord1 = discriminationTask?.word1
-                ?.toLowerCase()
-                .includes(searchQuery.toLowerCase());
-            const matchesWord2 = discriminationTask?.word2
-                ?.toLowerCase()
-                .includes(searchQuery.toLowerCase());
-            return matchesWord1 || matchesWord2; 
-        });
+        const filtered = allDiscriminationTask
+            .slice()
+            .reverse()
+            .filter((discriminationTask) => {
+                const matchesWord1 = discriminationTask?.word1
+                    ?.toLowerCase()
+                    .includes(searchQuery.toLowerCase());
+                const matchesWord2 = discriminationTask?.word2
+                    ?.toLowerCase()
+                    .includes(searchQuery.toLowerCase());
+                return matchesWord1 || matchesWord2;
+            });
         setFilteredDiscriminationTask(filtered);
     };
 
@@ -66,30 +70,39 @@ export default function DiscriminationViewTasks() {
                             style={{ maxHeight: "400px", overflowY: "auto" }}
                         >
                             {filteredDiscriminationTask.length > 0 ? (
-                                filteredDiscriminationTask.map((discriminationTask, index) => (
-                                    <tr key={index}>
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            {discriminationTask.word1}
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            {discriminationTask.word2}
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            {discriminationTask.level}
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <button
-                                                onClick={() => handleView(discriminationTask)}
-                                                className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded mr-2"
-                                            >
-                                                Assign
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))
+                                filteredDiscriminationTask.map(
+                                    (discriminationTask, index) => (
+                                        <tr key={index}>
+                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                {discriminationTask.word1}
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                {discriminationTask.word2}
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                {discriminationTask.level}
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                <button
+                                                    onClick={() =>
+                                                        handleView(
+                                                            discriminationTask
+                                                        )
+                                                    }
+                                                    className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded mr-2"
+                                                >
+                                                    Assign
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    )
+                                )
                             ) : (
                                 <tr>
-                                    <td colSpan="5" className="px-6 py-4 text-center">
+                                    <td
+                                        colSpan="5"
+                                        className="px-6 py-4 text-center"
+                                    >
                                         Data Loading...
                                     </td>
                                 </tr>
