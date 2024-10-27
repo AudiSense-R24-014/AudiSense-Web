@@ -5,14 +5,14 @@ import IdentificationLevelTwoService from '../../../../services/IdentificationSe
 const fetchAllTasks = async () => {
     try {
         const response = await IdentificationLevelOneService.getAllTaskLevel1();
-        return response; 
+        return response;
     } catch (error) {
         console.error('Error fetching tasks:', error);
         return [];
     }
 };
 
-export default function IdentificationViewAll() {
+export default function IdentificationViewAll({ patients }) {
     const [tasks, setTasks] = useState([]);
 
     useEffect(() => {
@@ -23,7 +23,6 @@ export default function IdentificationViewAll() {
         loadTasks();
     }, []);
 
-    
 
     return (
         <div className="container mx-auto p-4 border border-black rounded-md">
@@ -47,7 +46,7 @@ export default function IdentificationViewAll() {
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{task._id}</td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{task.level}</td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{task.difficulty || "N/A"}</td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{task.response? 'Yes' : 'No'}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{task.response ? 'Yes' : 'No'}</td>
                             </tr>
                         ))}
                     </tbody>
