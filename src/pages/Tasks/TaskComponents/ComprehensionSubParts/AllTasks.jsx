@@ -3,8 +3,8 @@ import ComprehensionTaskService from "../../../../services/ComprehensionTask.ser
 import AssignComprehensiveTaskModal from "../../../../components/modals/AssignComprehensiveTaskModal";
 import ViewComprehensiveTaskModal from "../../../../components/modals/ViewComprehensiveTaskModal";
 import Loading from "../../../../components/Loading";
-import SearchBar from "../../../../components/pagination/searchBar";
-import PaginationButtons from "../../../../components/pagination/paginationButtons";
+import SearchBar from "../../../../components/pagination/SearchBar.jsx";
+import PaginationButtons from "../../../../components/pagination/PaginationButtons.jsx";
 
 const AllTasks = () => {
     const [allFeedback, setAllFeedback] = useState([]);
