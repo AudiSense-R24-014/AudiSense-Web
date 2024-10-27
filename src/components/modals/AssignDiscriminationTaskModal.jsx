@@ -43,9 +43,10 @@ export default function AssignDiscriminationTaskModal({
         patient: selectedPatientId,
         organization: organizationId,
         discriminationTask: discriminationTaskId,
-        status: "pending",
+        status: "Assigned",
       })
-        .then(() => {
+        .then((data) => {
+          console.log(data);
           Swal.fire({
             title: "Success",
             text: "Task assigned successfully",
