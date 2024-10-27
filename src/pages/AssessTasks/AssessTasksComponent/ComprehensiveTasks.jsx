@@ -4,8 +4,8 @@ import AssessComprehensiveActivityModal from "../../../components/modals/AssessC
 import ViewComprehensiveActivityModal from "../../../components/modals/ViewComprehensiveActivityModal.jsx";
 import Swal from "sweetalert2";
 import Loading from "../../../components/Loading.jsx";
-import SearchBar from "../../../components/pagination/searchBar.jsx";
-import PaginationButtons from "../../../components/pagination/paginationButtons.jsx";
+import SearchBar from "../../../components/pagination/SearchBar.jsx";
+import PaginationButtons from "../../../components/pagination/PaginationButtons.jsx";
 
 const ComprehensiveTasks = () => {
     const orgId = JSON.parse(localStorage.getItem("audi-user"))?.organization;

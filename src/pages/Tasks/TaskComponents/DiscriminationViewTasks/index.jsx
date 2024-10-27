@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import DiscriminationTaskService from "../../../../services/DiscriminationTask.service";
 import AssignDiscriminationTaskModal from "../../../../components/modals/AssignDiscriminationTaskModal";
-import SearchBar from "../../../../components/pagination/searchBar";
+import SearchBar from "../../../../components/pagination/SearchBar.jsx";
 
 export default function DiscriminationViewTasks() {
     const [allDiscriminationTask, setAllDiscriminationTask] = useState([]);
