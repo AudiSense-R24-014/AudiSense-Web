@@ -36,7 +36,7 @@ const AllTasks = () => {
     const totalPages = Math.ceil(filteredFeedback.length / itemsPerPage);
 
     const filterFeedback = () => {
-        const filteredFeedback = allFeedback.filter((feedback) => {
+        const filteredFeedback = allFeedback.slice().reverse().filter((feedback) => {
             const matchesAge = feedback?.Input_Age?.toString()
                 .toLowerCase()
                 .includes(searchAgeQuery.toLowerCase());
@@ -127,60 +127,57 @@ const AllTasks = () => {
                             className="bg-white divide-y divide-gray-200"
                             style={{ maxHeight: "400px", overflowY: "auto" }} // Setting max-height and making it scrollable
                         >
-                            {currentItems
-                                .slice()
-                                .reverse()
-                                .map((feedback) => (
-                                    <tr
-                                        key={feedback._id}
-                                        className="text-sm text-gray-600"
-                                    >
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            {feedback.Input_Age}
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-pre-wrap">
-                                            {feedback.Input_Context
-                                                ? feedback.Input_Context
-                                                : "N/A"}
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            {feedback.Input_Length.charAt(
-                                                0
-                                            ).toUpperCase() +
-                                                feedback.Input_Length.slice(
-                                                    1
-                                                ).toLowerCase()}
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            {feedback.Question_Count}
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <pre className="whitespace-pre-wrap text-sm font-nunito">
-                                                {feedback.Generated_Passage}
-                                            </pre>
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            <div className="flex flex-col space-y-2">
-                                                <button
-                                                    onClick={() =>
-                                                        handleAssign(feedback)
-                                                    }
-                                                    className="text-blue-600 hover:font-bold left"
-                                                >
-                                                    Assign
-                                                </button>
-                                                <button
-                                                    onClick={() =>
-                                                        handleView(feedback)
-                                                    }
-                                                    className="text-green-600 hover:font-bold"
-                                                >
-                                                    View
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))}
+                            {currentItems.map((feedback) => (
+                                <tr
+                                    key={feedback._id}
+                                    className="text-sm text-gray-600"
+                                >
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                        {feedback.Input_Age}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-pre-wrap">
+                                        {feedback.Input_Context
+                                            ? feedback.Input_Context
+                                            : "N/A"}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                        {feedback.Input_Length.charAt(
+                                            0
+                                        ).toUpperCase() +
+                                            feedback.Input_Length.slice(
+                                                1
+                                            ).toLowerCase()}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                        {feedback.Question_Count}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                        <pre className="whitespace-pre-wrap text-sm font-nunito">
+                                            {feedback.Generated_Passage}
+                                        </pre>
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <div className="flex flex-col space-y-2">
+                                            <button
+                                                onClick={() =>
+                                                    handleAssign(feedback)
+                                                }
+                                                className="text-blue-600 hover:font-bold left"
+                                            >
+                                                Assign
+                                            </button>
+                                            <button
+                                                onClick={() =>
+                                                    handleView(feedback)
+                                                }
+                                                className="text-green-600 hover:font-bold"
+                                            >
+                                                View
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </div>
