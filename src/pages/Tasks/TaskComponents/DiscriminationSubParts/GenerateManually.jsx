@@ -1,6 +1,7 @@
 import React from 'react';
 import AutoGenerateService from '../../../../services/DiscriminationTask.service'
 import { useState } from 'react'
+import Swal from 'sweetalert2';
 
 
 function GenManually() {
@@ -28,7 +29,6 @@ function GenManually() {
     AutoGenerateService.manual_generate(word)
       .then((data) => {
         setGeneratedWord(data);
-        console.log(data.rhymes);
       })
       .catch((err) => {
         console.error("Error generating rhyming words: ", err);
@@ -41,19 +41,15 @@ function GenManually() {
 
   const saveGeneratedWords = async (event) => {
     event.preventDefault();
-    console.log(generatedWords);
     AutoGenerateService.createDiscriminationQuestion(firstWordSet, secondWordSet, parseInt(level))
-      .then((data) => {
-        console.log("Rhyming Words saved Successfully: ", data);
+      .then(() => {
+        Swal.fire("Success", "Task has been saved", "success");
       })
       .catch((err) => {
         console.error("Error saving: ", err);
       });
   };
-  const handleStageChange = (event) => {
-    setStage(event.target.value);
-    console.log('Selected stage:', event.target.value);
-  };
+
 
   // Updated handleWordClick function
   const handleWordClick = (word) => {
@@ -78,10 +74,6 @@ function GenManually() {
 
       setFirstWordSet(firstWord);
       setSecondWordSet(secondWord);
-
-      // Log the updated sets for debugging
-      console.log("First Word: ", firstWord);
-      console.log("Second Word: ", secondWord);
 
       return updatedSelectedWords;
     });
@@ -132,15 +124,20 @@ function GenManually() {
           className="border font-nunito border-gray-400 rounded-md p-4 w-full h-12 mr-4"
         />
       </div>
-      <div className="mt-10"
-        onClick={handleGeneration}>
-        <button className="bg-purple-400 font-nunito text-white py-2 px-4 rounded-md hover:bg-purple-600 transition-colors duration-300 ">Generate Task</button>
-      </div>
+      <div className="mt-10">
+        <button
+          onClick={handleGeneration}
+          disabled={loading} // Disable the button when loading is true
+          className={`bg-purple-400 font-nunito text-white py-2 px-4 rounded-md hover:bg-purple-600 transition-colors duration-300 ${loading ? "opacity-50 cursor-not-allowed" : ""
+            }`}
+        >
+          {loading ? "Generating..." : "Generate Task"}
+        </button></div>
       <div className="mt-5">
         {isGenerated ? (
           <div className="list-disc pl-5">
             <h3>Words:</h3>
-            {generatedWords.rhymes.map((word, index) => (
+            {generatedWords.map((word, index) => (
               <span
                 key={index}
                 onClick={() => handleWordClick(word)}

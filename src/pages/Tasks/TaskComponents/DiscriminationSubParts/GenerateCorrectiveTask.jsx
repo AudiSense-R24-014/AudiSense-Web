@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
 import AutoGenerateService from '../../../../services/DiscriminationTask.service'
+import Swal from 'sweetalert2';
 
 const GenCorrectiveTask = () => {
   const [selectedStage, setSelectedStage] = useState('');
@@ -53,10 +54,9 @@ const GenCorrectiveTask = () => {
 
   const saveGeneratedWords = async (event) => {
     event.preventDefault();
-    console.log(generatedWords);
     AutoGenerateService.createDiscriminationQuestion(firstWordSet, secondWordSet, parseInt(level))
-      .then((data) => {
-        console.log("Rhyming Words saved Successfully: ", data);
+      .then(() => {
+        Swal.fire("Success", "Task has been saved", "success");
       })
       .catch((err) => {
         console.error("Error saving: ", err);
@@ -81,10 +81,6 @@ const GenCorrectiveTask = () => {
 
       setFirstWordSet(firstWord);
       setSecondWordSet(secondWord);
-
-      // Log the updated sets for debugging
-      console.log("First Word: ", firstWord);
-      console.log("Second Word: ", secondWord);
 
       return updatedSelectedWords;
     });
@@ -161,9 +157,15 @@ const GenCorrectiveTask = () => {
           </div>
         </div>
 
-        <div className="mt-10"
-          onClick={handleGeneration}>
-          <button className="bg-purple-400 font-nunito text-white py-2 px-4 rounded-md hover:bg-purple-600 transition-colors duration-300 ">Generate Task</button>
+        <div className="mt-10">
+          <button
+            onClick={handleGeneration}
+            disabled={loading} // Disable the button when loading is true
+            className={`bg-purple-400 font-nunito text-white py-2 px-4 rounded-md hover:bg-purple-600 transition-colors duration-300 ${loading ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+          >
+            {loading ? "Generating..." : "Generate Task"}
+          </button>
         </div>
         <div className="mt-5">
           {isGenerated && generatedWords.rhymes?.length > 0 ? (
