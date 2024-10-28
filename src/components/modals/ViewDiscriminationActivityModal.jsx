@@ -13,10 +13,6 @@ export default function ViewDiscriminationActivityModal({
 
   const score = `${activity.score}/2`;
 
-  useEffect(() => {
-    console.log(activity);
-  }, [activity]);
-
   return (
     <div
       className="fixed inset-0 bg-opacity-20 backdrop-blur-sm bg-black flex justify-center items-center"
