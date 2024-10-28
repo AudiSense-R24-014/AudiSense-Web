@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import ComprehensiveTasksService from "../../../services/ComprehensionTask.service.jsx";
 import DiscriminationTaskService from "../../../services/DiscriminationTask.service.jsx";
-import AssessComprehensiveActivityModal from "../../../components/modals/AssessComprehensiveActivityModal.jsx";
+import AssessDiscriminationActivityModal from "../../../components/modals/AssessDiscriminationActivityModal.jsx";
 import ViewDiscriminationActivityModal from "../../../components/modals/ViewDiscriminationActivityModal.jsx";
 import SearchBar from "../../../components/pagination/SearchBar.jsx";
 import Swal from "sweetalert2";
@@ -31,6 +30,28 @@ const DiscriminationTasks = () => {
             })
             .catch((error) => {
                 console.error("Error loading activities:", error);
+            });
+    };
+
+    const handleView = (task) => {
+        DiscriminationTaskService.getActivityById(task._id)
+            .then((data) => {
+                setViewActivity(data);
+                setViewModal(true);
+            })
+            .catch((error) => {
+                console.error("Error loading activity details:", error);
+            });
+    };
+
+    const handleAssess = (task) => {
+        DiscriminationTaskService.getActivityById(task._id)
+            .then((data) => {
+                setAssessActivity(data);
+                setAssessModal(true);
+            })
+            .catch((error) => {
+                console.error("Error loading activity details:", error);
             });
     };
 
@@ -69,7 +90,6 @@ const DiscriminationTasks = () => {
         } else if (typeof page === "number") {
             setCurrentPage(page);
         } else if (page === "next" && currentPage < totalPages) {
-            console.log("next");
             setCurrentPage(currentPage + 1);
         } else if (page === "previous" && currentPage > 1) {
             setCurrentPage(currentPage - 1);
@@ -185,7 +205,7 @@ const DiscriminationTasks = () => {
             />
 
             {assessModal && (
-                <AssessComprehensiveActivityModal
+                <AssessDiscriminationActivityModal
                     assessActivity={assessActivity}
                     visible={assessModal}
                     onClose={() => setAssessModal(false)}
